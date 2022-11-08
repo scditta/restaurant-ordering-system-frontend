@@ -45,7 +45,7 @@ We love your input! We want to make contributing to our code base as easy and tr
 However, to ensure consistency throughout the source code, keep these rules in mind as you are working:
 - Ensure to push your code in a seperate branch and wait for the pull request to be reviewed by the team members.
 - Create issues for any changes and enhancements that you wish to make. Discuss things transparently and get feedback.
-- follow the rules contained in [Google's JavaScript Style Guide][js-style-guide] with your code
+- follow the rules contained in [Google's JavaScript Style Guide](https://google.github.io/styleguide/javascriptguide.xml) with your code
 - Commit your changes using a descriptive commit message
 
 
