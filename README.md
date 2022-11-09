@@ -1,7 +1,7 @@
 <h1 align="center"> Restaurant Food Ordering System - FrontEnd </h3>
 
 ## 📰 *Description*
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is the reataurant food ordering system front-end service. This service will use routing capabilities to build a single page application using the [React](https://reactjs.org/) framework. The [JQuery](https://jquery.com/) library will be used to simplify the number of AJAX calls needed. Additionally, the [Bootstrap 5.2](https://getbootstrap.com/docs/5.2/getting-started/introduction/) framework will be used to implement templates, typography, and extra functionality for HTML and CSS to create a responsive website with a professional look. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is the reataurant food ordering system front-end service. This service will use routing capabilities to build a single page application using the [React](https://reactjs.org/) framework. The [Axios](https://github.com/axios/axios) library will be used to simplify the number of AJAX calls needed. Additionally, the [Bootstrap 5.2](https://getbootstrap.com/docs/5.2/getting-started/introduction/) framework will be used to implement templates, typography, and extra functionality for HTML and CSS to create a responsive website with a professional look. 
 
 ## 🎃 *Language*
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
