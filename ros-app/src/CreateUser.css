@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 15px;
+  color: #fff;
+}
+
+body {
+  min-height: 100vh;
+  background-color: white;
+}
+
+h1 {
+  padding: 1px 70px;
+}
+
+.App {
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem 0.5rem;
+}
+
+section {
+  width: 100%;
+  max-width: 450px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem;
+  background-color: rgba(188, 127, 238, 0.851);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  padding-bottom: 1rem;
+}
+
+/* a, a:visited {
+    color: #fff;
+} */
+
+button,
+textarea {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  padding: 0.35rem;
+  border-radius: 0.5rem;
+}
+
+#username,
+#password,
+#confirm_pwd,
+#email,
+#checkbox {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  padding: 0.35rem;
+  border-radius: 0.5rem;
+}
+
+label,
+button {
+  margin-top: 1rem;
+}
+
+#button {
+  padding: 0.5rem;
+  font-size: 20px;
+}

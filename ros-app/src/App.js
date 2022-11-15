@@ -1,24 +1,23 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
+import { Routes, Route, Link } from 'react-router-dom';
 import './App.css';
+import './CreateUser.css'; // added styles: rezi
+import CreateUser from './components/CreateUser';
+import Welcome from './components/Welcome';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div>
+        <Link to="/">Main</Link> |<Link to="/signup">Sign Up</Link>
+      </div>
+      {/* -------------- */}
+      <Routes>
+        <Route path="/" element={<div>Home!</div>} />
+        <Route path="/signup" element={<CreateUser />} />
+        <Route path="/welcome" element={<Welcome />} />
+      </Routes>
+    </>
   );
 }
 
