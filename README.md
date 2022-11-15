@@ -39,6 +39,10 @@ REACT_APP_API_KEY = {askdevforpassword}
 ```
 npm install
 ```
+- Always remember to change directory to ros-app
+```
+cd ros-app
+```
 - To run this project in your device; clone the repository, open the terminal in your editor, and run the command
 ```
 npm start
