@@ -7,8 +7,3 @@ export default axios.create({
     api_key: process.env.REACT_APP_API_KEY,
   },
 });
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 814da9188b296bbbc4f82ab15bea71c2e7eda680
