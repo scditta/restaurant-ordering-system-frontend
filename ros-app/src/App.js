@@ -1,5 +1,6 @@
 // import logo from './logo.svg';
 import './App.css';
+<<<<<<< HEAD
 import CreateUser from './components/CreateUser';
 
 function App() {
@@ -20,6 +21,14 @@ function App() {
     //     </a>
     //   </header>
     // </div>
+=======
+import './CreateUser.css'    // added styles: rezi
+import CreateUser from './components/CreateUser';
+import Welcome from './components/Welcome'
+
+function App() {
+  return (
+>>>>>>> 814da9188b296bbbc4f82ab15bea71c2e7eda680
     <>
       <CreateUser />
     </>

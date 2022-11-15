@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import { Button, Form, Alert } from 'react-bootstrap';
 
 import api from '../API/posts';
 
+=======
+import api from '../API/posts';
+
+
+>>>>>>> 814da9188b296bbbc4f82ab15bea71c2e7eda680
 export default function CreateUser() {
   const [userData, setUserData] = useState({
     //initialize empty
@@ -54,6 +60,7 @@ export default function CreateUser() {
 
   return (
     <>
+<<<<<<< HEAD
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicDisplayName">
           <Form.Label>User Name</Form.Label>
@@ -95,6 +102,76 @@ export default function CreateUser() {
         </Button>
       </Form>
       {errorResponse !== '' ? <Alert variant="danger">{errorResponse}</Alert> : <></>}
+=======
+      <section>
+        <h1>Create Account</h1>
+        <hr></hr>
+      <form onSubmit={handleSubmit}>
+          <label>Username </label>
+          <input 
+            type="text"
+            id="username"
+            placeholder="Username"
+            name="displayname"
+            required
+            value={userData.displayname}
+            onChange={handleChange}
+          />
+          <br></br>
+
+          <label>Email address</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Email Id"
+            name="email"
+            required
+            value={userData.email}
+            onChange={handleChange}
+          />
+          <br></br>
+       
+          <label>Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter Password"
+            name="password_hash"
+            required
+            value={userData.password_hash}
+            onChange={handleChange}
+          />
+          <br></br>
+
+          <label>Confirm Password</label>
+          <input
+            type="password"
+            id="confirm_pwd"
+            placeholder="Confirm Password"
+            name="password_hash"
+            required
+            value={userData.password_hash}
+            onChange={handleChange}
+          />
+          <br></br><br></br>
+
+
+        <button variant="primary" type="submit" id="button">
+          Register
+        </button>
+      </form>
+
+      <p>Already registered?
+      <span>
+        <a href="#"> Log In</a>
+      </span>
+      </p>
+
+      </section>
+
+
+      {errorResponse !== '' ? <alert variant="danger">{errorResponse}</alert> : <></>}
+>>>>>>> 814da9188b296bbbc4f82ab15bea71c2e7eda680
     </>
   );
 }
