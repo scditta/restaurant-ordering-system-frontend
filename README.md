@@ -1,5 +1,7 @@
 <h1 align="center"> Restaurant Food Ordering System - FrontEnd </h3>
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1e22a3a1-21ce-43ac-94eb-9521f410a643/deploy-status)](https://app.netlify.com/sites/restaurantorderingsystem/deploys)
+
 ## 📰 *Description*
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is the restaurant food ordering system front-end service. This service will use routing capabilities to build a single page application using the [React](https://reactjs.org/) framework. The [Axios](https://github.com/axios/axios) library will be used to send asynchronous HTTP request to REST endpoints. This will allow us to use request methods like get, post, delete, and many more. Additionally, the [React-Bootstrap](https://react-bootstrap.github.io/) framework will be used to implement components containing templates, typography, and extra functionality for JSX and CSS to create a responsive website with a professional look.
 
@@ -24,17 +26,37 @@ Following are the requirements to run this project:
 
 
 
+# Getting Started
+## *Installation Process*
+Clone this repository onto your system.
+Be sure to create an environment variable file named .env in the root directory of the react app. The contents of this file should follow this structure:
+```
+REACT_APP_API_KEY = {askdevforpassword}
+```
+
 ## *Usage*
+- To install the package providing all the node.js modules and dependencies.
+```
+npm install
+```
 - To run this project in your device; clone the repository, open the terminal in your editor, and run the command
 ```
 npm start
 ```
-This will open in the browser as http://localhost:3000.
+``  
+This will locally open in the browser as http://localhost:3000.
+``
+- Verify the app is running. You should see the following message:
+```
+Compiled successfully!
 
-- OR you can directly visit
+You can now view ros-app in the browser.
 ```
-(coming soon)
+- You should be redirected to the app in the browser. However, in the case that you are not enter this URL:
 ```
+http://localhost:3000
+```
+
 
 ## Contributor Guidelines
 We love your input! We want to make contributing to our code base as easy and transparent as possible, whether it's:
