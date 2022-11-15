@@ -47,16 +47,18 @@ export default function CreateUser() {
       console.log(response.data);
       // setUserId(response.data.id);
       setErrorResponse('');
-      navigate('/welcome', {
-        state: {
-          id: response.data.id,
-        },
-      });
-      // navigate({
-      //   pathname: '/welcome',
-      //   state: response.data.id,
+
+      //store the user data locally (inspect->Application)
+      localStorage.setItem('user-id', response.data.id);
+
+      //redirect to the /welcome page
+      navigate('/welcome');
+
+      // navigate('/welcome', {
+      //   state: {
+      //     id: response.data.id,
+      //   },
       // });
-      // history.go('/welcome');
     } catch (err) {
       if (err.response) {
         //not in the 200 range
@@ -69,19 +71,6 @@ export default function CreateUser() {
         console.log(`Error: ${err.message}`);
       }
     }
-
-    // api
-    //   .post('/api/v1/users', userData)
-    //   .then((response) => {
-    //     console.log(response);
-    //     setErrorResponse('');
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.response.data.error);
-    //     setErrorResponse(error.response.data.error);
-    //   });
-
-    // console.log(userData);
   }
 
   return (
