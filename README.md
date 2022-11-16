@@ -43,7 +43,7 @@ npm install
 ```
 cd ros-app
 ```
-- To run this project in your device; clone the repository, open the terminal in your editor, and run the command
+- To run this project in your browser; open the terminal in your editor, change to ros-app, and run the command
 ```
 npm start
 ```
