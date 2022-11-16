@@ -11,11 +11,12 @@ function App() {
       <div>
         <Link to="/">Main</Link> |<Link to="/signup">Sign Up</Link>
       </div>
-      {/* -------test------- */}
+      {/* -------------- */}
       <Routes>
         <Route path="/" element={<div>Home!</div>} />
         <Route path="/signup" element={<CreateUser />} />
         <Route path="/welcome" element={<Welcome />} />
+        <Route path="*" element={<div>page not found!</div>}></Route>
       </Routes>
     </>
   );
