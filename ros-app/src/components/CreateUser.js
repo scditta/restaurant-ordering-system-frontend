@@ -5,6 +5,8 @@ import Alert from 'react-bootstrap/Alert';
 
 import api from '../API/posts';
 
+import '../CreateUser.css';
+
 export default function CreateUser() {
   const [userData, setUserData] = useState({
     //initialize empty
