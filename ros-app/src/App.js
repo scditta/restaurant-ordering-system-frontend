@@ -1,59 +1,31 @@
-// import logo from './logo.svg';
 import { Routes, Route } from 'react-router-dom';
-import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Container, Nav, NavDropdown, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 import './App.css';
 
 import CreateUser from './components/CreateUser';
-import Welcome from './components/Welcome';
+import Login from './components/Login';
+import NavBar from './components/NavBar';
 
 function App() {
   return (
     <>
-      <Navbar bg="light" expand="md">
-        <Container>
-          <LinkContainer to="/">
-            <Navbar.Brand>ROS-APP</Navbar.Brand>
-          </LinkContainer>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-
-          <Navbar.Collapse>
-            <Nav className="me-auto">
-              <Nav.Link>Menu</Nav.Link>
-              <Nav.Link>Orders</Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-          <Navbar.Collapse className="justify-content-end">
-            {/* <Navbar.Text>
-              Signed in as: <a href="#login">Stephen Ditta</a>
-            </Navbar.Text> */}
-            <NavDropdown title="Guest">
-              <LinkContainer to="/login">
-                <NavDropdown.Item>Login</NavDropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/signup">
-                <NavDropdown.Item>Sign up</NavDropdown.Item>
-              </LinkContainer>
-            </NavDropdown>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-
-      <Container>
-        <Row>
-          <Col>1 of 3</Col>
+      <NavBar />
+      {/* Content */}
+      <Container className="menuHeight" fluid>
+        <Row className="h-100 g-0">
+          <Col></Col>
           <Col xs={6}>
-            <Card></Card>
+            <Card className="h-100"></Card>
           </Col>
-          <Col>3 of 3</Col>
+          <Col></Col>
         </Row>
       </Container>
 
       {/* -------------- */}
       <Routes>
-        <Route path="/" element={<div>Home!</div>} />
+        <Route path="/" />
         <Route path="/signup" element={<CreateUser />} />
-        <Route path="/welcome" element={<Welcome />} />
+        <Route path="/login" element={<Login />} />
         <Route path="*" element={<div>page not found!</div>} />
       </Routes>
     </>
