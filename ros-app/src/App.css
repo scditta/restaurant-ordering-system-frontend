@@ -2,3 +2,10 @@
   position: fixed;
   height: 95vh;
 }
+
+.cardImage {
+  object-fit: cover;
+  width: 10vw;
+  height: 10vw;
+  position: relative;
+}
