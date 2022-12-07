@@ -1,21 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { Container, Modal, Form, Button, Alert } from 'react-bootstrap';
 
 import api from '../API/posts';
 
-import '../CreateUser.css';
-
-export default function CreateUser() {
-  const [userData, setUserData] = useState({
-    //initialize empty
+export default function Login() {
+  const [userLoginData, setUserLoginData] = useState({
+    //initialize empty login
     email: '',
-    user_type: 0,
     password: '',
-    displayname: '',
   });
-
-  // const [userId, setUserId] = useState('');
 
   const [show, setShow] = useState(true);
 
@@ -29,7 +24,7 @@ export default function CreateUser() {
     const name = target.name;
     const value = target.value;
 
-    setUserData((prevUserData) => {
+    setUserLoginData((prevUserData) => {
       return {
         ...prevUserData,
         [name]: value,
@@ -42,13 +37,14 @@ export default function CreateUser() {
     e.preventDefault();
 
     try {
-      const response = await api.post('/api/v1/users', userData);
+      const response = await api.post('/api/v1/login', userLoginData);
       console.log(response.data);
-      // setUserId(response.data.id);
-      setErrorResponse('');
-
+      localStorage.setItem('user_id', response.data.id);
+      localStorage.setItem('user_session_token', response.data.session_token);
       //redirect to the home page
       navigate('/');
+      // this.forceUpdate();
+      window.location.reload();
     } catch (err) {
       if (err.response) {
         //not in the 200 range
@@ -77,7 +73,7 @@ export default function CreateUser() {
           }}
         >
           <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-vcenter">Create Account</Modal.Title>
+            <Modal.Title id="contained-modal-title-vcenter">Login</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Container>
@@ -88,18 +84,7 @@ export default function CreateUser() {
                     type="email"
                     placeholder="Email"
                     name="email"
-                    value={userData.email}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formUsername">
-                  <Form.Label>Username</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Username"
-                    name="displayname"
-                    value={userData.displayname}
+                    value={userLoginData.email}
                     onChange={handleChange}
                   />
                 </Form.Group>
@@ -110,7 +95,7 @@ export default function CreateUser() {
                     type="password"
                     placeholder="Password"
                     name="password"
-                    value={userData.password}
+                    value={userLoginData.password}
                     onChange={handleChange}
                   />
                 </Form.Group>
