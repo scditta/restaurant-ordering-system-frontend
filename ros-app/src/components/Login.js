@@ -1,11 +1,18 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useContext } from 'react';
+import { redirect, useNavigate, Navigate } from 'react-router-dom';
 
 import { Container, Modal, Form, Button, Alert } from 'react-bootstrap';
+
+import AuthenticationContext from '../AuthenticationContext';
+
+import { login } from '../API/authenticationService';
 
 import api from '../API/posts';
 
 export default function Login() {
+  const authUser = useContext(AuthenticationContext);
+  // console.log(authUser);
+
   const [userLoginData, setUserLoginData] = useState({
     //initialize empty login
     email: '',
@@ -13,7 +20,6 @@ export default function Login() {
   });
 
   const [show, setShow] = useState(true);
-
   const [errorResponse, setErrorResponse] = useState('');
 
   let navigate = useNavigate();
@@ -32,31 +38,57 @@ export default function Login() {
     });
   }
 
-  //Handle the submission of a created user
+  //Handle the submission of a user logging in
   async function handleSubmit(e) {
     e.preventDefault();
 
-    try {
-      const response = await api.post('/api/v1/login', userLoginData);
-      console.log(response.data);
-      localStorage.setItem('user_id', response.data.id);
-      localStorage.setItem('user_session_token', response.data.session_token);
-      //redirect to the home page
-      navigate('/');
-      // this.forceUpdate();
-      window.location.reload();
-    } catch (err) {
-      if (err.response) {
-        //not in the 200 range
-        console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
-        setErrorResponse(err.response.data.error);
-      } else {
-        //response is undefined
-        console.log(`Error: ${err.message}`);
-      }
-    }
+    login(userLoginData.email, userLoginData.password)
+      .then((resp) => {
+        console.log(resp);
+        authUser.userLogged();
+        navigate('/');
+      })
+      .catch((err) => {
+        if (err.response) {
+          //not in the 200 range
+          console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response.headers);
+          setErrorResponse(err.response.data.error);
+        } else {
+          //response is undefined
+          console.log(`Error: ${err.message}`);
+        }
+      });
+
+    // login(userLoginData.email, userLoginData.password)
+    // .then(() => {})
+    // .catch(() => {});
+
+    // try {
+    //   const response = await api.post('/api/v1/login', userLoginData);
+    //   console.log(response.data);
+    //   localStorage.setItem('user_id', response.data.id);
+    //   localStorage.setItem('user_session_token', response.data.session_token);
+    //   authUser.userLogged();
+    //   // authUser.setAuth(true);
+    //   //redirect to the home page
+    //   navigate('/');
+    //   // return redirect('/');
+    //   // this.forceUpdate();
+    //   // window.location.reload();
+    // } catch (err) {
+    //   if (err.response) {
+    //     //not in the 200 range
+    //     console.log(err.response.data);
+    //     console.log(err.response.status);
+    //     console.log(err.response.headers);
+    //     setErrorResponse(err.response.data.error);
+    //   } else {
+    //     //response is undefined
+    //     console.log(`Error: ${err.message}`);
+    //   }
+    // }
   }
 
   return (

@@ -1,30 +1,68 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+
+import AuthenticationContext from '../AuthenticationContext';
+
+import { logout } from '../API/authenticationService';
 
 import api from '../API/posts';
 
 export default function NavBar() {
+  const authUser = useContext(AuthenticationContext);
+  // console.log(authUser);
+  // loggedInUser.setAuth(true);
+  // console.log(loggedInUser);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const userSessionToken = localStorage.getItem('user_session_token');
-      console.log(userSessionToken);
-      if (userSessionToken === null) {
-        setUser(null);
-        return;
-      }
-      // setUser(userSessionToken);
-      try {
-        const userID = localStorage.getItem('user_id');
-        const response = await api.get(`/api/v1/users/${userID}`);
-        // console.log(response);
-        if (response.data.session_token === userSessionToken) {
-          setUser(response.data);
-        }
-        // console.log(user);
-      } catch (err) {
+  // const [loggedIn, setLogin] = useState(false);
+
+  // console.log(user);
+
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const userSessionToken = localStorage.getItem('user_session_token');
+  //     console.log(userSessionToken);
+  //     if (userSessionToken === null) {
+  //       setUser(null);
+  //       return;
+  //     }
+  //     // setUser(userSessionToken);
+  //     try {
+  //       const userID = localStorage.getItem('user_id');
+  //       const response = await api.get(`/api/v1/users/${userID}`);
+  //       // console.log(response);
+  //       if (response.data.session_token === userSessionToken) {
+  //         setUser(response.data);
+  //       }
+  //       // console.log(user);
+  //     } catch (err) {
+  //       if (err.response) {
+  //         //not in the 200 range
+  //         console.log(err.response.data);
+  //         console.log(err.response.status);
+  //         console.log(err.response.headers);
+  //       } else {
+  //         //response is undefined
+  //         console.log(`Error: ${err.message}`);
+  //       }
+  //     }
+  //   };
+
+  //   fetchUser();
+  // }, []);
+
+  // useEffect(() => {
+  //   console.log('updated -> ', user);
+  // }, [user]);
+
+  async function logoutUser() {
+    logout()
+      .then((resp) => {
+        console.log(resp);
+        authUser.userLogged(); //removes the user data as they are logged out and not stored locally
+      })
+      .catch((err) => {
         if (err.response) {
           //not in the 200 range
           console.log(err.response.data);
@@ -34,33 +72,30 @@ export default function NavBar() {
           //response is undefined
           console.log(`Error: ${err.message}`);
         }
-      }
-    };
+      });
 
-    fetchUser();
-  }, []);
-
-  async function logoutUser() {
-    const userID = localStorage.getItem('user_id');
-    try {
-      const response = await api.post(`/api/v1/logout/${userID}`);
-      console.log(response.data);
-    } catch (err) {
-      if (err.response) {
-        //not in the 200 range
-        console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
-      } else {
-        //response is undefined
-        console.log(`Error: ${err.message}`);
-      }
-    }
-    localStorage.removeItem('user_session_token');
-    localStorage.removeItem('user_id');
-    window.location.reload();
-    // this.forceUpdate();
-    // navigate(0);
+    // const userID = localStorage.getItem('user_id');
+    // try {
+    //   const response = await api.post(`/api/v1/logout/${userID}`);
+    //   console.log(response.data);
+    // } catch (err) {
+    //   if (err.response) {
+    //     //not in the 200 range
+    //     console.log(err.response.data);
+    //     console.log(err.response.status);
+    //     console.log(err.response.headers);
+    //   } else {
+    //     //response is undefined
+    //     console.log(`Error: ${err.message}`);
+    //   }
+    // }
+    // localStorage.removeItem('user_session_token');
+    // localStorage.removeItem('user_id');
+    // // authUser.setAuth(false);
+    // authUser.userLogged(); //removes the user data as they are logged out and not stored locally
+    // // window.location.reload();
+    // // this.forceUpdate();
+    // // navigate(0);
   }
 
   return (
@@ -82,8 +117,8 @@ export default function NavBar() {
             {/* <Navbar.Text>
               Signed in as: <a href="#login">Stephen Ditta</a>
             </Navbar.Text> */}
-            <NavDropdown title={user == null ? 'Guest' : user.displayname}>
-              {user == null ? (
+            <NavDropdown title={!authUser.auth ? 'Guest' : authUser.user.displayname}>
+              {!authUser.auth ? (
                 <>
                   <LinkContainer to="/login">
                     <NavDropdown.Item>Login</NavDropdown.Item>
