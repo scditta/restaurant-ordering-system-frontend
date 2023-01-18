@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 
@@ -6,14 +6,14 @@ import AuthenticationContext from '../AuthenticationContext';
 
 import { logout } from '../API/authenticationService';
 
-import api from '../API/posts';
+// import api from '../API/posts';
 
 export default function NavBar() {
   const authUser = useContext(AuthenticationContext);
   // console.log(authUser);
   // loggedInUser.setAuth(true);
   // console.log(loggedInUser);
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
 
   // const [loggedIn, setLogin] = useState(false);
 

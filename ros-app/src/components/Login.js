@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { redirect, useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Container, Modal, Form, Button, Alert } from 'react-bootstrap';
 
@@ -7,7 +7,7 @@ import AuthenticationContext from '../AuthenticationContext';
 
 import { login } from '../API/authenticationService';
 
-import api from '../API/posts';
+// import api from '../API/posts';
 
 export default function Login() {
   const authUser = useContext(AuthenticationContext);

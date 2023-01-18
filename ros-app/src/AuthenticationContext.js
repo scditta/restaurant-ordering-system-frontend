@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
   const userLogged = () => {
     const fetchUser = async () => {
       const userSessionToken = localStorage.getItem('user_session_token');
-      console.log(userSessionToken);
+      // console.log(userSessionToken);
       //if there is no local session token the user is not logged in
       if (userSessionToken === null) {
         setUser(null);

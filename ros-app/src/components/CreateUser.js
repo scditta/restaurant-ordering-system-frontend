@@ -6,7 +6,7 @@ import AuthenticationContext from '../AuthenticationContext';
 
 import { signup, login } from '../API/authenticationService';
 
-import api from '../API/posts';
+// import api from '../API/posts';
 
 import '../CreateUser.css';
 
