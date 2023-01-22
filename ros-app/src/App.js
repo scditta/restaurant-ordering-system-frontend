@@ -17,7 +17,7 @@ function App() {
           <Route path="/" />
           <Route path="/signup" element={<CreateUser />} />
           <Route path="/login" element={<Login />} />
-          <Route path="*" element={<div>page not found!</div>} />
+          {/* <Route path="*" element={<div>page not found!</div>} /> */}
         </Routes>
       </AuthProvider>
     </>

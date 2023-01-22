@@ -5,8 +5,12 @@ import api from './API/posts';
 const AuthenticationContext = createContext();
 
 export function AuthProvider({ children }) {
+  //authentication / logged in
   const [auth, setAuth] = useState(false);
-  const [user, setUser] = useState({});
+  //if the user has administrative privileges
+  const [authorization, setAuthorization] = useState(false);
+  //user data if successfully logged
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     userLogged();
@@ -21,6 +25,7 @@ export function AuthProvider({ children }) {
       if (userSessionToken === null) {
         setUser(null);
         setAuth(false);
+        setAuthorization(false);
         return;
       }
 
@@ -31,12 +36,17 @@ export function AuthProvider({ children }) {
         if (response.data.session_token === userSessionToken) {
           setUser(response.data);
           setAuth(true);
+          //if the logged in user is an authorized
+          if (response.data.user_type >= 2) {
+            setAuthorization(true);
+          }
         }
         // console.log(user);
       } catch (err) {
         if (err.response) {
           setUser(null);
           setAuth(false);
+          setAuthorization(false);
           //not in the 200 range
           console.log(err.response.data);
           console.log(err.response.status);
@@ -52,7 +62,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthenticationContext.Provider value={{ auth, setAuth, user, userLogged }}>
+    <AuthenticationContext.Provider value={{ auth, setAuth, user, userLogged, authorization }}>
       {children}
     </AuthenticationContext.Provider>
   );

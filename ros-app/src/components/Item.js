@@ -1,12 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Row, Image, Col } from 'react-bootstrap';
+
+import Icon from './Icon';
+
+import AuthenticationContext from '../AuthenticationContext';
 
 import api from '../API/posts';
 
 export default function Item(props) {
   const [item, setItemData] = useState([]);
 
-  const [isAdmin, setAdmin] = useState(false);
+  const authUser = useContext(AuthenticationContext);
 
   useEffect(() => {
     // console.log(props.itemId);
@@ -45,7 +49,18 @@ export default function Item(props) {
         </Col>
         <Col>${item.price}</Col>
         {/* If the user logged in is an admin */}
-        {isAdmin ? <Row>Woo</Row> : <></>}
+        {authUser.authorization ? (
+          <Col>
+            <Icon
+              icon={'http://www.w3.org/2000/svg'}
+              itemId={item.id}
+              categoryId={props.categoryId}
+              type={'item'}
+            />
+          </Col>
+        ) : (
+          <></>
+        )}
       </Row>
     </>
   );

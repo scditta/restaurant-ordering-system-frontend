@@ -12,7 +12,6 @@ import '../CreateUser.css';
 
 export default function CreateUser() {
   const authUser = useContext(AuthenticationContext);
-  console.log(authUser);
 
   const [userData, setUserData] = useState({
     //initialize empty

@@ -11,7 +11,6 @@ import { login } from '../API/authenticationService';
 
 export default function Login() {
   const authUser = useContext(AuthenticationContext);
-  // console.log(authUser);
 
   const [userLoginData, setUserLoginData] = useState({
     //initialize empty login
@@ -45,7 +44,9 @@ export default function Login() {
     login(userLoginData.email, userLoginData.password)
       .then((resp) => {
         console.log(resp);
+        //adds the user data as they are logged in and stores it locally
         authUser.userLogged();
+        //redirect to the dashboard
         navigate('/');
       })
       .catch((err) => {
@@ -60,35 +61,6 @@ export default function Login() {
           console.log(`Error: ${err.message}`);
         }
       });
-
-    // login(userLoginData.email, userLoginData.password)
-    // .then(() => {})
-    // .catch(() => {});
-
-    // try {
-    //   const response = await api.post('/api/v1/login', userLoginData);
-    //   console.log(response.data);
-    //   localStorage.setItem('user_id', response.data.id);
-    //   localStorage.setItem('user_session_token', response.data.session_token);
-    //   authUser.userLogged();
-    //   // authUser.setAuth(true);
-    //   //redirect to the home page
-    //   navigate('/');
-    //   // return redirect('/');
-    //   // this.forceUpdate();
-    //   // window.location.reload();
-    // } catch (err) {
-    //   if (err.response) {
-    //     //not in the 200 range
-    //     console.log(err.response.data);
-    //     console.log(err.response.status);
-    //     console.log(err.response.headers);
-    //     setErrorResponse(err.response.data.error);
-    //   } else {
-    //     //response is undefined
-    //     console.log(`Error: ${err.message}`);
-    //   }
-    // }
   }
 
   return (

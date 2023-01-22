@@ -60,7 +60,8 @@ export default function NavBar() {
     logout()
       .then((resp) => {
         console.log(resp);
-        authUser.userLogged(); //removes the user data as they are logged out and not stored locally
+        //removes the user data as they are logged out and not stored locally
+        authUser.userLogged();
       })
       .catch((err) => {
         if (err.response) {
@@ -73,29 +74,6 @@ export default function NavBar() {
           console.log(`Error: ${err.message}`);
         }
       });
-
-    // const userID = localStorage.getItem('user_id');
-    // try {
-    //   const response = await api.post(`/api/v1/logout/${userID}`);
-    //   console.log(response.data);
-    // } catch (err) {
-    //   if (err.response) {
-    //     //not in the 200 range
-    //     console.log(err.response.data);
-    //     console.log(err.response.status);
-    //     console.log(err.response.headers);
-    //   } else {
-    //     //response is undefined
-    //     console.log(`Error: ${err.message}`);
-    //   }
-    // }
-    // localStorage.removeItem('user_session_token');
-    // localStorage.removeItem('user_id');
-    // // authUser.setAuth(false);
-    // authUser.userLogged(); //removes the user data as they are logged out and not stored locally
-    // // window.location.reload();
-    // // this.forceUpdate();
-    // // navigate(0);
   }
 
   return (
@@ -114,9 +92,6 @@ export default function NavBar() {
             </Nav>
           </Navbar.Collapse>
           <Navbar.Collapse className="justify-content-end">
-            {/* <Navbar.Text>
-              Signed in as: <a href="#login">Stephen Ditta</a>
-            </Navbar.Text> */}
             <NavDropdown title={!authUser.auth ? 'Guest' : authUser.user.displayname}>
               {!authUser.auth ? (
                 <>
