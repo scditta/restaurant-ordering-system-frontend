@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Modal, Form, Button, Alert } from 'react-bootstrap';
 
-import api from '../API/posts';
+import AuthenticationContext from '../context/AuthenticationContext';
+
+import { signup, login } from '../API/authenticationService';
 
 import '../CreateUser.css';
 
 export default function CreateUser() {
+  const authUser = useContext(AuthenticationContext);
+
   const [userData, setUserData] = useState({
     //initialize empty
     email: '',
@@ -14,8 +18,6 @@ export default function CreateUser() {
     password: '',
     displayname: '',
   });
-
-  // const [userId, setUserId] = useState('');
 
   const [show, setShow] = useState(true);
 
@@ -41,26 +43,33 @@ export default function CreateUser() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    try {
-      const response = await api.post('/api/v1/users', userData);
-      console.log(response.data);
-      // setUserId(response.data.id);
-      setErrorResponse('');
+    signup(userData.email, userData.user_type, userData.password, userData.displayname)
+      .then((resp) => {
+        console.log(resp);
+        login(userData.email, userData.password)
+          .then((resp) => {
+            console.log(resp);
+            authUser.userLogged();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
 
-      //redirect to the home page
-      navigate('/');
-    } catch (err) {
-      if (err.response) {
-        //not in the 200 range
-        console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
-        setErrorResponse(err.response.data.error);
-      } else {
-        //response is undefined
-        console.log(`Error: ${err.message}`);
-      }
-    }
+        //redirect to the home page
+        navigate('/');
+      })
+      .catch((err) => {
+        if (err.response) {
+          //not in the 200 range
+          console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response.headers);
+          setErrorResponse(err.response.data.error);
+        } else {
+          //response is undefined
+          console.log(`Error: ${err.message}`);
+        }
+      });
   }
 
   return (
