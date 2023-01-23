@@ -7,8 +7,6 @@ import AuthenticationContext from '../context/AuthenticationContext';
 
 import { login } from '../API/authenticationService';
 
-// import api from '../API/posts';
-
 export default function Login() {
   const authUser = useContext(AuthenticationContext);
 

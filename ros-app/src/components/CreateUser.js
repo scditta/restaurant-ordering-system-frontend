@@ -6,8 +6,6 @@ import AuthenticationContext from '../context/AuthenticationContext';
 
 import { signup, login } from '../API/authenticationService';
 
-// import api from '../API/posts';
-
 import '../CreateUser.css';
 
 export default function CreateUser() {
@@ -20,8 +18,6 @@ export default function CreateUser() {
     password: '',
     displayname: '',
   });
-
-  // const [userId, setUserId] = useState('');
 
   const [show, setShow] = useState(true);
 

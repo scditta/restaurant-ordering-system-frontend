@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import { Row, Col } from 'react-bootstrap';
 
 import Icon from './Icon';
@@ -9,10 +9,6 @@ import AuthenticationContext from '../context/AuthenticationContext';
 
 export default function Category(props) {
   const authUser = useContext(AuthenticationContext);
-
-  useEffect(() => {
-    // console.log(props.itemId);
-  }, []);
 
   return (
     <>

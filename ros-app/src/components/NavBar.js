@@ -6,8 +6,6 @@ import AuthenticationContext from '../context/AuthenticationContext';
 
 import { logout } from '../API/authenticationService';
 
-// import api from '../API/posts';
-
 export default function NavBar() {
   const authUser = useContext(AuthenticationContext);
 
