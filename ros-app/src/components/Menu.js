@@ -22,6 +22,7 @@ export default function Menu() {
                   <AddCategoryButton />
                 </Stack>
               </Container>
+              {console.log(menuData)}
               {menuData.categories?.map((category, index) => (
                 <div key={index}>
                   <Category categoryId={category.id} categoryName={category.name} />
