@@ -74,27 +74,6 @@ export default function CreateUser() {
           console.log(`Error: ${err.message}`);
         }
       });
-
-    // try {
-    //   const response = await api.post('/api/v1/users', userData);
-    //   console.log(response.data);
-    //   // setUserId(response.data.id);
-    //   setErrorResponse('');
-
-    //   //redirect to the home page
-    //   navigate('/');
-    // } catch (err) {
-    //   if (err.response) {
-    //     //not in the 200 range
-    //     console.log(err.response.data);
-    //     console.log(err.response.status);
-    //     console.log(err.response.headers);
-    //     setErrorResponse(err.response.data.error);
-    //   } else {
-    //     //response is undefined
-    //     console.log(`Error: ${err.message}`);
-    //   }
-    // }
   }
 
   return (
