@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Container, Modal, Form, Button, Alert } from 'react-bootstrap';
 
-import AuthenticationContext from '../AuthenticationContext';
+import AuthenticationContext from '../context/AuthenticationContext';
 
 import { login } from '../API/authenticationService';
 

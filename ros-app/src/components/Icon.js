@@ -1,29 +1,44 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
+
+import MenuContext from '../context/MenuContext';
 
 import api from '../API/posts';
 
 export default function Icon(props) {
-  useEffect(() => {}, []);
+  const menuData = useContext(MenuContext);
+
+  useEffect(() => {
+    // console.log(menuData);
+  }, []);
 
   function removeCategory(e) {
     e.preventDefault();
-    console.log(props);
-    // console.log(e.target.parentElement);
 
-    // console.log(props.type);
     if (props.type === 'category') {
-      console.log('category');
-      // try {
-      //   // const response = api.delete(`/api/v1/categories/${props.itemId}`);
-      // } catch (err) {}
+      const deleteCategory = async () => {
+        try {
+          const response = await api.delete(`/api/v1/categories/${props.categoryId}`);
+          console.log(response.data);
+          menuData.updateMenu();
+        } catch (err) {
+          if (err.response) {
+            //not in the 200 range
+            console.log(err.response.data);
+            console.log(err.response.status);
+            console.log(err.response.headers);
+          } else {
+            //response is undefined
+            console.log(`Error: ${err.message}`);
+          }
+        }
+      };
+      deleteCategory();
     } else {
-      console.log('item');
       const deleteItem = async () => {
         try {
-          // console.log(props.itemId);
-          // console.log(props.categoryId);
           const response = await api.delete(`/api/v1/items/${props.itemId}/${props.categoryId}`);
           console.log(response.data);
+          menuData.updateMenu();
         } catch (err) {
           if (err.response) {
             //not in the 200 range

@@ -5,7 +5,7 @@ import './App.css';
 import CreateUser from './components/CreateUser';
 import Login from './components/Login';
 import DashBoard from './components/DashBoard';
-import { AuthProvider } from './AuthenticationContext';
+import { AuthProvider } from './context/AuthenticationContext';
 
 function App() {
   return (

@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 
-import AuthenticationContext from '../AuthenticationContext';
+import AuthenticationContext from '../context/AuthenticationContext';
 
 import { logout } from '../API/authenticationService';
 
@@ -10,51 +10,6 @@ import { logout } from '../API/authenticationService';
 
 export default function NavBar() {
   const authUser = useContext(AuthenticationContext);
-  // console.log(authUser);
-  // loggedInUser.setAuth(true);
-  // console.log(loggedInUser);
-  // const [user, setUser] = useState(null);
-
-  // const [loggedIn, setLogin] = useState(false);
-
-  // console.log(user);
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const userSessionToken = localStorage.getItem('user_session_token');
-  //     console.log(userSessionToken);
-  //     if (userSessionToken === null) {
-  //       setUser(null);
-  //       return;
-  //     }
-  //     // setUser(userSessionToken);
-  //     try {
-  //       const userID = localStorage.getItem('user_id');
-  //       const response = await api.get(`/api/v1/users/${userID}`);
-  //       // console.log(response);
-  //       if (response.data.session_token === userSessionToken) {
-  //         setUser(response.data);
-  //       }
-  //       // console.log(user);
-  //     } catch (err) {
-  //       if (err.response) {
-  //         //not in the 200 range
-  //         console.log(err.response.data);
-  //         console.log(err.response.status);
-  //         console.log(err.response.headers);
-  //       } else {
-  //         //response is undefined
-  //         console.log(`Error: ${err.message}`);
-  //       }
-  //     }
-  //   };
-
-  //   fetchUser();
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log('updated -> ', user);
-  // }, [user]);
 
   async function logoutUser() {
     logout()

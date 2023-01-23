@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 
 import Icon from './Icon';
 
-import AuthenticationContext from '../AuthenticationContext';
+import AuthenticationContext from '../context/AuthenticationContext';
 
 // import api from '../API/posts';
 
