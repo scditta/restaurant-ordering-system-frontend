@@ -73,6 +73,7 @@ export default function AddItemButton(props) {
                     <Form.Label>Image</Form.Label>
 
                     <div
+                      className="d-flex align-items-center justify-content-center"
                       style={{
                         backgroundColor: 'rgb(233 233 233)',
                         border: '3px dashed',
@@ -80,11 +81,13 @@ export default function AddItemButton(props) {
                         margin: '1em',
                         aspectRatio: '1/1',
                         color: 'rgb(122 122 122)',
+                        borderRadius: '0.5em',
+                        cursor: 'pointer',
                       }}
                       {...getRootProps()}
                     >
                       <input {...getInputProps()} />
-                      {isDragActive ? <p>Drop the files here ...</p> : <p>Upload Image</p>}
+                      <div>{isDragActive ? 'Drop file here...' : 'Upload Image'}</div>
                     </div>
                   </Form.Group>
                 </Col>
