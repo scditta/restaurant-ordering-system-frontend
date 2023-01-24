@@ -1,5 +1,5 @@
 import { useState, useContext, useCallback } from 'react';
-import { Modal, Button, Form, InputGroup, Row, Col, Container } from 'react-bootstrap';
+import { Modal, Button, Form, InputGroup, Row, Col, Container, Alert } from 'react-bootstrap';
 import { useDropzone } from 'react-dropzone';
 
 import MenuContext from '../context/MenuContext';
@@ -8,7 +8,20 @@ export default function AddItemButton(props) {
   const NAME_MAX = 40;
   const DESCRIPTION_MAX = 100;
   const PRICE_MIN = 0;
+  const IMAGE_MAX_MB = 8;
+  const IMAGE_FNAME_MAX = 100;
 
+  // Image filetypes accepted by image upload widget
+  // Key - Common MIME type (see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)
+  // Value - Accepted file extension names
+  const IMAGE_ACCEPTED_FILETYPES = {
+    'image/png': ['.png'],
+    'image/bmp': ['.bmp'],
+    'image/jpeg': ['.jpeg', '.jpg'],
+    'image/webp': ['.webp'],
+  };
+
+  const menuData = useContext(MenuContext);
   const [itemData, setItemData] = useState({
     name: '',
     category: props.categoryId,
@@ -18,7 +31,6 @@ export default function AddItemButton(props) {
   });
 
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -47,12 +59,58 @@ export default function AddItemButton(props) {
     });
   };
 
-  const menuData = useContext(MenuContext);
-
   const onDrop = useCallback((acceptedFiles) => {
-    // Do something with the files
+    /*
+    acceptedFiles.map((file) => {
+      //Handle accepted file
+    });
+    */
   }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  function imageSizeValidator(file) {
+    if (file.name.length > IMAGE_FNAME_MAX) {
+      return {
+        code: 'fname-too-large',
+        message: `File name is too long (max length: ${IMAGE_FNAME_MAX} characters).`,
+      };
+    }
+
+    if (file.size > IMAGE_MAX_MB * 1000000) {
+      return {
+        code: 'size-too-large',
+        message: `Image is too large (max size: ${IMAGE_MAX_MB}MB).`,
+      };
+    }
+  }
+
+  const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
+    onDrop: onDrop,
+    accept: IMAGE_ACCEPTED_FILETYPES,
+    maxFiles: 1,
+    validator: imageSizeValidator,
+  });
+
+  const fileRejectionItems = fileRejections.map(({ file, errors }) => (
+    <Alert variant="warning" key={file.path} style={{ marginBottom: '0rem' }}>
+      Unable to upload '{file.path}'.
+      <ul style={{ marginBottom: '0.25rem' }}>
+        {errors.map((e) => {
+          let message = null;
+          switch (e.code) {
+            case 'file-invalid-type':
+              message = `File type must be:`;
+              Object.values(IMAGE_ACCEPTED_FILETYPES).forEach((filetype) => {
+                message += ` ${filetype[0]}`;
+              });
+              break;
+            default:
+              message = e.message;
+          }
+          return <li key={e.code}>{message}</li>;
+        })}
+      </ul>
+    </Alert>
+  ));
 
   return (
     <>
@@ -71,23 +129,58 @@ export default function AddItemButton(props) {
                 <Col lg={true}>
                   <Form.Group className="mb-3">
                     <Form.Label>Image</Form.Label>
+                    <div style={{ margin: '1em' }}>
+                      <div
+                        className="d-flex align-items-center justify-content-center"
+                        style={{
+                          backgroundColor: 'rgb(233 233 233)',
+                          border: '3px dashed',
+                          marginBottom: '0.5em',
+                          aspectRatio: '1/1',
+                          color: 'rgb(122 122 122)',
+                          borderRadius: '0.5em',
+                          cursor: 'pointer',
+                          textAlign: 'center',
+                        }}
+                        {...getRootProps()}
+                      >
+                        <input {...getInputProps()} />
+                        <div>
+                          {isDragActive ? (
+                            'Drop file here...'
+                          ) : (
+                            <>
+                              Drag and drop image here<br></br>(
+                              {Object.values(IMAGE_ACCEPTED_FILETYPES).map((filetype, i, arr) => (
+                                <span key={filetype[0]}>
+                                  {filetype[0]}
+                                  {i < arr.length - 1 && ' '}
+                                </span>
+                              ))}
+                              )
+                            </>
+                          )}
+                        </div>
+                      </div>
 
-                    <div
-                      className="d-flex align-items-center justify-content-center"
-                      style={{
-                        backgroundColor: 'rgb(233 233 233)',
-                        border: '3px dashed',
-                        padding: '1em',
-                        margin: '1em',
-                        aspectRatio: '1/1',
-                        color: 'rgb(122 122 122)',
-                        borderRadius: '0.5em',
-                        cursor: 'pointer',
-                      }}
-                      {...getRootProps()}
-                    >
-                      <input {...getInputProps()} />
-                      <div>{isDragActive ? 'Drop file here...' : 'Upload Image'}</div>
+                      <span className="text-muted">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          className="bi bi-info-circle"
+                          viewBox="0 0 16 16"
+                          style={{
+                            marginRight: '0.2em',
+                            transform: 'translate(0px, -2px)',
+                          }}
+                        >
+                          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                          <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                        </svg>
+                        Image size cannot exceed {IMAGE_MAX_MB}MB.
+                      </span>
                     </div>
                   </Form.Group>
                 </Col>
@@ -158,12 +251,15 @@ export default function AddItemButton(props) {
                   </Form.Group>
                 </Col>
               </Row>
+              <Row>
+                <Col>{fileRejectionItems}</Col>
+              </Row>
             </Container>
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Discard
+            Close
           </Button>
           <Button variant="primary" onClick={handleClose}>
             Save
