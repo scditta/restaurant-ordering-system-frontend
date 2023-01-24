@@ -129,7 +129,7 @@ export default function AddItemButton(props) {
                 <Col lg={true}>
                   <Form.Group className="mb-3">
                     <Form.Label>Image</Form.Label>
-                    <div style={{ margin: '1em' }}>
+                    <div style={{ margin: '2em' }}>
                       <div
                         className="d-flex align-items-center justify-content-center"
                         style={{
@@ -262,7 +262,7 @@ export default function AddItemButton(props) {
             Close
           </Button>
           <Button variant="primary" onClick={handleClose}>
-            Save
+            Save New Item
           </Button>
         </Modal.Footer>
       </Modal>
