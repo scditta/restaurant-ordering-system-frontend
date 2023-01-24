@@ -27,13 +27,11 @@ export default function Menu() {
               {menuData.categories?.map((category, index) => (
                 <div key={index}>
                   <Category categoryId={category.id} categoryName={category.name} />
-
                   {category?.items.map((item, index) => (
                     // console.log(item);
                     <Item key={index} itemId={item} categoryId={category.id} />
                   ))}
-
-                  {authUser.authorization && <AddItemButton />}
+                  {authUser.authorization && <AddItemButton categoryId={category.id} />}
                 </div>
               ))}
             </Container>
