@@ -152,7 +152,7 @@ export default function AddItemButton(props) {
                   <Form.Group className="mb-3">
                     <Form.Label>Image</Form.Label>
 
-                    <div style={{ position: 'relative', margin: '2em' }}>
+                    <div style={{ position: 'relative' }}>
                       {imgSrc ? (
                         <>
                           <Image src={imgSrc} fluid thumbnail></Image>
