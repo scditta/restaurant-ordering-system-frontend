@@ -6,12 +6,13 @@ import MenuContext from '../context/MenuContext';
 export default function AddItemButton(props) {
   const NAME_MAX = 40;
   const DESCRIPTION_MAX = 100;
+  const PRICE_MIN = 0;
 
   const [itemData, setItemData] = useState({
     name: '',
     category: props.categoryId,
     description: '',
-    price: 0,
+    price: PRICE_MIN,
     image: '',
   });
 
@@ -24,6 +25,18 @@ export default function AddItemButton(props) {
     const name = e.target.name;
     const valueRaw = e.target.value;
     let valueValidated = valueRaw;
+
+    switch (name) {
+      case 'price':
+        valueValidated = parseFloat(valueRaw);
+        if (isNaN(valueValidated) || valueValidated < PRICE_MIN) {
+          valueValidated = PRICE_MIN;
+        }
+        valueValidated = valueValidated.toFixed(2);
+        e.target.value = valueValidated;
+        break;
+      default:
+    }
 
     setItemData((prevItemData) => {
       return {
@@ -98,7 +111,14 @@ export default function AddItemButton(props) {
               <Form.Label>Price</Form.Label>
               <InputGroup className="mb-3">
                 <InputGroup.Text>$</InputGroup.Text>
-                <Form.Control placeholder="0.00" />
+                <Form.Control
+                  type="number"
+                  placeholder="0.00"
+                  step="0.01"
+                  min={PRICE_MIN}
+                  name="price"
+                  onBlur={handleChange}
+                />
               </InputGroup>
             </Form.Group>
 
