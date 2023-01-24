@@ -1,8 +1,18 @@
-import { useState, useContext } from 'react';
-import { Modal, Button, Form, InputGroup, Row, Col, Container, Alert } from 'react-bootstrap';
+import { useState, useContext, useEffect } from 'react';
+import {
+  Modal,
+  Button,
+  Form,
+  InputGroup,
+  Row,
+  Col,
+  Container,
+  Alert,
+  Tooltip,
+  OverlayTrigger,
+} from 'react-bootstrap';
 
 import ImageUpload from './ImageUpload';
-
 import MenuContext from '../context/MenuContext';
 
 export default function AddItemButton(props) {
@@ -16,12 +26,12 @@ export default function AddItemButton(props) {
     category: props.categoryId,
     description: '',
     price: PRICE_MIN,
-    image: '',
+    image: null,
   });
 
-  const [error, setError] = useState(null);
-
   const [show, setShow] = useState(false);
+  const [error, setError] = useState(null);
+  const [valid, setValid] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleChange = (e) => {
@@ -49,13 +59,33 @@ export default function AddItemButton(props) {
     });
   };
 
+  const handleSubmit = () => {
+    console.log(itemData); //*PK
+  };
+
   const imageUpdate = (result) => {
     if (result.success) {
       setError(null);
     } else {
       setError(result.message);
     }
+
+    setItemData((prevItemData) => {
+      return {
+        ...prevItemData,
+        image: result.imageBinary,
+      };
+    });
   };
+
+  useEffect(() => {
+    setValid(
+      itemData.name.length > 0 &&
+        itemData.description.length > 0 &&
+        itemData.image !== null &&
+        itemData.price > 0
+    );
+  }, [itemData]);
 
   return (
     <>
@@ -160,9 +190,22 @@ export default function AddItemButton(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save New Item
-          </Button>
+
+          <OverlayTrigger
+            overlay={<Tooltip id="tooltip-disabled">Please fill out all fields</Tooltip>}
+          >
+            <span className="d-inline-block">
+              {valid ? (
+                <Button variant="primary" onClick={handleSubmit}>
+                  Save New Item
+                </Button>
+              ) : (
+                <Button disabled style={{ pointerEvents: 'none' }}>
+                  Save New Item
+                </Button>
+              )}
+            </span>
+          </OverlayTrigger>
         </Modal.Footer>
       </Modal>
     </>
