@@ -25,7 +25,7 @@ export default function AddItemButton(props) {
     name: '',
     category: props.categoryId,
     description: '',
-    price: PRICE_MIN,
+    price: null,
     image: null,
   });
 
@@ -191,21 +191,21 @@ export default function AddItemButton(props) {
             Close
           </Button>
 
-          <OverlayTrigger
-            overlay={<Tooltip id="tooltip-disabled">Please fill out all fields</Tooltip>}
-          >
-            <span className="d-inline-block">
-              {valid ? (
-                <Button variant="primary" onClick={handleSubmit}>
-                  Save New Item
-                </Button>
-              ) : (
+          {valid ? (
+            <Button variant="primary" onClick={handleSubmit}>
+              Save New Item
+            </Button>
+          ) : (
+            <OverlayTrigger
+              overlay={<Tooltip id="tooltip-disabled">Please fill out all fields</Tooltip>}
+            >
+              <span className="d-inline-block">
                 <Button disabled style={{ pointerEvents: 'none' }}>
                   Save New Item
                 </Button>
-              )}
-            </span>
-          </OverlayTrigger>
+              </span>
+            </OverlayTrigger>
+          )}
         </Modal.Footer>
       </Modal>
     </>
