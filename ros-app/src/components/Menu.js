@@ -3,6 +3,7 @@ import { Container, Row, Col, Stack } from 'react-bootstrap';
 
 import Item from './Item';
 import Category from './Category';
+import AuthenticationContext from '../context/AuthenticationContext';
 import AddCategoryButton from './AddCategoryButton';
 import AddItemButton from './AddItemButton';
 
@@ -10,6 +11,7 @@ import MenuContext from '../context/MenuContext';
 
 export default function Menu() {
   const menuData = useContext(MenuContext);
+  const authUser = useContext(AuthenticationContext);
 
   return (
     <>
@@ -30,7 +32,8 @@ export default function Menu() {
                     // console.log(item);
                     <Item key={index} itemId={item} categoryId={category.id} />
                   ))}
-                  <AddItemButton />
+
+                  {authUser.authorization && <AddItemButton />}
                 </div>
               ))}
             </Container>
