@@ -1,20 +1,19 @@
 import { useState, useEffect, useContext } from 'react';
-import { Row, Image, Col } from 'react-bootstrap';
-
-import Icon from './Icon';
+import { Row, Image, Col, Modal } from 'react-bootstrap';
 
 import AuthenticationContext from '../context/AuthenticationContext';
-
 import api from '../API/posts';
+import Icon from './Icon';
+import ItemForm from './ItemForm/ItemForm';
 
 export default function Item(props) {
   const [item, setItemData] = useState([]);
-
   const authUser = useContext(AuthenticationContext);
 
-  useEffect(() => {
-    // console.log(props.itemId);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
 
+  useEffect(() => {
     //Fetch the item and insert its data
     const fetchItem = async () => {
       try {
@@ -35,9 +34,13 @@ export default function Item(props) {
     fetchItem();
   }, [props.itemId]);
 
+  const handleClick = () => {
+    setShow(true);
+  };
+
   return (
     <>
-      <Row alt={item.id} className="mb-3">
+      <Row alt={item.id} className="mb-3" style={{ cursor: 'pointer' }} onClick={handleClick}>
         <Col>
           <Image className="cardImage" src={item.image}></Image>
         </Col>
@@ -64,6 +67,14 @@ export default function Item(props) {
           <></>
         )}
       </Row>
+      <Modal show={show} onHide={handleClose} animation={false} size="lg" centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Menu Item</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ItemForm categoryId={props.categoryId} closeModalCallback={handleClose} item={item} />
+        </Modal.Body>
+      </Modal>
     </>
   );
 }
