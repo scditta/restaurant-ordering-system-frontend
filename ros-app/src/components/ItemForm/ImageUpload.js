@@ -90,6 +90,7 @@ export default function ImageUpload(props) {
     accept: IMAGE_ACCEPTED_FILETYPES,
     maxFiles: 1,
     validator: imageValidator,
+    disabled: props.disabled,
   });
 
   return (

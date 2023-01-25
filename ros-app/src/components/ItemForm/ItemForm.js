@@ -169,6 +169,7 @@ export default function ItemForm(props) {
               <ImageUpload
                 imageUpdateCallback={imageUpdate}
                 defaultImage={props.item ? props.item.image : null}
+                disabled={isLoading}
               ></ImageUpload>
             </Form.Group>
           </Col>
@@ -183,6 +184,7 @@ export default function ItemForm(props) {
                 value={itemData.name}
                 onChange={handleChange}
                 maxLength={NAME_MAX}
+                disabled={isLoading}
               ></Form.Control>
               <Form.Text className={itemData.name.length < NAME_MAX ? 'text-muted' : 'text-danger'}>
                 {NAME_MAX - itemData.name.length} character(s) remaining
@@ -191,7 +193,12 @@ export default function ItemForm(props) {
 
             <Form.Group className="mb-3">
               <Form.Label>Category</Form.Label>
-              <Form.Select name="category" value={itemData.category} onChange={handleChange}>
+              <Form.Select
+                name="category"
+                value={itemData.category}
+                onChange={handleChange}
+                disabled={isLoading}
+              >
                 {menuData.categories.map((category, index) => (
                   <option key={index} value={category.id}>
                     {category.name}
@@ -211,6 +218,7 @@ export default function ItemForm(props) {
                 maxLength={DESCRIPTION_MAX}
                 rows={3}
                 style={{ resize: 'none' }}
+                disabled={isLoading}
               ></Form.Control>
               <Form.Text
                 className={
@@ -232,6 +240,7 @@ export default function ItemForm(props) {
                   onChange={handleChange}
                   onBlur={formatPrice}
                   value={itemData.price}
+                  disabled={isLoading}
                 />
               </InputGroup>
             </Form.Group>
