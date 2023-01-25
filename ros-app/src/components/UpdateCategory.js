@@ -3,13 +3,13 @@ import { Button, Modal, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 // import { useNavigate } from 'react-router-dom';
 
 import AuthenticationContext from '../context/AuthenticationContext';
-import MenuContext from '../context/MenuContext';
+// import MenuContext from '../context/MenuContext';
 
-import api from '../API/posts';
+// import api from '../API/posts';
 
 export default function UpdateCategory(props) {
   const authUser = useContext(AuthenticationContext);
-  const menuData = useContext(MenuContext);
+  // const menuData = useContext(MenuContext);
 
   const [modalShow, setModalShow] = useState(false);
 
