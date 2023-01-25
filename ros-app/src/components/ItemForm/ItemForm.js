@@ -36,7 +36,7 @@ export default function ItemForm(props) {
       name: props.item.name,
       category: props.categoryId,
       description: props.item.description,
-      price: parseInt(props.item.price / 100),
+      price: (props.item.price / 100.0).toFixed(2),
       image: props.item.image,
     };
   }
@@ -47,25 +47,29 @@ export default function ItemForm(props) {
   const [isLoading, setIsLoading] = useState(false);
   const handleChange = (e) => {
     const name = e.target.name;
-    const valueRaw = e.target.value;
-    let valueValidated = valueRaw;
-
-    switch (name) {
-      case 'price':
-        valueValidated = parseFloat(valueRaw);
-        if (isNaN(valueValidated) || valueValidated < PRICE_MIN) {
-          valueValidated = PRICE_MIN;
-        }
-        valueValidated = valueValidated.toFixed(2);
-        e.target.value = valueValidated;
-        break;
-      default:
-    }
+    const value = e.target.value;
 
     setItemData((prevItemData) => {
       return {
         ...prevItemData,
-        [name]: valueValidated,
+        [name]: value,
+      };
+    });
+  };
+
+  const formatPrice = () => {
+    const valueRaw = itemData.price;
+    let valueValidated = parseFloat(valueRaw);
+
+    if (isNaN(valueValidated) || valueValidated < PRICE_MIN) {
+      valueValidated = PRICE_MIN;
+    }
+    valueValidated = valueValidated.toFixed(2);
+
+    setItemData((prevItemData) => {
+      return {
+        ...prevItemData,
+        price: valueValidated,
       };
     });
   };
@@ -224,10 +228,10 @@ export default function ItemForm(props) {
                 <Form.Control
                   type="number"
                   placeholder="0.00"
-                  step="0.01"
-                  min={PRICE_MIN}
                   name="price"
-                  onBlur={handleChange}
+                  onChange={handleChange}
+                  onBlur={formatPrice}
+                  value={itemData.price}
                 />
               </InputGroup>
             </Form.Group>
