@@ -10,10 +10,12 @@ import {
   Alert,
   Tooltip,
   OverlayTrigger,
+  Spinner,
 } from 'react-bootstrap';
 
 import ImageUpload from './ImageUpload';
 import MenuContext from '../context/MenuContext';
+import api from '../API/posts';
 
 export default function AddItemButton(props) {
   const NAME_MAX = 40;
@@ -21,17 +23,20 @@ export default function AddItemButton(props) {
   const PRICE_MIN = 0;
 
   const menuData = useContext(MenuContext);
-  const [itemData, setItemData] = useState({
+
+  const defaultItemData = {
     name: '',
     category: props.categoryId,
     description: '',
     price: null,
     image: null,
-  });
+  };
+  const [itemData, setItemData] = useState({ ...defaultItemData });
 
   const [show, setShow] = useState(false);
   const [error, setError] = useState(null);
-  const [valid, setValid] = useState(false);
+  const [isValid, setIsValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleChange = (e) => {
@@ -60,7 +65,26 @@ export default function AddItemButton(props) {
   };
 
   const handleSubmit = () => {
-    console.log(itemData); //*PK
+    setError(null);
+    setIsLoading(true);
+    api
+      .post(`api/v1/items/${itemData.category}`, {
+        name: itemData.name,
+        description: itemData.description,
+        price: itemData.price * 100, //save as cents in db, NOT dollars
+        image: itemData.image,
+      })
+      .then((res) => {
+        setItemData({ ...defaultItemData });
+        setShow(false);
+        menuData.updateMenu();
+      })
+      .catch((err) => {
+        setError(err.response.data.error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const imageUpdate = (result) => {
@@ -79,7 +103,7 @@ export default function AddItemButton(props) {
   };
 
   useEffect(() => {
-    setValid(
+    setIsValid(
       itemData.name.length > 0 &&
         itemData.description.length > 0 &&
         itemData.image !== null &&
@@ -190,22 +214,24 @@ export default function AddItemButton(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-
-          {valid ? (
-            <Button variant="primary" onClick={handleSubmit}>
-              Save New Item
-            </Button>
-          ) : (
-            <OverlayTrigger
-              overlay={<Tooltip id="tooltip-disabled">Please fill out all fields</Tooltip>}
-            >
-              <span className="d-inline-block">
-                <Button disabled style={{ pointerEvents: 'none' }}>
-                  Save New Item
-                </Button>
-              </span>
-            </OverlayTrigger>
-          )}
+          <OverlayTrigger
+            overlay={
+              isValid ? <></> : <Tooltip id="tooltip-disabled">Please fill out all fields</Tooltip>
+            }
+          >
+            <span className="d-inline-block">
+              <Button
+                variant="primary"
+                disabled={isLoading || !isValid}
+                onClick={handleSubmit}
+                style={{
+                  minWidth: '9em',
+                }}
+              >
+                {isLoading ? <Spinner animation="border" size="sm" /> : <>Save New Item</>}
+              </Button>
+            </span>
+          </OverlayTrigger>
         </Modal.Footer>
       </Modal>
     </>
