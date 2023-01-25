@@ -83,7 +83,7 @@ export default function ItemForm(props) {
         .put(`api/v1/items/${props.item.id}`, {
           name: itemData.name,
           description: itemData.description,
-          price: itemData.price * 100, //save as cents in db, NOT dollars
+          price: parseInt(itemData.price * 100), //save as cents in db, NOT dollars
           image: itemData.image,
         })
         .then((res) => {
