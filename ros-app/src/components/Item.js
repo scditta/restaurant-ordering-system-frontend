@@ -9,7 +9,6 @@ import api from '../API/posts';
 
 export default function Item(props) {
   const [item, setItemData] = useState([]);
-
   const authUser = useContext(AuthenticationContext);
 
   useEffect(() => {
@@ -35,33 +34,33 @@ export default function Item(props) {
     fetchItem();
   }, [props.itemId]);
 
+  const handleClick = () => {};
+
   return (
-    <>
-      <Row alt={item.id} className="mb-3">
+    <Row alt={item.id} className="mb-3" style={{ cursor: 'pointer' }} onClick={handleClick}>
+      <Col>
+        <Image className="cardImage" src={item.image}></Image>
+      </Col>
+      <Col>
+        <Row>
+          <h6>{item.name}</h6>
+        </Row>
+        <Row>{item.description}</Row>
+      </Col>
+      <Col>${item.price}</Col>
+      {/* If the user logged in is an admin */}
+      {authUser.authorization ? (
         <Col>
-          <Image className="cardImage" src={item.image}></Image>
+          <Icon
+            icon={'http://www.w3.org/2000/svg'}
+            itemId={item.id}
+            categoryId={props.categoryId}
+            type={'item'}
+          />
         </Col>
-        <Col>
-          <Row>
-            <h6>{item.name}</h6>
-          </Row>
-          <Row>{item.description}</Row>
-        </Col>
-        <Col>${item.price}</Col>
-        {/* If the user logged in is an admin */}
-        {authUser.authorization ? (
-          <Col>
-            <Icon
-              icon={'http://www.w3.org/2000/svg'}
-              itemId={item.id}
-              categoryId={props.categoryId}
-              type={'item'}
-            />
-          </Col>
-        ) : (
-          <></>
-        )}
-      </Row>
-    </>
+      ) : (
+        <></>
+      )}
+    </Row>
   );
 }
