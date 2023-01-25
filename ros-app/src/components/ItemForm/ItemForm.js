@@ -197,7 +197,7 @@ export default function ItemForm(props) {
                 name="category"
                 value={itemData.category}
                 onChange={handleChange}
-                disabled={isLoading}
+                disabled={isLoading || props.item} //disable category selector if editing item
               >
                 {menuData.categories.map((category, index) => (
                   <option key={index} value={category.id}>
