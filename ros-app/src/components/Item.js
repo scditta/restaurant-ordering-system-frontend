@@ -47,7 +47,9 @@ export default function Item(props) {
           </Row>
           <Row>{item.description}</Row>
         </Col>
-        <Col>${item.price}</Col>
+        <Col>
+          {(item.price / 100).toLocaleString('en-ca', { style: 'currency', currency: 'CAD' })}
+        </Col>
         {/* If the user logged in is an admin */}
         {authUser.authorization ? (
           <Col>

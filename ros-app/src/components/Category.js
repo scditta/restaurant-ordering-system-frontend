@@ -4,6 +4,7 @@ import { Row, Col } from 'react-bootstrap';
 import Icon from './Icon';
 
 import AuthenticationContext from '../context/AuthenticationContext';
+import UpdateCategory from './UpdateCategory';
 
 // import api from '../API/posts';
 
@@ -18,13 +19,18 @@ export default function Category(props) {
         </Col>
         {/* If the user logged in is an admin */}
         {authUser.authorization ? (
-          <Col xs={2}>
-            <Icon
-              icon={'http://www.w3.org/2000/svg'}
-              categoryId={props.categoryId}
-              type={'category'}
-            />
-          </Col>
+          <>
+            <Col>
+              <UpdateCategory categoryName={props.categoryName} />
+            </Col>
+            <Col>
+              <Icon
+                icon={'http://www.w3.org/2000/svg'}
+                categoryId={props.categoryId}
+                type={'category'}
+              />
+            </Col>
+          </>
         ) : (
           <></>
         )}
