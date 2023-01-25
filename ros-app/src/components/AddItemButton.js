@@ -18,7 +18,7 @@ export default function AddItemButton(props) {
           <Modal.Title>Add Menu Item</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ItemForm categoryId={props.categoryId} closeModalCallback={handleClose} />
+          <ItemForm categoryId={props.categoryId} closeModalCallback={handleClose} item={null} />
         </Modal.Body>
       </Modal>
     </>

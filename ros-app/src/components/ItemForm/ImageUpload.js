@@ -14,7 +14,7 @@ export default function ImageUpload(props) {
     'image/webp': ['.webp'],
   };
 
-  const [imgSrc, setImgSrc] = useState('');
+  const [imgSrc, setImgSrc] = useState(props.defaultImage);
 
   function imageUpdate(src) {
     setImgSrc(src);

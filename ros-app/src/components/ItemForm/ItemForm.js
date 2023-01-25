@@ -23,13 +23,24 @@ export default function ItemForm(props) {
 
   const menuData = useContext(MenuContext);
 
-  const defaultItemData = {
+  let defaultItemData = {
     name: '',
     category: props.categoryId,
     description: '',
     price: null,
     image: null,
   };
+  // If item passed to component, set as default values.
+  if (props.item) {
+    defaultItemData = {
+      name: props.item.name,
+      category: props.categoryId,
+      description: props.item.description,
+      price: props.item.price,
+      image: props.item.image,
+    };
+  }
+
   const [itemData, setItemData] = useState({ ...defaultItemData });
   const [error, setError] = useState(null);
   const [isValid, setIsValid] = useState(false);
@@ -113,7 +124,10 @@ export default function ItemForm(props) {
           <Col lg={true}>
             <Form.Group className="mb-3">
               <Form.Label>Image</Form.Label>
-              <ImageUpload imageUpdateCallback={imageUpdate}></ImageUpload>
+              <ImageUpload
+                imageUpdateCallback={imageUpdate}
+                defaultImage={props.item ? props.item.image : null}
+              ></ImageUpload>
             </Form.Group>
           </Col>
 
@@ -186,12 +200,15 @@ export default function ItemForm(props) {
         </Row>
         <Row>
           <Col style={{ display: 'flex' }}>
+            <Button variant="danger" style={{ minWidth: '9em' }}>
+              Delete Item
+            </Button>
             <Button
               variant="secondary"
               onClick={props.closeModalCallback}
-              style={{ marginLeft: 'auto' }}
+              style={{ marginLeft: 'auto', minWidth: '9em' }}
             >
-              Close
+              Discard Changes
             </Button>
             <OverlayTrigger
               overlay={
@@ -211,7 +228,11 @@ export default function ItemForm(props) {
                     minWidth: '9em',
                   }}
                 >
-                  {isLoading ? <Spinner animation="border" size="sm" /> : <>Save New Item</>}
+                  {isLoading ? (
+                    <Spinner animation="border" size="sm" />
+                  ) : (
+                    <>{props.item ? 'Update Item' : 'Create Item'}</>
+                  )}
                 </Button>
               </span>
             </OverlayTrigger>
