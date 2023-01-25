@@ -240,6 +240,7 @@ export default function ItemForm(props) {
                   onChange={handleChange}
                   onBlur={formatPrice}
                   value={itemData.price}
+                  step="0.01"
                   disabled={isLoading}
                 />
               </InputGroup>
