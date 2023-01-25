@@ -27,7 +27,7 @@ export default function ItemForm(props) {
     name: '',
     category: props.categoryId,
     description: '',
-    price: null,
+    price: 0,
     image: null,
   };
   // If item passed to component, set as default values.
@@ -36,7 +36,7 @@ export default function ItemForm(props) {
       name: props.item.name,
       category: props.categoryId,
       description: props.item.description,
-      price: props.item.price,
+      price: parseInt(props.item.price / 100),
       image: props.item.image,
     };
   }
@@ -73,24 +73,45 @@ export default function ItemForm(props) {
   const handleSubmit = () => {
     setError(null);
     setIsLoading(true);
-    api
-      .post(`api/v1/items/${itemData.category}`, {
-        name: itemData.name,
-        description: itemData.description,
-        price: itemData.price * 100, //save as cents in db, NOT dollars
-        image: itemData.image,
-      })
-      .then((res) => {
-        setItemData({ ...defaultItemData });
-        props.closeModalCallback();
-        menuData.updateMenu();
-      })
-      .catch((err) => {
-        setError(err.response.data.error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+
+    if (props.item) {
+      api
+        .put(`api/v1/items/${props.item.id}`, {
+          name: itemData.name,
+          description: itemData.description,
+          price: itemData.price * 100, //save as cents in db, NOT dollars
+          image: itemData.image,
+        })
+        .then((res) => {
+          props.closeModalCallback();
+          menuData.updateMenu();
+        })
+        .catch((err) => {
+          setError(err.response.data.error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } else {
+      api
+        .post(`api/v1/items/${itemData.category}`, {
+          name: itemData.name,
+          description: itemData.description,
+          price: itemData.price * 100, //save as cents in db, NOT dollars
+          image: itemData.image,
+        })
+        .then((res) => {
+          setItemData({ ...defaultItemData });
+          props.closeModalCallback();
+          menuData.updateMenu();
+        })
+        .catch((err) => {
+          setError(err.response.data.error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
 
   const imageUpdate = (result) => {
