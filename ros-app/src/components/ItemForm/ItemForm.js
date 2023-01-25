@@ -138,6 +138,21 @@ export default function ItemForm(props) {
     );
   }, [itemData]);
 
+  const handleDelete = () => {
+    api
+      .delete(`api/v1/items/${props.item.id}/${props.categoryId}`)
+      .then((res) => {
+        props.closeModalCallback();
+        menuData.updateMenu();
+      })
+      .catch((err) => {
+        setError(err.response.data.error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   return (
     <Form>
       <Container style={{ paddingBottom: '0.75rem' }}>
@@ -221,9 +236,12 @@ export default function ItemForm(props) {
         </Row>
         <Row>
           <Col style={{ display: 'flex' }}>
-            <Button variant="danger" style={{ minWidth: '9em' }}>
-              Delete Item
-            </Button>
+            {props.item ? (
+              <Button variant="danger" style={{ minWidth: '9em' }} onClick={handleDelete}>
+                Delete Item
+              </Button>
+            ) : null}
+
             <Button
               variant="secondary"
               onClick={props.closeModalCallback}
