@@ -84,7 +84,8 @@ export default function ItemForm(props) {
         })
         .then((res) => {
           props.closeModalCallback();
-          menuData.updateMenu();
+          //menuData.updateMenu();
+          window.location.reload(); // Calling updateMenu() doesn't work here for some reason
         })
         .catch((err) => {
           setError(err.response.data.error);
@@ -134,6 +135,7 @@ export default function ItemForm(props) {
       itemData.name.length > 0 &&
         itemData.description.length > 0 &&
         itemData.image !== null &&
+        itemData.image !== '' &&
         itemData.price > 0
     );
   }, [itemData]);
