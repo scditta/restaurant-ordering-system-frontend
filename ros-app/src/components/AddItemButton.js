@@ -123,7 +123,7 @@ export default function AddItemButton(props) {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Container>
+            <Container style={{ paddingBottom: '0.75rem' }}>
               <Row>
                 <Col lg={true}>
                   <Form.Group className="mb-3">
@@ -198,41 +198,41 @@ export default function AddItemButton(props) {
                   </Form.Group>
                 </Col>
               </Row>
+              <Row style={{ minHeight: '5em' }}>
+                <Col>{error ? <Alert variant="danger">{error}</Alert> : null}</Col>
+              </Row>
               <Row>
-                <Col>
-                  {error ? (
-                    <Alert variant="danger" style={{ marginBottom: '0rem' }}>
-                      {error}
-                    </Alert>
-                  ) : null}
+                <Col style={{ display: 'flex' }}>
+                  <Button variant="secondary" onClick={handleClose} style={{ marginLeft: 'auto' }}>
+                    Close
+                  </Button>
+                  <OverlayTrigger
+                    overlay={
+                      isValid ? (
+                        <></>
+                      ) : (
+                        <Tooltip id="tooltip-disabled">Please fill out all fields</Tooltip>
+                      )
+                    }
+                  >
+                    <span className="d-inline-block" style={{ paddingLeft: '0.5rem' }}>
+                      <Button
+                        variant="primary"
+                        disabled={isLoading || !isValid}
+                        onClick={handleSubmit}
+                        style={{
+                          minWidth: '9em',
+                        }}
+                      >
+                        {isLoading ? <Spinner animation="border" size="sm" /> : <>Save New Item</>}
+                      </Button>
+                    </span>
+                  </OverlayTrigger>
                 </Col>
               </Row>
             </Container>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <OverlayTrigger
-            overlay={
-              isValid ? <></> : <Tooltip id="tooltip-disabled">Please fill out all fields</Tooltip>
-            }
-          >
-            <span className="d-inline-block">
-              <Button
-                variant="primary"
-                disabled={isLoading || !isValid}
-                onClick={handleSubmit}
-                style={{
-                  minWidth: '9em',
-                }}
-              >
-                {isLoading ? <Spinner animation="border" size="sm" /> : <>Save New Item</>}
-              </Button>
-            </span>
-          </OverlayTrigger>
-        </Modal.Footer>
       </Modal>
     </>
   );
