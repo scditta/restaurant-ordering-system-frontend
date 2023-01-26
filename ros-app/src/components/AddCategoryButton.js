@@ -98,7 +98,7 @@ export default function AddCategoryButton() {
               >
                 <span className="d-inline-block">
                   <Button disabled style={{ pointerEvents: 'none' }}>
-                    Save New Category
+                    Add New Category
                   </Button>
                 </span>
               </OverlayTrigger>

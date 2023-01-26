@@ -12,17 +12,17 @@ export default function Category(props) {
 
   return (
     <>
-      <Row alt={props.categoryId} className="mb-3 mt-4">
-        <Col xs={6}>
+      <Row alt={props.categoryId} className="mb-3 mt-4" style={{ borderBottom: '1px solid black' }}>
+        <Col xs={5}>
           <h1>{props.categoryName}</h1>
         </Col>
         {/* If the user logged in is an admin */}
         {authUser.authorization ? (
           <>
-            <Col>
+            <Col xs={2}>
               <UpdateCategory categoryName={props.categoryName} categoryId={props.categoryId} />
             </Col>
-            <Col>
+            <Col xs={2}>
               <DeleteCategory categoryName={props.categoryName} categoryId={props.categoryId} />
             </Col>
           </>
