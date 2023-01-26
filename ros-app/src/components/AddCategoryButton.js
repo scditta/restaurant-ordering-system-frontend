@@ -20,10 +20,10 @@ export default function AddCategoryButton() {
     const [valid, setValid] = useState(false);
 
     function handleSubmit() {
-      console.log(categoryName);
+      // console.log(categoryName);
       const createCategory = async () => {
         try {
-          const response = await api.post('/api/v1/categories', { name: categoryName });
+          const response = await api.post('/api/v1/categories', { name: categoryName, items: [] });
           console.log(response.data);
           menuData.updateMenu();
           setModalShow(false);
@@ -62,7 +62,6 @@ export default function AddCategoryButton() {
         <Modal
           show={modalShow}
           onHide={() => setModalShow(false)}
-          size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
         >
@@ -71,7 +70,7 @@ export default function AddCategoryButton() {
           </Modal.Header>
           <Modal.Body className="px-5">
             <Form.Group className="mb-3 px-5">
-              <Form.Label>Category</Form.Label>
+              <Form.Label>Category Name</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Category Name"
@@ -86,7 +85,9 @@ export default function AddCategoryButton() {
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={() => setModalShow(false)}>Close</Button>
+            <Button variant="secondary" onClick={() => setModalShow(false)}>
+              Close
+            </Button>
             {valid ? (
               <Button variant="primary" onClick={handleSubmit}>
                 Save New Category

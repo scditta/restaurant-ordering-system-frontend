@@ -3,7 +3,7 @@ import { Row, Image, Col, Modal } from 'react-bootstrap';
 
 import AuthenticationContext from '../context/AuthenticationContext';
 import api from '../API/posts';
-import Icon from './Icon';
+// import Icon from './Icon';
 import ItemForm from './ItemForm/ItemForm';
 
 export default function Item(props) {
@@ -58,12 +58,12 @@ export default function Item(props) {
         {/* If the user logged in is an admin */}
         {authUser.authorization ? (
           <Col>
-            <Icon
+            {/* <Icon
               icon={'http://www.w3.org/2000/svg'}
               itemId={item.id}
               categoryId={props.categoryId}
               type={'item'}
-            />
+            /> */}
           </Col>
         ) : (
           <></>

@@ -1,11 +1,10 @@
 import { useContext } from 'react';
 import { Row, Col } from 'react-bootstrap';
 
-import Icon from './Icon';
+import UpdateCategory from './UpdateCategory';
+import DeleteCategory from './DeleteCategory';
 
 import AuthenticationContext from '../context/AuthenticationContext';
-import UpdateCategory from './UpdateCategory';
-
 // import api from '../API/posts';
 
 export default function Category(props) {
@@ -24,11 +23,7 @@ export default function Category(props) {
               <UpdateCategory categoryName={props.categoryName} categoryId={props.categoryId} />
             </Col>
             <Col>
-              <Icon
-                icon={'http://www.w3.org/2000/svg'}
-                categoryId={props.categoryId}
-                type={'category'}
-              />
+              <DeleteCategory categoryName={props.categoryName} categoryId={props.categoryId} />
             </Col>
           </>
         ) : (

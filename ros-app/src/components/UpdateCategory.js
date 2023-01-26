@@ -19,8 +19,8 @@ export default function UpdateCategory(props) {
     const [valid, setValid] = useState(false);
 
     function handleSubmit() {
-      console.log(categoryName);
-      console.log(props.categoryId);
+      // console.log(categoryName);
+      // console.log(props.categoryId);
       const updateCategory = async () => {
         for (let i = 0; i < menuData.categories.length; i++) {
           // console.log();
@@ -70,7 +70,6 @@ export default function UpdateCategory(props) {
         <Modal
           show={modalShow}
           onHide={() => setModalShow(false)}
-          size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
         >
@@ -94,7 +93,9 @@ export default function UpdateCategory(props) {
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={() => setModalShow(false)}>Close</Button>
+            <Button variant="secondary" onClick={() => setModalShow(false)}>
+              Close
+            </Button>
             {valid ? (
               <Button variant="primary" onClick={handleSubmit}>
                 Update Category
