@@ -4,7 +4,7 @@ import axios from 'axios';
 export default axios.create({
   baseURL: 'https://restaurant-order-system.cyclic.app',
   headers: {
-    'X-Requested-With': 'XMLHttpRequest',
+    // 'X-Requested-With': 'XMLHttpRequest',
     api_key: process.env.REACT_APP_API_KEY,
   },
 });
