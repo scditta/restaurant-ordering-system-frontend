@@ -8,8 +8,6 @@ export default function ImageUpload(props) {
 
   // Common MIME types: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
   const IMAGE_ACCEPTED_FILETYPES = {
-    'image/png': ['.png'],
-    'image/bmp': ['.bmp'],
     'image/jpeg': ['.jpeg', '.jpg'],
     'image/webp': ['.webp'],
   };

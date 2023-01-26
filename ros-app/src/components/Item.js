@@ -35,7 +35,9 @@ export default function Item(props) {
   }, [props.itemId]);
 
   const handleClick = () => {
-    setShow(true);
+    if (authUser.authorization) {
+      setShow(true);
+    }
   };
 
   return (
