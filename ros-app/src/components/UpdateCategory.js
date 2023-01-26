@@ -1,15 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import { Button, Modal, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
-// import { useNavigate } from 'react-router-dom';
 
 import AuthenticationContext from '../context/AuthenticationContext';
-// import MenuContext from '../context/MenuContext';
+import MenuContext from '../context/MenuContext';
 
-// import api from '../API/posts';
+import api from '../API/posts';
 
 export default function UpdateCategory(props) {
   const authUser = useContext(AuthenticationContext);
-  // const menuData = useContext(MenuContext);
+  const menuData = useContext(MenuContext);
 
   const [modalShow, setModalShow] = useState(false);
 
@@ -21,6 +20,35 @@ export default function UpdateCategory(props) {
 
     function handleSubmit() {
       console.log(categoryName);
+      console.log(props.categoryId);
+      const updateCategory = async () => {
+        for (let i = 0; i < menuData.categories.length; i++) {
+          // console.log();
+          if (menuData.categories[i].id === props.categoryId) {
+            // console.log(menuData.categories[i].items);
+            try {
+              const response = await api.put(`api/v1/categories/${props.categoryId}`, {
+                name: categoryName,
+                items: menuData.categories[i].items,
+              });
+              console.log(response.data);
+              menuData.updateMenu();
+              setModalShow(false);
+            } catch (err) {
+              if (err.response) {
+                //not in the 200 range
+                console.log(err.response.data);
+                console.log(err.response.status);
+                console.log(err.response.headers);
+              } else {
+                //response is undefined
+                console.log(`Error: ${err.message}`);
+              }
+            }
+          }
+        }
+      };
+      updateCategory();
     }
 
     function handleChange(e) {

@@ -21,7 +21,7 @@ export default function Category(props) {
         {authUser.authorization ? (
           <>
             <Col>
-              <UpdateCategory categoryName={props.categoryName} />
+              <UpdateCategory categoryName={props.categoryName} categoryId={props.categoryId} />
             </Col>
             <Col>
               <Icon
