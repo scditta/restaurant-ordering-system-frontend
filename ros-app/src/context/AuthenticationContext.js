@@ -32,7 +32,7 @@ export function AuthProvider({ children }) {
       try {
         const userID = localStorage.getItem('user_id');
         const response = await api.get(`/api/v1/users/${userID}`);
-        // console.log(response);
+        //if there is a user session token
         if (response.data.session_token === userSessionToken) {
           setUser(response.data);
           setAuth(true);
@@ -40,6 +40,10 @@ export function AuthProvider({ children }) {
           if (response.data.user_type >= 2) {
             setAuthorization(true);
           }
+        } else {
+          //if there is no user session token remove the localstorage
+          localStorage.removeItem('user_id');
+          localStorage.removeItem('user_session_token');
         }
         // console.log(user);
       } catch (err) {
