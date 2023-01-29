@@ -19,11 +19,11 @@ export default function Menu() {
         <Row className="h-100 g-0">
           <Col className="h-100 overflow-auto">
             <Container>
-              <Container>
-                <Stack gap={3} className="col-md-5 mx-2 my-3 ">
-                  <AddCategoryButton />
-                </Stack>
-              </Container>
+              {/* <Container> */}
+              <Stack gap={3} className="col-md-5 my-3">
+                <AddCategoryButton />
+              </Stack>
+              {/* </Container> */}
               {menuData.categories?.map((category, index) => (
                 <div key={index}>
                   <Category categoryId={category.id} categoryName={category.name} />

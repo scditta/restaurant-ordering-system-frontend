@@ -42,7 +42,7 @@ export default function Item(props) {
 
   return (
     <>
-      <Row alt={item.id} className="mb-3" style={{ cursor: 'pointer' }} onClick={handleClick}>
+      <Row alt={item.id} className="mb-3 py-2" style={{ cursor: 'pointer' }} onClick={handleClick}>
         <Col>
           <Image className="cardImage" src={item.image}></Image>
         </Col>

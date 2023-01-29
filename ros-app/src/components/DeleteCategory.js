@@ -14,6 +14,27 @@ export default function DeleteCategory(props) {
   const [modalShow, setModalShow] = useState(false);
 
   function DeleteCategoryModal() {
+    function removeCategory(e) {
+      const deleteCategory = async () => {
+        try {
+          const response = await api.delete(`/api/v1/categories/${props.categoryId}`);
+          console.log(response.data);
+          menuData.updateMenu();
+        } catch (err) {
+          if (err.response) {
+            //not in the 200 range
+            console.log(err.response.data);
+            console.log(err.response.status);
+            console.log(err.response.headers);
+          } else {
+            //response is undefined
+            console.log(`Error: ${err.message}`);
+          }
+        }
+      };
+      deleteCategory();
+    }
+
     return (
       <Modal
         show={modalShow}
@@ -38,33 +59,18 @@ export default function DeleteCategory(props) {
           <Button variant="secondary" onClick={() => setModalShow(false)}>
             Cancel
           </Button>
-          <Button variant="danger" onClick={() => removeCategory()}>
+          <Button
+            variant="danger"
+            onClick={() => {
+              removeCategory();
+              setModalShow(false);
+            }}
+          >
             Delete
           </Button>
         </Modal.Footer>
       </Modal>
     );
-  }
-
-  function removeCategory(e) {
-    const deleteCategory = async () => {
-      try {
-        const response = await api.delete(`/api/v1/categories/${props.categoryId}`);
-        console.log(response.data);
-        menuData.updateMenu();
-      } catch (err) {
-        if (err.response) {
-          //not in the 200 range
-          console.log(err.response.data);
-          console.log(err.response.status);
-          console.log(err.response.headers);
-        } else {
-          //response is undefined
-          console.log(`Error: ${err.message}`);
-        }
-      }
-    };
-    deleteCategory();
   }
 
   return (

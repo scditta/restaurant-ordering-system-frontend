@@ -17,44 +17,39 @@ export default function AddCategoryButton() {
     const NAME_MAX = 40;
 
     const [categoryName, setCategoryName] = useState('');
-    const [valid, setValid] = useState(false);
+    const [isValid, setIsValid] = useState(false);
 
-    function handleSubmit() {
-      // console.log(categoryName);
-      const createCategory = async () => {
-        try {
-          const response = await api.post('/api/v1/categories', { name: categoryName, items: [] });
-          console.log(response.data);
-          menuData.updateMenu();
-          setModalShow(false);
-        } catch (err) {
-          if (err.response) {
-            //not in the 200 range
-            console.log(err.response.data);
-            console.log(err.response.status);
-            console.log(err.response.headers);
-          } else {
-            //response is undefined
-            console.log(`Error: ${err.message}`);
-          }
+    async function handleSubmit() {
+      try {
+        const response = await api.post('/api/v1/categories', { name: categoryName, items: [] });
+        console.log(response.data);
+        menuData.updateMenu();
+        setModalShow(false);
+      } catch (err) {
+        if (err.response) {
+          //not in the 200 range
+          console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response.headers);
+        } else {
+          //response is undefined
+          console.log(`Error: ${err.message}`);
         }
-      };
-      createCategory();
+      }
     }
 
     function handleChange(e) {
       const value = e.target.value;
       setCategoryName(value);
       if (value.length > 0) {
-        setValid(true);
+        setIsValid(true);
       } else {
-        setValid(false);
+        setIsValid(false);
       }
     }
 
     useEffect(() => {
-      // console.log('testing');
-      setValid(false);
+      setIsValid(false);
     }, []);
 
     return (
@@ -86,9 +81,9 @@ export default function AddCategoryButton() {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setModalShow(false)}>
-              Close
+              Cancel
             </Button>
-            {valid ? (
+            {isValid ? (
               <Button variant="primary" onClick={handleSubmit}>
                 Save New Category
               </Button>
@@ -97,14 +92,11 @@ export default function AddCategoryButton() {
                 overlay={<Tooltip id="tooltip-disabled">Please fill out category name</Tooltip>}
               >
                 <span className="d-inline-block">
-                  <Button disabled style={{ pointerEvents: 'none' }}>
-                    Add New Category
+                  <Button style={{ pointerEvents: 'none' }}>
+                    <>Add New Category</>
                   </Button>
                 </span>
               </OverlayTrigger>
-              // <Button variant="primary" onClick={handleSubmit} disabled>
-              //   Save New Category
-              // </Button>
             )}
           </Modal.Footer>
         </Modal>

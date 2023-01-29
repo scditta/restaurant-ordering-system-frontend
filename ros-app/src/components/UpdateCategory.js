@@ -81,7 +81,7 @@ export default function UpdateCategory(props) {
           </Modal.Header>
           <Modal.Body className="px-5">
             <Form.Group className="mb-3 px-5">
-              <Form.Label>Category</Form.Label>
+              <Form.Label>Category Name</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Category Name"
@@ -97,7 +97,7 @@ export default function UpdateCategory(props) {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setModalShow(false)}>
-              Close
+              Cancel
             </Button>
             {valid ? (
               <Button variant="primary" onClick={handleSubmit}>
