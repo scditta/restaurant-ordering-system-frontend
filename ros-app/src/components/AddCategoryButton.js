@@ -92,7 +92,7 @@ export default function AddCategoryButton() {
                 overlay={<Tooltip id="tooltip-disabled">Please fill out category name</Tooltip>}
               >
                 <span className="d-inline-block">
-                  <Button style={{ pointerEvents: 'none' }}>
+                  <Button style={{ pointerEvents: 'none' }} disabled={!isValid}>
                     <>Add New Category</>
                   </Button>
                 </span>
