@@ -15,7 +15,7 @@ Be sure to create an environment variable file named .env in the root directory 
 
 ```
 REACT_APP_API_KEY = {askdevforpassword}
-BACKEND_URL = {askdevforurl}
+REACT_APP_BACKEND_URL = {askdevforurl}
 ```
 
 ### Usage

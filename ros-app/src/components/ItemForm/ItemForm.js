@@ -74,12 +74,12 @@ export default function ItemForm(props) {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setError(null);
     setIsLoading(true);
 
     if (props.item) {
-      api
+      await api
         .put(`api/v1/items/${props.item.id}`, {
           name: itemData.name,
           description: itemData.description,
@@ -88,8 +88,7 @@ export default function ItemForm(props) {
         })
         .then((res) => {
           props.closeModalCallback();
-          //menuData.updateMenu();
-          window.location.reload(); // Calling updateMenu() doesn't work here for some reason
+          props.updateItemCallBack(props.item.id);
         })
         .catch((err) => {
           setError(err.response.data.error);
@@ -98,7 +97,7 @@ export default function ItemForm(props) {
           setIsLoading(false);
         });
     } else {
-      api
+      await api
         .post(`api/v1/items/${itemData.category}`, {
           name: itemData.name,
           description: itemData.description,
@@ -144,8 +143,8 @@ export default function ItemForm(props) {
     );
   }, [itemData]);
 
-  const handleDelete = () => {
-    api
+  const handleDelete = async () => {
+    await api
       .delete(`api/v1/items/${props.item.id}/${props.categoryId}`)
       .then((res) => {
         props.closeModalCallback();

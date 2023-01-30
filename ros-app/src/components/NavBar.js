@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown, Alert } from 'react-bootstrap';
 
 import AuthenticationContext from '../context/AuthenticationContext';
 
@@ -64,6 +64,13 @@ export default function NavBar() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+      {authUser.authorization ? (
+        <Alert className="m-0 p-1 px-5" key="info" variant="info">
+          You are logged in as an admin.
+        </Alert>
+      ) : (
+        <></>
+      )}
     </>
   );
 }

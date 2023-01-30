@@ -1,55 +1,71 @@
 import { useContext, useEffect, useState } from 'react';
 import { Button, Modal, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
-// import { useNavigate } from 'react-router-dom';
 
 import AuthenticationContext from '../context/AuthenticationContext';
 import MenuContext from '../context/MenuContext';
 
 import api from '../API/posts';
 
-export default function AddCategoryButton() {
+//Imported Icon
+import { PencilSquare } from 'react-bootstrap-icons';
+
+export default function UpdateCategory(props) {
   const authUser = useContext(AuthenticationContext);
   const menuData = useContext(MenuContext);
 
   const [modalShow, setModalShow] = useState(false);
 
-  function CreateCategoryModal() {
+  function UpdateCategoryModal() {
     const NAME_MAX = 40;
 
-    const [categoryName, setCategoryName] = useState('');
-    const [isValid, setIsValid] = useState(false);
+    const [categoryName, setCategoryName] = useState(props.categoryName);
+    const [valid, setValid] = useState(false);
 
-    async function handleSubmit() {
-      try {
-        const response = await api.post('/api/v1/categories', { name: categoryName, items: [] });
-        console.log(response.data);
-        menuData.updateMenu();
-        setModalShow(false);
-      } catch (err) {
-        if (err.response) {
-          //not in the 200 range
-          console.log(err.response.data);
-          console.log(err.response.status);
-          console.log(err.response.headers);
-        } else {
-          //response is undefined
-          console.log(`Error: ${err.message}`);
+    function handleSubmit() {
+      // console.log(categoryName);
+      // console.log(props.categoryId);
+      const updateCategory = async () => {
+        for (let i = 0; i < menuData.categories.length; i++) {
+          // console.log();
+          if (menuData.categories[i].id === props.categoryId) {
+            // console.log(menuData.categories[i].items);
+            try {
+              const response = await api.put(`api/v1/categories/${props.categoryId}`, {
+                name: categoryName,
+                items: menuData.categories[i].items,
+              });
+              console.log(response.data);
+              menuData.updateMenu();
+              setModalShow(false);
+            } catch (err) {
+              if (err.response) {
+                //not in the 200 range
+                console.log(err.response.data);
+                console.log(err.response.status);
+                console.log(err.response.headers);
+              } else {
+                //response is undefined
+                console.log(`Error: ${err.message}`);
+              }
+            }
+          }
         }
-      }
+      };
+      updateCategory();
     }
 
     function handleChange(e) {
       const value = e.target.value;
       setCategoryName(value);
-      if (value.length > 0) {
-        setIsValid(true);
+      if (value.length > 0 && value !== props.categoryName) {
+        setValid(true);
       } else {
-        setIsValid(false);
+        setValid(false);
       }
     }
 
     useEffect(() => {
-      setIsValid(false);
+      setValid(false);
     }, []);
 
     return (
@@ -61,7 +77,7 @@ export default function AddCategoryButton() {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-vcenter">Add a Category</Modal.Title>
+            <Modal.Title id="contained-modal-title-vcenter">Edit Category</Modal.Title>
           </Modal.Header>
           <Modal.Body className="px-5">
             <Form.Group className="mb-3 px-5">
@@ -83,20 +99,23 @@ export default function AddCategoryButton() {
             <Button variant="secondary" onClick={() => setModalShow(false)}>
               Cancel
             </Button>
-            {isValid ? (
+            {valid ? (
               <Button variant="primary" onClick={handleSubmit}>
-                Save New Category
+                Update Category
               </Button>
             ) : (
               <OverlayTrigger
-                overlay={<Tooltip id="tooltip-disabled">Please fill out category name</Tooltip>}
+                overlay={<Tooltip id="tooltip-disabled">Please change category name</Tooltip>}
               >
                 <span className="d-inline-block">
-                  <Button style={{ pointerEvents: 'none' }}>
-                    <>Add New Category</>
+                  <Button disabled style={{ pointerEvents: 'none' }}>
+                    Update Category
                   </Button>
                 </span>
               </OverlayTrigger>
+              // <Button variant="primary" onClick={handleSubmit} disabled>
+              //   Save New Category
+              // </Button>
             )}
           </Modal.Footer>
         </Modal>
@@ -107,13 +126,13 @@ export default function AddCategoryButton() {
   return (
     <>
       {authUser.authorization ? (
-        <Button variant="primary" type="button" onClick={() => setModalShow(true)}>
-          + Add Category
+        <Button variant="secondary" type="button" onClick={() => setModalShow(true)}>
+          <PencilSquare width={20} height={20} />
         </Button>
       ) : (
         <></>
       )}
-      <CreateCategoryModal />
+      <UpdateCategoryModal />
     </>
   );
 }
