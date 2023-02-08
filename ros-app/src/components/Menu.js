@@ -1,11 +1,12 @@
 import { useContext } from 'react';
-import { Container, Row, Col, Stack } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import Item from './Item';
 import Category from './Category';
 import AuthenticationContext from '../context/AuthenticationContext';
 import AddCategoryButton from './AddCategoryButton';
 import AddItemButton from './AddItemButton';
+import Cart from './Cart';
 
 import MenuContext from '../context/MenuContext';
 
@@ -14,31 +15,24 @@ export default function Menu() {
   const authUser = useContext(AuthenticationContext);
 
   return (
-    <>
-      <Container className="">
-        <Row className="h-100 g-0">
-          <Col className="h-100 overflow-auto">
-            <Container>
-              {/* <Container> */}
-              <Stack gap={3} className="col-md-5 my-3">
-                <AddCategoryButton />
-              </Stack>
-              {/* </Container> */}
-              {menuData.categories?.map((category, index) => (
-                <div key={index}>
-                  <Category categoryId={category.id} categoryName={category.name} />
-                  {category?.items.map((item, index) => (
-                    // console.log(item);
-                    <Item key={index} itemId={item} categoryId={category.id} />
-                  ))}
-                  {authUser.authorization && <AddItemButton categoryId={category.id} />}
-                </div>
+    <Container>
+      <Row className="pt-3">
+        <Col md={8}>
+          <AddCategoryButton />
+          {menuData.categories?.map((category, index) => (
+            <div key={index}>
+              <Category categoryId={category.id} categoryName={category.name} />
+              {category?.items.map((item, index) => (
+                <Item key={index} itemId={item} categoryId={category.id} />
               ))}
-            </Container>
-          </Col>
-          <Col></Col>
-        </Row>
-      </Container>
-    </>
+              {authUser.authorization && <AddItemButton categoryId={category.id} />}
+            </div>
+          ))}
+        </Col>
+        <Col md={4} className="ml-4">
+          <Cart />
+        </Col>
+      </Row>
+    </Container>
   );
 }
