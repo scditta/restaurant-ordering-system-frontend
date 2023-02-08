@@ -36,6 +36,19 @@ export default function Cart(props) {
     );
   });
 
+  const orderItems = cartEntryIds.map((id) => {
+    const cartItem = cartEntries[id];
+
+    return (
+      <div key={id}>
+        <span>
+          {cartItem.name} (x{cartItem.qty})
+        </span>
+        <span className="float-end">{formatCurrency(cartItem.price * cartItem.qty)}</span>
+      </div>
+    );
+  });
+
   const tax = Math.ceil(subtotal * 0.13);
   const total = subtotal + tax;
 
@@ -74,11 +87,33 @@ export default function Cart(props) {
         </Card.Body>
       </Card>
 
-      <Modal show={showCheckout} onHide={hideCheckout} animation={false} size="md" centered>
+      <Modal show={showCheckout} onHide={hideCheckout} animation={false} size="sm" centered>
         <Modal.Header closeButton>
           <Modal.Title>Order Checkout</Modal.Title>
         </Modal.Header>
-        <Modal.Body></Modal.Body>
+        <Modal.Body>
+          <div className="mb-4">{orderItems}</div>
+          <hr className="mt-2 mb-2"></hr>
+          <div>
+            Subtotal:
+            <span className="float-end">{subtotalFormatted}</span>
+          </div>
+          <div>
+            Tax:
+            <span className="float-end">{taxFormatted}</span>
+          </div>
+          <hr className="mt-2 mb-2"></hr>
+          <div style={{ fontWeight: 'bold' }}>
+            Total:
+            <span className="float-end">{totalFormatted}</span>
+          </div>
+
+          <div className="d-grid gap-2 mt-2">
+            <Button variant="secondary" onClick={hideCheckout}>
+              Cancel
+            </Button>
+          </div>
+        </Modal.Body>
       </Modal>
     </>
   );
