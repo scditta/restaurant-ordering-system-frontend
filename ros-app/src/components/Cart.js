@@ -16,22 +16,24 @@ export default function Cart() {
             </Card.Body>
           </Card>
         </div>
-        <Card.Text>
-          <div>
-            Subtotal:
-            <span className="float-end">$0.00</span>
-          </div>
-          <div>
-            Tax:
-            <span className="float-end">$0.00</span>
-          </div>
-          <hr className="mt-2 mb-2"></hr>
-          <div>
-            Total:
-            <span className="float-end">$0.00</span>
-          </div>
-        </Card.Text>
-        <div className="d-grid gap-2">
+
+        <div>
+          Subtotal:
+          <span className="float-end">$0.00</span>
+        </div>
+        <div>
+          Tax:
+          <span className="float-end">$0.00</span>
+        </div>
+
+        <hr className="mt-2 mb-2"></hr>
+
+        <div style={{ fontWeight: 'bold' }}>
+          Total:
+          <span className="float-end">$0.00</span>
+        </div>
+
+        <div className="d-grid gap-2 mt-2">
           <Button>Checkout</Button>
         </div>
       </Card.Body>
