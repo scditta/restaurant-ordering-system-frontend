@@ -3,10 +3,10 @@ import { XCircleFill } from 'react-bootstrap-icons';
 
 export default function Cart() {
   return (
-    <Card>
+    <Card style={{ position: 'sticky', top: '1em' }}>
       <Card.Body>
         <Card.Title>Cart</Card.Title>
-        <div>
+        <div style={{ minHeight: '30vh' }}>
           <Card>
             <Card.Body>
               <span>Vanilla Ice Cream</span>
