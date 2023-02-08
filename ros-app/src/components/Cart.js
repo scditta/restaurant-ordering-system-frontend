@@ -9,7 +9,7 @@ export default function Cart(props) {
   const cartItems = cartEntryIds.map((id) => {
     const cartItem = cartEntries[id];
     return (
-      <Card key={id}>
+      <Card key={id} className="mb-2">
         <Card.Body>
           <span>{cartItem.name}</span>
           <span className="float-end">
