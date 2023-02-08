@@ -40,8 +40,15 @@ export default function NavBar() {
 
           <Navbar.Collapse>
             <Nav className="me-auto">
-              <Nav.Link>Menu</Nav.Link>
+              <LinkContainer to="/">
+                <Nav.Link>Menu</Nav.Link>
+              </LinkContainer>
               <Nav.Link>Orders</Nav.Link>
+              {authUser.authorization ? (
+                <LinkContainer to="/ordergrid">
+                  <Nav.Link>Active Orders</Nav.Link>
+                </LinkContainer>
+              ) : null}
             </Nav>
           </Navbar.Collapse>
           <Navbar.Collapse className="justify-content-end">
