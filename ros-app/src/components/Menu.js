@@ -49,7 +49,7 @@ export default function Menu() {
           ))}
         </Col>
         <Col md={4} className="ml-4">
-          <Cart cart={cart} />
+          {!authUser.authorization ? <Cart cart={cart} /> : <></>}
         </Col>
       </Row>
     </Container>
