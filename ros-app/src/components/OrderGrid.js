@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import { Container, Row, Col, Stack } from 'react-bootstrap';
-
 import OrderGridContext from '../context/OrderGridContext';
 import Order from './Order';
 export default function OrderGrid() {
@@ -14,7 +13,7 @@ export default function OrderGrid() {
             <Container>
               {/* <Container> */}
               <Stack gap={3} className="col-md-5 my-3">
-                {/* <AddCategoryButton /> */ console.log(orderData)}
+                {/* <AddCategoryButton /> */}
               </Stack>
               {/* </Container> */}
 

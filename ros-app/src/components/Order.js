@@ -7,7 +7,7 @@ import AuthenticationContext from '../context/AuthenticationContext';
 import api from '../API/posts';
 
 export default function Order(props) {
-  const [Order, setOrderData] = useState([]);
+  const [order, setOrderData] = useState([]);
   const authUser = useContext(AuthenticationContext);
 
   const [show, setShow] = useState(false);
@@ -42,14 +42,14 @@ export default function Order(props) {
 
   return (
     <>
-      <Row alt={Order.id} className="mb-3 py-2" style={{ cursor: 'pointer' }} onClick={handleClick}>
+      <Row alt={order.id} className="mb-3 py-2" style={{ cursor: 'pointer' }} onClick={handleClick}>
         <Col>
           <Row>
-            {console.log('ORDER: ' + Order)}
-            <h6>Order ID: {Order.id}</h6>
+            {console.log('ORDER: ' + order)}
+            <h6>Order ID: {order.id}</h6>
           </Row>
           <Row>
-            <p>Order State: {Order.state}</p>
+            <p>Order State: {order.state}</p>
           </Row>
         </Col>
         <Col>
