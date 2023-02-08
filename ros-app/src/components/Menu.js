@@ -15,7 +15,7 @@ export default function Menu() {
 
   return (
     <>
-      <Container className="menuHeight" fluid>
+      <Container className="">
         <Row className="h-100 g-0">
           <Col className="h-100 overflow-auto">
             <Container>
