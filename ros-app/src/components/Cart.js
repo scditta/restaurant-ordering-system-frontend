@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { XCircleFill } from 'react-bootstrap-icons';
 
@@ -14,7 +13,7 @@ export default function Cart(props) {
           <span>{cartItem.name}</span>
           <span className="float-end">
             Qty: {cartItem.qty}
-            <XCircleFill size={24} style={{ marginLeft: '1em' }}></XCircleFill>
+            <XCircleFill size={24} style={{ marginLeft: '1em', cursor: 'pointer' }}></XCircleFill>
           </span>
         </Card.Body>
       </Card>

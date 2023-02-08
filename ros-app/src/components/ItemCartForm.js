@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Image, Button, Container, Row } from 'react-bootstrap';
 
 export default function ItemCartForm(props) {
