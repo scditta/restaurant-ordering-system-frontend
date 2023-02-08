@@ -5,8 +5,14 @@ export default function Cart(props) {
   const cartEntryIds = Object.keys(props.cart);
   const cartEntries = props.cart;
 
+  const formatCurrency = (cents) =>
+    (cents / 100).toLocaleString('en-ca', { style: 'currency', currency: 'CAD' });
+
+  let subtotal = 0;
   const cartItems = cartEntryIds.map((id) => {
     const cartItem = cartEntries[id];
+    subtotal += cartItem.price * cartItem.qty;
+
     return (
       <Card key={id} className="mb-2">
         <Card.Body>
@@ -26,6 +32,13 @@ export default function Cart(props) {
     );
   });
 
+  const tax = Math.ceil(subtotal * 0.13);
+  const total = subtotal + tax;
+
+  const subtotalFormatted = formatCurrency(subtotal);
+  const taxFormatted = formatCurrency(tax);
+  const totalFormatted = formatCurrency(total);
+
   return (
     <Card style={{ position: 'sticky', top: '1em' }}>
       <Card.Body>
@@ -34,18 +47,18 @@ export default function Cart(props) {
 
         <div>
           Subtotal:
-          <span className="float-end">$0.00</span>
+          <span className="float-end">{subtotalFormatted}</span>
         </div>
         <div>
           Tax:
-          <span className="float-end">$0.00</span>
+          <span className="float-end">{taxFormatted}</span>
         </div>
 
         <hr className="mt-2 mb-2"></hr>
 
         <div style={{ fontWeight: 'bold' }}>
           Total:
-          <span className="float-end">$0.00</span>
+          <span className="float-end">{totalFormatted}</span>
         </div>
 
         <div className="d-grid gap-2 mt-2">
