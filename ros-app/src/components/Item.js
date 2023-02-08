@@ -86,7 +86,11 @@ export default function Item(props) {
           <Modal.Title>{item.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ItemCartForm closeModalCallback={handleCloseCartForm} item={item} />
+          <ItemCartForm
+            closeModalCallback={handleCloseCartForm}
+            item={item}
+            addCartCallback={props.addCartCallback}
+          />
         </Modal.Body>
       </Modal>
     </>

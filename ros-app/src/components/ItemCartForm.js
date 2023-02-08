@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Image, Button, Container, Row } from 'react-bootstrap';
 
 export default function ItemCartForm(props) {
@@ -13,6 +13,7 @@ export default function ItemCartForm(props) {
   };
 
   const handleSubmit = () => {
+    props.addCartCallback(props.item.id, qty, props.item.name, props.item.price);
     props.closeModalCallback();
   };
 
