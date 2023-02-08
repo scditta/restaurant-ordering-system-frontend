@@ -1,6 +1,21 @@
+import { useState } from 'react';
 import { Image, Button, Container, Row } from 'react-bootstrap';
 
 export default function ItemCartForm(props) {
+  const [qty, setQty] = useState(1);
+
+  const addQty = () => {
+    setQty(qty + 1);
+  };
+
+  const subQty = () => {
+    setQty(qty - 1);
+  };
+
+  const handleSubmit = () => {
+    props.closeModalCallback();
+  };
+
   return (
     <Container style={{ padding: '0.5em' }}>
       <Row>
@@ -23,13 +38,24 @@ export default function ItemCartForm(props) {
 
       <Row>
         <span
-          style={{ fontWeight: 'bold', marginTop: 'auto', marginBottom: 'auto', width: 'auto' }}
+          style={{
+            fontWeight: 'bold',
+            marginTop: 'auto',
+            marginBottom: 'auto',
+            width: 'auto',
+            userSelect: 'none',
+          }}
         >
           Quantity
         </span>
 
         <span style={{ marginLeft: 'auto', width: 'auto' }}>
-          <Button variant="secondary" style={{ minWidth: '2.2em' }}>
+          <Button
+            variant="secondary"
+            style={{ minWidth: '2.2em' }}
+            onClick={subQty}
+            disabled={qty <= 1}
+          >
             -
           </Button>
           <span
@@ -39,18 +65,19 @@ export default function ItemCartForm(props) {
               marginBottom: 'auto',
               marginLeft: '1em',
               marginRight: '1em',
+              userSelect: 'none',
             }}
           >
-            1
+            {qty}
           </span>
-          <Button variant="secondary" style={{ minWidth: '2.2em' }}>
+          <Button variant="secondary" style={{ minWidth: '2.2em' }} onClick={addQty}>
             +
           </Button>
         </span>
       </Row>
 
       <div className="d-grid gap-2 mt-2">
-        <Button>Add To Cart</Button>
+        <Button onClick={handleSubmit}>Add To Cart</Button>
       </div>
     </Container>
   );
