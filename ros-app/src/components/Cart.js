@@ -13,7 +13,13 @@ export default function Cart(props) {
           <span>{cartItem.name}</span>
           <span className="float-end">
             Qty: {cartItem.qty}
-            <XCircleFill size={24} style={{ marginLeft: '1em', cursor: 'pointer' }}></XCircleFill>
+            <XCircleFill
+              size={24}
+              style={{ marginLeft: '1em', cursor: 'pointer' }}
+              onClick={() => {
+                props.removeCartCallback(id);
+              }}
+            ></XCircleFill>
           </span>
         </Card.Body>
       </Card>

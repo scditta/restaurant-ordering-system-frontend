@@ -28,6 +28,12 @@ export default function Menu() {
     setCart(updatedCart);
   };
 
+  const removeCart = (id) => {
+    const updatedCart = { ...cart };
+    delete updatedCart[id];
+    setCart(updatedCart);
+  };
+
   return (
     <Container>
       <Row className="pt-3">
@@ -49,7 +55,7 @@ export default function Menu() {
           ))}
         </Col>
         <Col md={4} className="ml-4">
-          {!authUser.authorization ? <Cart cart={cart} /> : <></>}
+          {!authUser.authorization ? <Cart cart={cart} removeCartCallback={removeCart} /> : <></>}
         </Col>
       </Row>
     </Container>
