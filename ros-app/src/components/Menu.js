@@ -3,18 +3,22 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import Item from './Item';
 import Category from './Category';
-import AuthenticationContext from '../context/AuthenticationContext';
 import AddCategoryButton from './AddCategoryButton';
 import AddItemButton from './AddItemButton';
 import Cart from './Cart';
 
+import AuthenticationContext from '../context/AuthenticationContext';
 import MenuContext from '../context/MenuContext';
 
 export default function Menu() {
   const menuData = useContext(MenuContext);
   const authUser = useContext(AuthenticationContext);
 
-  const [cart, setCart] = useState({});
+  let cartCached = localStorage.getItem('cart');
+  let defaultCart = {};
+  if (cartCached) defaultCart = JSON.parse(cartCached);
+
+  const [cart, setCart] = useState(defaultCart);
 
   const addCart = (id, qty, name, price) => {
     const updatedCart = { ...cart };
@@ -25,12 +29,17 @@ export default function Menu() {
     }
     updatedCart[id].name = name;
     updatedCart[id].price = price;
-    setCart(updatedCart);
+    updateCart(updatedCart);
   };
 
   const removeCart = (id) => {
     const updatedCart = { ...cart };
     delete updatedCart[id];
+    updateCart(updatedCart);
+  };
+
+  const updateCart = (updatedCart) => {
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
     setCart(updatedCart);
   };
 

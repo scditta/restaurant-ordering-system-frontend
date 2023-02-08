@@ -1,7 +1,11 @@
-import { Card, Button } from 'react-bootstrap';
+import { useState } from 'react';
+import { Card, Button, Modal } from 'react-bootstrap';
 import { XCircleFill } from 'react-bootstrap-icons';
 
 export default function Cart(props) {
+  const [showCheckout, setShowCheckout] = useState(false);
+  const hideCheckout = () => setShowCheckout(false);
+
   const cartEntryIds = Object.keys(props.cart);
   const cartEntries = props.cart;
 
@@ -40,31 +44,40 @@ export default function Cart(props) {
   const totalFormatted = formatCurrency(total);
 
   return (
-    <Card style={{ position: 'sticky', top: '1em' }}>
-      <Card.Body>
-        <Card.Title>Cart</Card.Title>
-        <div style={{ minHeight: '30vh' }}>{cartItems}</div>
+    <>
+      <Card style={{ position: 'sticky', top: '1em' }}>
+        <Card.Body>
+          <Card.Title>Cart</Card.Title>
+          <div style={{ minHeight: '30vh' }}>{cartItems}</div>
 
-        <div>
-          Subtotal:
-          <span className="float-end">{subtotalFormatted}</span>
-        </div>
-        <div>
-          Tax:
-          <span className="float-end">{taxFormatted}</span>
-        </div>
+          <div>
+            Subtotal:
+            <span className="float-end">{subtotalFormatted}</span>
+          </div>
+          <div>
+            Tax:
+            <span className="float-end">{taxFormatted}</span>
+          </div>
 
-        <hr className="mt-2 mb-2"></hr>
+          <hr className="mt-2 mb-2"></hr>
 
-        <div style={{ fontWeight: 'bold' }}>
-          Total:
-          <span className="float-end">{totalFormatted}</span>
-        </div>
+          <div style={{ fontWeight: 'bold' }}>
+            Total:
+            <span className="float-end">{totalFormatted}</span>
+          </div>
 
-        <div className="d-grid gap-2 mt-2">
-          <Button>Checkout</Button>
-        </div>
-      </Card.Body>
-    </Card>
+          <div className="d-grid gap-2 mt-2">
+            <Button onClick={setShowCheckout}>Checkout</Button>
+          </div>
+        </Card.Body>
+      </Card>
+
+      <Modal show={showCheckout} onHide={hideCheckout} animation={false} size="md" centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Order Checkout</Modal.Title>
+        </Modal.Header>
+        <Modal.Body></Modal.Body>
+      </Modal>
+    </>
   );
 }
