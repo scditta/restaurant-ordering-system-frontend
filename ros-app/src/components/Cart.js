@@ -141,8 +141,8 @@ export default function Cart(props) {
                 totalPriceStatus: 'FINAL',
                 totalPriceLabel: 'Total',
                 totalPrice: '100.00',
-                currencyCode: 'USD',
-                countryCode: 'US',
+                currencyCode: 'CAD',
+                countryCode: 'CA',
               },
             }}
             onLoadPaymentData={(paymentRequest) => {
