@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
 import { XCircleFill } from 'react-bootstrap-icons';
+import GooglePayButton from '@google-pay/button-react';
 
 export default function Cart(props) {
   const [showCheckout, setShowCheckout] = useState(false);
@@ -103,13 +104,58 @@ export default function Cart(props) {
             <span className="float-end">{taxFormatted}</span>
           </div>
           <hr className="mt-2 mb-2"></hr>
-          <div style={{ fontWeight: 'bold' }}>
+          <div style={{ fontWeight: 'bold' }} className="mb-4">
             Total:
             <span className="float-end">{totalFormatted}</span>
           </div>
 
+          <GooglePayButton
+            environment="TEST"
+            buttonType="checkout"
+            buttonSizeMode="fill"
+            style={{ width: '100%' }}
+            paymentRequest={{
+              apiVersion: 2,
+              apiVersionMinor: 0,
+              allowedPaymentMethods: [
+                {
+                  type: 'CARD',
+                  parameters: {
+                    allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                    allowedCardNetworks: ['MASTERCARD', 'VISA'],
+                  },
+                  tokenizationSpecification: {
+                    type: 'PAYMENT_GATEWAY',
+                    parameters: {
+                      gateway: 'example',
+                      gatewayMerchantId: 'exampleGatewayMerchantId',
+                    },
+                  },
+                },
+              ],
+              merchantInfo: {
+                merchantId: '12345678901234567890',
+                merchantName: 'Demo Merchant',
+              },
+              transactionInfo: {
+                totalPriceStatus: 'FINAL',
+                totalPriceLabel: 'Total',
+                totalPrice: '100.00',
+                currencyCode: 'USD',
+                countryCode: 'US',
+              },
+            }}
+            onLoadPaymentData={(paymentRequest) => {
+              console.log('load payment data', paymentRequest);
+            }}
+          />
+
           <div className="d-grid gap-2 mt-2">
-            <Button variant="secondary" onClick={hideCheckout}>
+            <Button
+              variant="secondary"
+              onClick={hideCheckout}
+              style={{ height: '48px', borderRadius: '3rem' }}
+            >
               Cancel
             </Button>
           </div>
