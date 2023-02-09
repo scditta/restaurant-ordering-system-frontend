@@ -83,10 +83,9 @@ export default function Cart(props) {
         items: orderItems,
       })
       .then((res) => {
+        setOrderNumber(res.data.pin);
         setPaySuccess(true);
         props.clearCartCallback();
-
-        setOrderNumber('0000'); //TODO
       })
       .catch((err) => {
         setError(`An unexpected error occured. Please contact site administrator.`);
