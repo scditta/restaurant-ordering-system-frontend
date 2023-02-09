@@ -7,6 +7,7 @@ import api from '../API/posts';
 export default function Cart(props) {
   const [showCheckout, setShowCheckout] = useState(false);
   const [paySuccess, setPaySuccess] = useState(false);
+  const [orderNumber, setOrderNumber] = useState('XXXX');
   const [error, setError] = useState(null);
   const hideCheckout = () => {
     setPaySuccess(false);
@@ -84,6 +85,8 @@ export default function Cart(props) {
       .then((res) => {
         setPaySuccess(true);
         props.clearCartCallback();
+
+        setOrderNumber('0000'); //TODO
       })
       .catch((err) => {
         setError(`An unexpected error occured. Please contact site administrator.`);
@@ -134,7 +137,20 @@ export default function Cart(props) {
             <Modal.Header closeButton>
               <Modal.Title>Order Checkout</Modal.Title>
             </Modal.Header>
-            <Modal.Body>Success</Modal.Body>
+            <Modal.Body>
+              <h5 style={{ display: 'flex', justifyContent: 'center' }}>Your order number is</h5>
+              <h1
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  fontSize: '5rem',
+                  marginBottom: '1rem',
+                }}
+              >
+                {orderNumber}
+              </h1>
+              <div>Please retain this order number for when your order is complete.</div>
+            </Modal.Body>
           </>
         ) : (
           <>
