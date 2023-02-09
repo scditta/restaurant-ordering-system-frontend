@@ -80,7 +80,7 @@ export default function Cart(props) {
           </div>
 
           <div className="d-grid gap-2 mt-2">
-            <Button onClick={setShowCheckout} disabled={cartEntryIds.length == 0}>
+            <Button onClick={setShowCheckout} disabled={cartEntryIds.length === 0}>
               Checkout
             </Button>
           </div>
