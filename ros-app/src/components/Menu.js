@@ -38,6 +38,10 @@ export default function Menu() {
     updateCart(updatedCart);
   };
 
+  const clearCart = () => {
+    updateCart({});
+  };
+
   const updateCart = (updatedCart) => {
     localStorage.setItem('cart', JSON.stringify(updatedCart));
     setCart(updatedCart);
@@ -64,7 +68,11 @@ export default function Menu() {
           ))}
         </Col>
         <Col md={4} className="ml-4">
-          {!authUser.authorization ? <Cart cart={cart} removeCartCallback={removeCart} /> : <></>}
+          {!authUser.authorization ? (
+            <Cart cart={cart} removeCartCallback={removeCart} clearCartCallback={clearCart} />
+          ) : (
+            <></>
+          )}
         </Col>
       </Row>
     </Container>
