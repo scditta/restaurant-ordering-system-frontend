@@ -8,7 +8,10 @@ export default function Cart(props) {
   const [showCheckout, setShowCheckout] = useState(false);
   const [paySuccess, setPaySuccess] = useState(false);
   const [error, setError] = useState(null);
-  const hideCheckout = () => setShowCheckout(false);
+  const hideCheckout = () => {
+    setPaySuccess(false);
+    setShowCheckout(false);
+  };
 
   const cartEntryIds = Object.keys(props.cart);
   const cartEntries = props.cart;
