@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Button, Modal } from 'react-bootstrap';
+import { Card, Button, Modal, Alert } from 'react-bootstrap';
 import { XCircleFill } from 'react-bootstrap-icons';
 import GooglePayButton from '@google-pay/button-react';
 import api from '../API/posts';
@@ -7,6 +7,7 @@ import api from '../API/posts';
 export default function Cart(props) {
   const [showCheckout, setShowCheckout] = useState(false);
   const [paySuccess, setPaySuccess] = useState(false);
+  const [error, setError] = useState(null);
   const hideCheckout = () => setShowCheckout(false);
 
   const cartEntryIds = Object.keys(props.cart);
@@ -60,6 +61,7 @@ export default function Cart(props) {
   const totalFormatted = formatCurrency(total);
 
   const handlePaymentSuccess = async () => {
+    setError(null);
     const orderItems = [];
 
     cartEntryIds.forEach((id) => {
@@ -81,7 +83,8 @@ export default function Cart(props) {
         props.clearCartCallback();
       })
       .catch((err) => {
-        console.log(err.response.data.error);
+        setError(`An unexpected error occured. Please contact site administrator.`);
+        console.error(err.response.data.error);
       });
   };
 
@@ -109,7 +112,13 @@ export default function Cart(props) {
           </div>
 
           <div className="d-grid gap-2 mt-2">
-            <Button onClick={setShowCheckout} disabled={cartEntryIds.length === 0}>
+            <Button
+              onClick={() => {
+                setError(null);
+                setShowCheckout(true);
+              }}
+              disabled={cartEntryIds.length === 0}
+            >
               Checkout
             </Button>
           </div>
@@ -145,6 +154,8 @@ export default function Cart(props) {
                 Total:
                 <span className="float-end">{totalFormatted}</span>
               </div>
+
+              <div>{error ? <Alert variant="danger">{error}</Alert> : null}</div>
 
               <GooglePayButton
                 environment="TEST"
