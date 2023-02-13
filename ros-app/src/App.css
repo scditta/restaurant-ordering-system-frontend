@@ -1,8 +1,3 @@
-.menuHeight {
-  position: fixed;
-  height: 95vh;
-}
-
 .cardImage {
   object-fit: cover;
   width: 10vw;
