@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Card, Container, Button } from 'react-bootstrap';
+import { Card, Container, Button, Col } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -11,12 +11,14 @@ export default function OrderHistory() {
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(null);
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [orders, setOrders] = useState();
 
   const onChange = (dates) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
+    setDatePickerOpen(false);
   };
 
   useEffect(() => {
@@ -42,15 +44,33 @@ export default function OrderHistory() {
   return (
     <>
       <Container>
-        <DatePicker
-          selected={startDate}
-          onChange={onChange}
-          startDate={startDate}
-          endDate={endDate}
-          selectsRange
-          // inline
-        />
-        <Button variant="primary">Clear</Button>
+        <Button variant="primary" onClick={() => setDatePickerOpen(true)}>
+          {startDate.toLocaleDateString()}
+        </Button>
+        <Button
+          variant="primary"
+          onClick={() => {
+            setStartDate(new Date());
+            setEndDate(null);
+          }}
+        >
+          Clear
+        </Button>
+        <Col className="">
+          <DatePicker
+            selected={startDate}
+            onChange={onChange}
+            startDate={startDate}
+            endDate={endDate}
+            selectsRange
+            open={datePickerOpen}
+            onClickOutside={() => setDatePickerOpen(false)}
+
+            // open={datePickerOpen}
+            // isClearable={true}
+            // inline
+          />
+        </Col>
         {orders?.map((order, index) => (
           <Card key={index}>
             <div>

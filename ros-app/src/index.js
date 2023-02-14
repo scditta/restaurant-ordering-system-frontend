@@ -10,11 +10,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 //Import BrowserRouter to add routes to application
 import { BrowserRouter } from 'react-router-dom';
 
+//Import AuthProvider for Auth context
+import { AuthProvider } from './context/AuthenticationContext';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

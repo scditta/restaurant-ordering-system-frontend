@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom';
+import { useContext } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import './App.css';
 
@@ -7,25 +8,40 @@ import Login from './components/Login';
 import DashBoard from './components/DashBoard';
 import NavBar from './components/NavBar';
 import OrderHistory from './components/OrderHistory';
-import { AuthProvider } from './context/AuthenticationContext';
+
+import AuthenticationContext from './context/AuthenticationContext';
 
 function App() {
+  const authUser = useContext(AuthenticationContext);
+
+  const ProtectedRoute = ({ user, children }) => {
+    if (user) {
+      return <Navigate to="/" replace />;
+    }
+    return children;
+  };
+
   return (
     <>
-      <AuthProvider>
-        {/* NavBar Component */}
-        <NavBar />
-        {/* <DashBoard /> */}
-        {/* Routes */}
-        <Routes>
-          <Route path="/" element={<DashBoard />} />
-          <Route path="/signup" element={<CreateUser />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/orders" />
-          <Route path="/orderHistory" element={<OrderHistory />} />
-          {/* <Route path="*" element={<div>page not found!</div>} /> */}
-        </Routes>
-      </AuthProvider>
+      {/* NavBar Component */}
+      <NavBar />
+      {/* <DashBoard /> */}
+      {/* Routes */}
+      <Routes>
+        <Route path="/" element={<DashBoard />} />
+        <Route path="/signup" element={<CreateUser />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/orders" />
+        <Route
+          path="/orderHistory"
+          element={
+            <ProtectedRoute user={!authUser.auth}>
+              <OrderHistory />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </>
   );
 }
