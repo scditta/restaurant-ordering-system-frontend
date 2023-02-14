@@ -71,9 +71,9 @@ export default function Order(props) {
     const element = document.querySelectorAll('#' + CSS.escape(orderId));
     console.log(element);
     for (let i = 0; i < element.length; i++) {
-      if (element[i].innerText === 'NOT STARTED') {
+      if (state === 'NOT STARTED') {
         element[i].style.backgroundColor = '#ff0000';
-      } else if (element[i].innerText === 'IN PROGRESS') {
+      } else if (state === 'IN PROGRESS') {
         element[i].style.backgroundColor = '#FFFF00';
       }
     }
