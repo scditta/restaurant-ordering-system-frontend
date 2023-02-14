@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { Row, Image, Col } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import OrderButtonGroup from './OrderButtonGroup';
 
 import AuthenticationContext from '../context/AuthenticationContext';
 import api from '../API/posts';
@@ -34,34 +33,33 @@ export default function Order(props) {
     }
   };
 
-  const handleClick = () => {
-    if (authUser.authorization) {
-      setShow(true);
+  function isActiveOrder(state) {
+    if (state === 'NOT_STARTED' || state === 'IN_PROGESS') {
+      return (
+        <>
+          <Row alt={order.id} className="mb-3 py-2" style={{ cursor: 'pointer' }}>
+            <Col>
+              <Row>
+                <h6>Order ID: {order.id}</h6>
+              </Row>
+              <Row>
+                <p>Order State: {order.state}</p>
+              </Row>
+            </Col>
+            <Col>
+              <OrderButtonGroup
+                orderId={order.id}
+                orderData={order}
+                className="mb-2"
+              ></OrderButtonGroup>
+            </Col>
+          </Row>
+        </>
+      );
     }
-  };
+  }
 
-  return (
-    <>
-      <Row alt={order.id} className="mb-3 py-2" style={{ cursor: 'pointer' }} onClick={handleClick}>
-        <Col>
-          <Row>
-            {console.log('ORDER: ' + order)}
-            <h6>Order ID: {order.id}</h6>
-          </Row>
-          <Row>
-            <p>Order State: {order.state}</p>
-          </Row>
-        </Col>
-        <Col>
-          <ButtonGroup className="mb-2">
-            <Button id="not-started-btn" style={{ backgroundColor: '#ff0000' }}>
-              NOT STARTED
-            </Button>
-            <Button id="in-progress-btn">IN PROGRESS</Button>
-            <Button id="completed-btn">COMPLETED</Button>
-          </ButtonGroup>
-        </Col>
-      </Row>
-    </>
-  );
+  const handleChange = () => {};
+
+  return <>{isActiveOrder(order.state) ? isActiveOrder(order.state) : ''}</>;
 }
