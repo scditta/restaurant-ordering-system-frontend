@@ -14,8 +14,8 @@ import AuthenticationContext from './context/AuthenticationContext';
 function App() {
   const authUser = useContext(AuthenticationContext);
 
-  const ProtectedRoute = ({ user, children }) => {
-    if (user) {
+  const ProtectedRoute = ({ userAuthorization, children }) => {
+    if (userAuthorization) {
       return <Navigate to="/" replace />;
     }
     return children;
@@ -35,7 +35,7 @@ function App() {
         <Route
           path="/orderHistory"
           element={
-            <ProtectedRoute user={!authUser.auth}>
+            <ProtectedRoute userAuthorization={!authUser.authorization}>
               <OrderHistory />
             </ProtectedRoute>
           }

@@ -46,7 +46,7 @@ export default function NavBar() {
               <LinkContainer to="/orders">
                 <Nav.Link>Active Orders</Nav.Link>
               </LinkContainer>
-              {!authUser.auth ? (
+              {!authUser.authorization ? (
                 <></>
               ) : (
                 <LinkContainer to="/orderHistory">
