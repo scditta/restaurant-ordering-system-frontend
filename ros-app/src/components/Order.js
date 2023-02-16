@@ -1,40 +1,40 @@
 import { useState, useEffect, useContext } from 'react';
 import { Row, Image, Col } from 'react-bootstrap';
 import OrderButtonGroup from './OrderButtonGroup';
-
-import AuthenticationContext from '../context/AuthenticationContext';
 import api from '../API/posts';
-
 export default function Order(props) {
-  const [order, setOrderData] = useState([]);
-  const authUser = useContext(AuthenticationContext);
+  function isActiveOrder(isActiveOrder) {
+    if (isActiveOrder) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  const [order, setOrderData] = useState(props.orderData);
 
-  const [show, setShow] = useState(false);
-
+  //Fetch the order item and insert its data
   useEffect(() => {
     updateOrder(props.orderId);
   }, [props.orderId]);
-
-  //Fetch the order item and insert its data
-  const updateOrder = async (orderId) => {
+  const updateOrder = async (e) => {
     try {
-      const response = await api.get(`api/v1/orders/${orderId}`);
-      setOrderData(response.data);
+      const getResponse = await api.get(`api/v1/orders/${props.orderId}`);
+      setOrderData(getResponse.data);
     } catch (err) {
       if (err.response) {
         //not in the 200 range
-        console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
+        console.log(err.getResponse.data);
+        console.log(err.getResponse.status);
+        console.log(err.getResponse.headers);
       } else {
         //response is undefined
         console.log(`Error: ${err.message}`);
       }
     }
   };
-
-  function isActiveOrder(state) {
-    if (state === 'NOT_STARTED' || state === 'IN_PROGESS') {
+  console.log(order);
+  if (isActiveOrder(props.isOrderActive)) {
+    if (order.state === 'NOT_STARTED' || order.state === 'IN_PROGRESS')
       return (
         <>
           <Row alt={order.id} className="mb-3 py-2" style={{ cursor: 'pointer' }}>
@@ -56,10 +56,30 @@ export default function Order(props) {
           </Row>
         </>
       );
+  } else {
+    if (order.state === 'COMPLETE') {
+      return (
+        <>
+          <Row alt={order.id} className="mb-3 py-2" style={{ cursor: 'pointer' }}>
+            <Col>
+              <Row>
+                <h6>Order ID: {order.id}</h6>
+              </Row>
+              <Row>
+                <p>Order State: {order.state}</p>
+              </Row>
+            </Col>
+            <Col>
+              <OrderButtonGroup
+                updateOrder={updateOrder(order)}
+                orderId={order.id}
+                orderData={order}
+                className="mb-2"
+              ></OrderButtonGroup>
+            </Col>
+          </Row>
+        </>
+      );
     }
   }
-
-  const handleChange = () => {};
-
-  return <>{isActiveOrder(order.state) ? isActiveOrder(order.state) : ''}</>;
 }

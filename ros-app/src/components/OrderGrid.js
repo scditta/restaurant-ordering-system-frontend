@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Container, Row, Col, Stack } from 'react-bootstrap';
 import OrderGridContext from '../context/OrderGridContext';
 import Order from './Order';
-export default function OrderGrid() {
+export default function OrderGrid(props) {
   const orderData = useContext(OrderGridContext);
 
   return (
@@ -18,7 +18,16 @@ export default function OrderGrid() {
               {/* </Container> */}
 
               {orderData.orders.map((order, index) => (
-                <div key={index}>{<Order key={index} orderId={order.id} />}</div>
+                <div key={index}>
+                  {
+                    <Order
+                      key={index}
+                      orderId={order.id}
+                      orderData={order}
+                      isOrderActive={props.isOrderActive}
+                    />
+                  }
+                </div>
               ))}
             </Container>
           </Col>

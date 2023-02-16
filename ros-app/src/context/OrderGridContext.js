@@ -34,7 +34,7 @@ export function OrderGridProvider({ children }) {
     };
     fetchOrders();
   };
-  console.log(orders);
+
   return (
     <OrderGridContext.Provider value={{ orders, updateOrderGrid }}>
       {children}
