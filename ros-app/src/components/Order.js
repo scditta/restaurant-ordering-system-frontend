@@ -15,7 +15,7 @@ export default function Order(props) {
   //Fetch the order item and insert its data
   useEffect(() => {
     updateOrder(props.orderId);
-  }, [props.orderId]);
+  }, []);
   const updateOrder = async (e) => {
     try {
       const getResponse = await api.get(`api/v1/orders/${props.orderId}`);
@@ -48,6 +48,7 @@ export default function Order(props) {
             </Col>
             <Col>
               <OrderButtonGroup
+                updateOrderCallback={updateOrder}
                 orderId={order.id}
                 orderData={order}
                 className="mb-2"
@@ -57,7 +58,9 @@ export default function Order(props) {
         </>
       );
   } else {
-    if (order.state === 'COMPLETE') {
+    let oneDay = new Date().getTime() + 1 * 24 * 60 * 60 * 1000;
+
+    if (order.state === 'COMPLETE' && oneDay > order.date) {
       return (
         <>
           <Row alt={order.id} className="mb-3 py-2" style={{ cursor: 'pointer' }}>
@@ -71,7 +74,7 @@ export default function Order(props) {
             </Col>
             <Col>
               <OrderButtonGroup
-                updateOrder={updateOrder(order)}
+                updateOrderCallback={updateOrder}
                 orderId={order.id}
                 orderData={order}
                 className="mb-2"

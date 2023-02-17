@@ -28,7 +28,7 @@ export default function OrderButtonGroup(props) {
         items: props.orderData.items,
       });
       setButtonState(validState);
-      props.updateOrder(response);
+      props.updateOrderCallback(response.data);
       console.log(response);
     } catch (err) {
       if (err.response) {
