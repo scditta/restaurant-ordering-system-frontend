@@ -7,14 +7,30 @@ import 'react-datepicker/dist/react-datepicker.css';
 import api from '../API/posts';
 
 import OrderDetail from './OrderDetail';
+import OrderPagination from './OrderPagination';
 
 export default function OrderHistory() {
   const orderState = 'COMPLETE';
 
+  //Specifications for pagination of orders
+  const perPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [start, setStart] = useState(0);
+  const [end, setEnd] = useState(perPage);
+
+  //Dates and datepicker state
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
+
+  //Array of orders state
   const [orders, setOrders] = useState([]);
+
+  const restartPagination = () => {
+    setCurrentPage(1);
+    setStart(0);
+    setEnd(perPage);
+  };
 
   //onchange for date selection
   const onChange = (dates) => {
@@ -22,6 +38,7 @@ export default function OrderHistory() {
     setStartDate(start);
     setEndDate(end);
     setDatePickerOpen(false);
+    restartPagination();
   };
 
   const onClear = () => {
@@ -48,15 +65,6 @@ export default function OrderHistory() {
   };
 
   useEffect(() => {
-    // console.log(
-    //   `api/v1/orders?state=${orderState}&min=${startDate.toLocaleDateString(
-    //     'en-CA'
-    //   )}T00:00:00&max=${
-    //     endDate != null
-    //       ? endDate.toLocaleDateString('en-CA') + 'T23:59:59.999Z'
-    //       : startDate.toLocaleDateString('en-CA') + 'T23:59:59.999Z'
-    //   }`
-    // );
     if (startDate === null && endDate === null) {
       onClear();
     } else {
@@ -88,77 +96,13 @@ export default function OrderHistory() {
     }
   }, [startDate, endDate]);
 
-  // //component which gets the item data and
-  // const OrderDetail = ({ itemId }) => {
-  //   // console.log(itemId);
-  //   const [item, setItem] = useState([]);
-
-  //   useEffect(() => {
-  //     console.log('itemEffect');
-  //     api
-  //       .get(`api/v1/items/${itemId}`)
-  //       .then((resp) => {
-  //         // console.log(resp.data);
-  //         setItem(resp.data);
-  //       })
-  //       .catch((err) => {
-  //         if (err.response) {
-  //           //not in the 200 range
-  //           console.log(err.response.data);
-  //           console.log(err.response.status);
-  //           console.log(err.response.headers);
-  //         } else {
-  //           //response is undefined
-  //           console.log(`Error: ${err.message}`);
-  //         }
-  //       });
-  //   }, [itemId]);
-
-  //   return (
-  //     <>
-  //       <p>{item.name}</p>
-  //       {/* <p>{item.description}</p> */}
-  //       <p>{item.price}</p>
-  //     </>
-  //   );
-  // };
-
-  const [activePagination, setActivePagination] = useState(1);
-  const page = useRef(1);
-  //Pagination Component
-  const OrderPagination = () => {
-    // let active = 1;
-    let paginationItems = [];
-    const perPage = 5;
-
-    for (let number = 1; number <= Math.ceil(orders.length / perPage); number++) {
-      // console.log(page.current);
-      paginationItems.push(
-        <Pagination.Item key={number} active={page.current === number} data-page={number}>
-          {number}
-        </Pagination.Item>
-      );
-    }
-
-    const paginationClick = (e) => {
-      // console.log(e.target.getAttribute('data-page'));
-      // setActivePagination(e.target.getAttribute('data-page'));
-      page.current = e.target.getAttribute('data-page');
-      console.log(page.current);
-      // console.log(activePagination);
-      // console.log(activePagination * perPage);
-    };
-
-    useEffect(() => {
-      // console.log(activePagination);
-      // active = activePagination;
-    }, []);
-
-    return (
-      <Pagination onClick={paginationClick} className="d-flex justify-content-center">
-        {paginationItems}
-      </Pagination>
-    );
+  const changePage = (selectedPage) => {
+    //1 * 5 - 5
+    //2 * 5 - 10
+    const orderRange = selectedPage * perPage;
+    // console.log(orders.slice(orderRange - perPage, orderRange));
+    setStart(orderRange - perPage);
+    setEnd(orderRange);
   };
 
   return (
@@ -175,6 +119,7 @@ export default function OrderHistory() {
             setStartDate(null);
             setEndDate(null);
             // onChange();
+            restartPagination();
             onClear();
           }}
         >
@@ -196,7 +141,7 @@ export default function OrderHistory() {
           <Card>No records found</Card>
         ) : (
           <>
-            {orders?.map((order, index) => (
+            {orders.slice(start, end).map((order, index) => (
               <Card key={index}>
                 <div>
                   <Row>
@@ -223,7 +168,12 @@ export default function OrderHistory() {
           </>
         )}
         {/* <Row centered> */}
-        <OrderPagination />
+        <OrderPagination
+          orderLength={orders.length}
+          changePage={changePage}
+          perPage={perPage}
+          page={{ currentPage, setCurrentPage }}
+        />
         {/* </Row> */}
       </Container>
     </>
