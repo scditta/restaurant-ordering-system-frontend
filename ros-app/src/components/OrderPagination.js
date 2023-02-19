@@ -10,7 +10,7 @@ export default function OrderPagination(props) {
   // const [currentPage, setCurrentPage] = useState(1);
 
   const paginationClick = (e) => {
-    console.log(props.page);
+    // console.log(props.page);
     props.page.setCurrentPage(e.target.getAttribute('data-page'));
     // setCurrentPage(e.target.getAttribute('data-page'));
     props.changePage(e.target.getAttribute('data-page'), props.perPage);

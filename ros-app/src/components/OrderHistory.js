@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Card, Container, Button, Col, Row, Pagination } from 'react-bootstrap';
+import { Card, Container, Button, Col, Row } from 'react-bootstrap';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -30,6 +30,36 @@ export default function OrderHistory() {
     setCurrentPage(1);
     setStart(0);
     setEnd(perPage);
+  };
+
+  let UserName = ({ userId }) => {
+    // console.log(userId);
+    // let userName = null;
+    const [userName, setUserName] = useState(null);
+
+    useEffect(() => {
+      api
+        .get(`api/v1/users/${userId}`)
+        .then((resp) => {
+          // console.log(resp.data.displayname);
+          setUserName(resp.data.displayname);
+          // return resp.data.displayname;
+          // userName = resp.data.displayname;
+        })
+        .catch((err) => {
+          if (err.response) {
+            //not in the 200 range
+            console.log(err.response.data);
+            console.log(err.response.status);
+            console.log(err.response.headers);
+          } else {
+            //response is undefined
+            console.log(`Error: ${err.message}`);
+          }
+        });
+    }, [userId]);
+
+    return userName;
   };
 
   //onchange for date selection
@@ -148,7 +178,10 @@ export default function OrderHistory() {
                     <Col>
                       <p>Order #{order.pin}</p>
                       <p>Date of Transaction: {order.date}</p>
-                      <p>Customer Info: {order.user === null ? 'Guest' : order.user}</p>
+                      <p>
+                        Customer Info:{' '}
+                        {order.user === null ? 'Guest' : <UserName userId={order.user} />}
+                      </p>
                     </Col>
                     <Col>
                       {order.items?.map((item, index) => (
