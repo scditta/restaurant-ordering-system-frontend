@@ -5,10 +5,6 @@ import api from '../API/posts';
 export default function OrderDetail(props) {
   const [item, setItem] = useState([]);
 
-  // useEffect(() => {
-  //   console.log(props.itemId);
-  // });
-
   useEffect(() => {
     // console.log('itemEffect');
     api

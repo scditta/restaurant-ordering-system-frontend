@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, Container, Button, Col, Row } from 'react-bootstrap';
 
 import DatePicker from 'react-datepicker';

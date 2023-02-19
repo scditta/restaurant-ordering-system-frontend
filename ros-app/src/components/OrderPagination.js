@@ -1,5 +1,3 @@
-// import { useState } from 'react';
-
 import { Pagination } from 'react-bootstrap';
 
 export default function OrderPagination(props) {
