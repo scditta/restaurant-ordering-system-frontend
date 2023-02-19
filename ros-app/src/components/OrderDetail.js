@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { Card, Col } from 'react-bootstrap';
 
 import api from '../API/posts';
+import { currency } from '../helpers/currency';
 
 export default function OrderDetail(props) {
   const [item, setItem] = useState([]);
@@ -28,8 +30,12 @@ export default function OrderDetail(props) {
 
   return (
     <>
-      <p>{item.name}</p>
-      <p>{item.price}</p>
+      <Col>
+        <Card.Text>{item.name}</Card.Text>
+      </Col>
+      <Col>
+        <Card.Text>{currency(item.price)}</Card.Text>
+      </Col>
     </>
   );
 }

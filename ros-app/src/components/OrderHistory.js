@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Card, Container, Button, Col, Row } from 'react-bootstrap';
+import { Card, Container, Button, Col, Row, ListGroup } from 'react-bootstrap';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import api from '../API/posts';
+import { currency } from '../helpers/currency';
 
 import OrderDetail from './OrderDetail';
 import OrderPagination from './OrderPagination';
@@ -137,25 +138,25 @@ export default function OrderHistory() {
 
   return (
     <>
-      <Container>
-        <Button variant="primary" onClick={() => setDatePickerOpen(true)}>
-          {/* {startDate.toLocaleDateString('en-CA')}
-          {endDate === null ? <></> : <> - {endDate.toLocaleDateString('en-CA')}</>} */}
-          Select Date
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => {
-            setStartDate(null);
-            setEndDate(null);
-            // onChange();
-            restartPagination();
-            onClear();
-          }}
-        >
-          Clear
-        </Button>
-        <Col>
+      <Container fluid="md">
+        <Row>
+          <Col className="my-2">
+            <Button variant="primary" onClick={() => setDatePickerOpen(true)} className="me-2">
+              Select Date
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                setStartDate(null);
+                setEndDate(null);
+                // onChange();
+                restartPagination();
+                onClear();
+              }}
+            >
+              Clear
+            </Button>
+          </Col>
           <DatePicker
             // selected={startDate}
             onChange={onChange}
@@ -166,36 +167,49 @@ export default function OrderHistory() {
             onClickOutside={() => setDatePickerOpen(false)}
             // inline
           />
-        </Col>
+        </Row>
         {orders.length === 0 ? (
           <Card>No records found</Card>
         ) : (
           <>
             {orders.slice(start, end).map((order, index) => (
-              <Card key={index}>
-                <div>
-                  <Row>
+              <Card key={index} className="my-2">
+                <Card.Body>
+                  <Row className="mx-5">
                     <Col>
-                      <p>Order #{order.pin}</p>
-                      <p>Date of Transaction: {order.date}</p>
-                      <p>
-                        Customer Info:{' '}
-                        {order.user === null ? 'Guest' : <UserName userId={order.user} />}
-                      </p>
+                      <Card.Title>Order #{order.pin}</Card.Title>
                     </Col>
                     <Col>
+                      <Card.Title>
+                        Customer: {order.user === null ? 'Guest' : <UserName userId={order.user} />}
+                      </Card.Title>
+                    </Col>
+                    <Card.Subtitle className="mb-2 text-muted">
+                      Date of Transaction: {order.date}
+                    </Card.Subtitle>
+                  </Row>
+                  <Row className="mx-5">
+                    <Col className="mx-2 my-3">
                       {order.items?.map((item, index) => (
-                        <div key={index}>
-                          <OrderDetail itemId={item.item} />
-                          <p>Quantity: {item.qty}</p>
-                        </div>
+                        <ListGroup key={index}>
+                          <ListGroup.Item className="my-1">
+                            <Row className="my-1">
+                              <OrderDetail itemId={item.item} />
+                              <Col>
+                                <Card.Text>Quantity: {item.qty}</Card.Text>
+                              </Col>
+                            </Row>
+                          </ListGroup.Item>
+                        </ListGroup>
                       ))}
-                      <p>Subtotal: {order.payment_subtotal}</p>
-                      <p>Tax: {order.payment_tax}</p>
-                      <p>Total: {order.payment_total}</p>
+                      <Row>
+                        <Card.Text>Subtotal: {currency(order.payment_subtotal)}</Card.Text>
+                        <Card.Text>Tax: {currency(order.payment_tax)}</Card.Text>
+                        <Card.Text>Total: {currency(order.payment_total)}</Card.Text>
+                      </Row>
                     </Col>
                   </Row>
-                </div>
+                </Card.Body>
               </Card>
             ))}
           </>
