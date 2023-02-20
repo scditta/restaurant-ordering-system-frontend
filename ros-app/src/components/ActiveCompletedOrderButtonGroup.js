@@ -5,14 +5,14 @@ import OrderGrid from './OrderGrid';
 export default function ActiveCompletedOrderButtonGroup() {
   //   const [order, setOrderButtonGroupData] = useState([]);
   //   const authUser = useContext(AuthenticationContext);
-  const [buttonState, setButtonState] = useState(true);
+  const [showActiveOrder, setShowActiveOrder] = useState(true);
 
   //Fetch the order item and insert its data
   const handleClick = async (e) => {
     if (e.target.innerText === 'Active Orders') {
-      setButtonState(true);
+      setShowActiveOrder(true);
     } else if (e.target.innerText === 'Completed Orders') {
-      setButtonState(false);
+      setShowActiveOrder(false);
     }
   };
 
@@ -22,7 +22,7 @@ export default function ActiveCompletedOrderButtonGroup() {
         <Button>Active Orders</Button>
         <Button>Completed Orders</Button>
       </ButtonGroup>
-      <OrderGrid isOrderActive={buttonState}></OrderGrid>
+      <OrderGrid showActiveOrder={showActiveOrder}></OrderGrid>
     </>
   );
 }

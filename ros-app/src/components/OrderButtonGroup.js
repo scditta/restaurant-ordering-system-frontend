@@ -5,8 +5,8 @@ import api from '../API/posts';
 export default function OrderButtonGroup(props) {
   //   const [order, setOrderButtonGroupData] = useState([]);
   //   const authUser = useContext(AuthenticationContext);
-  const REDHEX = 'FF0000';
-  const BLUEHEX = '0D6EFD';
+  const REDHEX = '706b71';
+  const BLUEHEX = 'bebbbe';
   const [order, setOrderData] = useState(props.orderData);
   const [buttonState, setButtonState] = useState(props.orderData.state);
 
@@ -43,14 +43,22 @@ export default function OrderButtonGroup(props) {
     }
   };
   return (
-    <>
-      <ButtonGroup className="mb-2" onClick={(e) => handleClick(e)}>
+    <div
+      style={{
+        position: 'absolute',
+        bottom: 10,
+        textAlign: 'center',
+        width: '100%',
+        paddingRight: '32px',
+      }}
+    >
+      <ButtonGroup className="mb-2" onClick={(e) => handleClick(e)} style={{ width: '80%' }}>
         <Button
           id={order.orderId}
           style={
             buttonState === 'NOT_STARTED'
-              ? { backgroundColor: `#${REDHEX}` }
-              : { backgroundColor: `#${BLUEHEX}` }
+              ? { backgroundColor: `#${REDHEX}`, borderColor: `#${BLUEHEX}` }
+              : { backgroundColor: `#${BLUEHEX}`, borderColor: `#${BLUEHEX}` }
           }
         >
           NOT STARTED
@@ -59,8 +67,8 @@ export default function OrderButtonGroup(props) {
           id={order.orderId}
           style={
             buttonState === 'IN_PROGRESS'
-              ? { backgroundColor: `#${REDHEX}` }
-              : { backgroundColor: `#${BLUEHEX}` }
+              ? { backgroundColor: `#${REDHEX}`, borderColor: `#${BLUEHEX}` }
+              : { backgroundColor: `#${BLUEHEX}`, borderColor: `#${BLUEHEX}` }
           }
         >
           IN PROGRESS
@@ -69,13 +77,13 @@ export default function OrderButtonGroup(props) {
           id={order.orderId}
           style={
             buttonState === 'COMPLETE'
-              ? { backgroundColor: `#${REDHEX}` }
-              : { backgroundColor: `#${BLUEHEX}` }
+              ? { backgroundColor: `#${REDHEX}`, borderColor: `#${BLUEHEX}` }
+              : { backgroundColor: `#${BLUEHEX}`, borderColor: `#${BLUEHEX}` }
           }
         >
           COMPLETED
         </Button>
       </ButtonGroup>
-    </>
+    </div>
   );
 }

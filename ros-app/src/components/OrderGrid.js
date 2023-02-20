@@ -8,30 +8,15 @@ export default function OrderGrid(props) {
   return (
     <>
       <Container className="menuHeight" fluid>
-        <Row className="h-100 g-0">
-          <Col className="h-100 overflow-auto">
-            <Container>
-              {/* <Container> */}
-              <Stack gap={3} className="col-md-5 my-3">
-                {/* <AddCategoryButton /> */}
-              </Stack>
-              {/* </Container> */}
-
-              {orderData.orders.map((order, index) => (
-                <div key={index}>
-                  {
-                    <Order
-                      key={index}
-                      orderId={order.id}
-                      orderData={order}
-                      isOrderActive={props.isOrderActive}
-                    />
-                  }
-                </div>
-              ))}
-            </Container>
-          </Col>
-          <Col></Col>
+        <Row className=" g-0 overflow-auto">
+          {orderData.orders.map((order, index) => (
+            <Order
+              key={index}
+              orderId={order.id}
+              orderData={order}
+              showActiveOrder={props.showActiveOrder}
+            />
+          ))}
         </Row>
       </Container>
     </>

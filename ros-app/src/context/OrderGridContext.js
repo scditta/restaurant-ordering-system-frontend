@@ -11,14 +11,10 @@ export function OrderGridProvider({ children }) {
     updateOrderGrid();
   }, []);
 
-  //updates the menu by fetching the new categories and items
   const updateOrderGrid = () => {
     const fetchOrders = async () => {
       try {
         const response = await api.get('/api/v1/orders');
-        // console.log(response.data);
-        console.log('RESPONSE');
-        console.log(response.data);
         setOrders(response.data);
       } catch (err) {
         if (err.response) {
