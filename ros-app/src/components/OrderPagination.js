@@ -29,15 +29,5 @@ export default function OrderPagination(props) {
     );
   }
 
-  // useEffect(() => {
-  //   console.log(currentPage);
-  // }, [currentPage]);
-
-  // const changePage = (number) => {
-  //   if (currentPage === number) {
-  //     setCurrentPage(number);
-  //   }
-  // };
-
   return <Pagination className="d-flex justify-content-center">{paginationItems}</Pagination>;
 }

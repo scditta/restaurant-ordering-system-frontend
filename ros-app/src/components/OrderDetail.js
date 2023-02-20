@@ -5,6 +5,7 @@ import api from '../API/posts';
 import { currency } from '../helpers/currency';
 
 export default function OrderDetail(props) {
+  const [isLoading, setLoading] = useState(true);
   const [item, setItem] = useState([]);
 
   useEffect(() => {
@@ -25,17 +26,28 @@ export default function OrderDetail(props) {
           //response is undefined
           console.log(`Error: ${err.message}`);
         }
+      }).finally(()=>{
+        setLoading(false);
       });
   }, [props.itemId]);
 
   return (
     <>
+    {isLoading? 
+      <Card.Text>Loading</Card.Text> : 
+    (
+      <>
       <Col>
         <Card.Text>{item.name}</Card.Text>
       </Col>
       <Col>
         <Card.Text>{currency(item.price)}</Card.Text>
       </Col>
+      <Col>
+        <Card.Text>Quantity: {props.qty}</Card.Text>
+      </Col>
+      </>
+      )}
     </>
   );
 }
