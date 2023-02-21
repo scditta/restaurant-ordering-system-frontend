@@ -8,8 +8,6 @@ import Login from './components/Login';
 import OrderPage from './components/OrderPage';
 
 import NavBar from './components/NavBar';
-import { AuthProvider } from './context/AuthenticationContext';
-import { MenuProvider } from '../src/context/MenuContext';
 import DashBoard from './components/DashBoard';
 import OrderHistory from './components/OrderHistory';
 import AuthenticationContext from './context/AuthenticationContext';
@@ -34,7 +32,14 @@ function App() {
         <Route path="/" element={<DashBoard />} />
         <Route path="/signup" element={<CreateUser />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/ordergrid" element={<OrderPage />} />
+        <Route
+          path="/ordergrid"
+          element={
+            <ProtectedRoute userAuthorization={!authUser.authorization}>
+              <OrderPage />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/orderHistory"

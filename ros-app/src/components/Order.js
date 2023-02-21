@@ -21,7 +21,7 @@ export default function Order(props) {
     const fetchItems = async () => {
       let allItems = [];
 
-      for (const item of order.items) {
+      for (const item of props.orderData.items) {
         const getResponse = await api.get(`api/v1/items/${item.item}`);
         allItems.push({ qty: item.qty, name: getResponse.data.name });
       }
@@ -30,7 +30,7 @@ export default function Order(props) {
     };
 
     fetchItems();
-  }, []);
+  }, [props.orderData.items]);
 
   const updateOrder = async (e) => {
     try {
