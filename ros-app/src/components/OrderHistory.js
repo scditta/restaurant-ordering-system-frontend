@@ -197,7 +197,6 @@ export default function OrderHistory() {
                       </Col>
                       <Col>
                         <Card.Title>
-                          Customer:{' '}
                           {order.user === null ? 'Guest' : <UserName userId={order.user} />}
                         </Card.Title>
                       </Col>
