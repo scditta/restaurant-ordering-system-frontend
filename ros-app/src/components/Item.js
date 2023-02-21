@@ -4,13 +4,17 @@ import { Row, Image, Col, Modal } from 'react-bootstrap';
 import AuthenticationContext from '../context/AuthenticationContext';
 import api from '../API/posts';
 import ItemForm from './ItemForm/ItemForm';
+import ItemCartForm from './ItemCartForm';
 
 export default function Item(props) {
   const [item, setItemData] = useState([]);
   const authUser = useContext(AuthenticationContext);
 
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+
+  const [showCartForm, setShowCartForm] = useState(false);
+  const handleCloseCartForm = () => setShowCartForm(false);
 
   useEffect(() => {
     updateItem(props.itemId);
@@ -36,7 +40,9 @@ export default function Item(props) {
 
   const handleClick = () => {
     if (authUser.authorization) {
-      setShow(true);
+      setShowEdit(true);
+    } else {
+      setShowCartForm(true);
     }
   };
 
@@ -60,16 +66,30 @@ export default function Item(props) {
           </p>
         </Col>
       </Row>
-      <Modal show={show} onHide={handleClose} animation={false} size="lg" centered>
+
+      <Modal show={showEdit} onHide={handleCloseEdit} animation={false} size="lg" centered>
         <Modal.Header closeButton>
           <Modal.Title>Edit Menu Item</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ItemForm
             categoryId={props.categoryId}
-            closeModalCallback={handleClose}
+            closeModalCallback={handleCloseEdit}
             item={item}
             updateItemCallBack={updateItem}
+          />
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={showCartForm} onHide={handleCloseCartForm} animation={false} size="md" centered>
+        <Modal.Header closeButton>
+          <Modal.Title>{item.name}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ItemCartForm
+            closeModalCallback={handleCloseCartForm}
+            item={item}
+            addCartCallback={props.addCartCallback}
           />
         </Modal.Body>
       </Modal>

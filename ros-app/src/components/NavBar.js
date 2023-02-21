@@ -43,11 +43,16 @@ export default function NavBar() {
               <LinkContainer to="/">
                 <Nav.Link>Menu</Nav.Link>
               </LinkContainer>
-              {authUser.authorization ? (
-                <LinkContainer to="/ordergrid">
-                  <Nav.Link>Active Orders</Nav.Link>
+              <LinkContainer to="/orders">
+                <Nav.Link>Active Orders</Nav.Link>
+              </LinkContainer>
+              {!authUser.authorization ? (
+                <></>
+              ) : (
+                <LinkContainer to="/orderHistory">
+                  <Nav.Link>Order History</Nav.Link>
                 </LinkContainer>
-              ) : null}
+              )}
             </Nav>
           </Navbar.Collapse>
           <Navbar.Collapse className="justify-content-end">

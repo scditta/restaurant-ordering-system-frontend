@@ -21,7 +21,7 @@ export default function AddCategoryButton() {
 
     async function handleSubmit() {
       try {
-        const response = await api.post('/api/v1/categories', { name: categoryName, items: [] });
+        const response = await api.post('api/v1/categories', { name: categoryName, items: [] });
         console.log(response.data);
         menuData.updateMenu();
         setModalShow(false);

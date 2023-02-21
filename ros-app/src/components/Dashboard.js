@@ -1,10 +1,13 @@
+import Menu from './Menu';
+
 import { MenuProvider } from '../context/MenuContext';
-import Menu from '../components/Menu';
-export default function Dashboard() {
+
+export default function DashBoard() {
   return (
     <>
       <MenuProvider>
-        <Menu></Menu>
+        {/* Content */}
+        <Menu />
       </MenuProvider>
     </>
   );

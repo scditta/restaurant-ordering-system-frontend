@@ -17,7 +17,7 @@ export default function DeleteCategory(props) {
     function removeCategory(e) {
       const deleteCategory = async () => {
         try {
-          const response = await api.delete(`/api/v1/categories/${props.categoryId}`);
+          const response = await api.delete(`api/v1/categories/${props.categoryId}`);
           console.log(response.data);
           menuData.updateMenu();
         } catch (err) {
