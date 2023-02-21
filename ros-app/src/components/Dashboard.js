@@ -1,5 +1,4 @@
 import Menu from './Menu';
-
 import { MenuProvider } from '../context/MenuContext';
 
 export default function DashBoard() {

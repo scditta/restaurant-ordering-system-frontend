@@ -6,13 +6,12 @@ import './App.css';
 import CreateUser from './components/CreateUser';
 import Login from './components/Login';
 import OrderPage from './components/OrderPage';
-import Dashboard from './components/Dashboard';
+
 import NavBar from './components/NavBar';
 import { AuthProvider } from './context/AuthenticationContext';
 import { MenuProvider } from '../src/context/MenuContext';
 import DashBoard from './components/DashBoard';
 import OrderHistory from './components/OrderHistory';
-
 import AuthenticationContext from './context/AuthenticationContext';
 
 function App() {
@@ -35,7 +34,8 @@ function App() {
         <Route path="/" element={<DashBoard />} />
         <Route path="/signup" element={<CreateUser />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/orders" />
+        <Route path="/ordergrid" element={<OrderPage />} />
+
         <Route
           path="/orderHistory"
           element={

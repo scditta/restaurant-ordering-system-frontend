@@ -49,31 +49,6 @@ export default function Order(props) {
     }
   };
 
-  // return (
-  //   props.showActiveOrder &&
-  //   order.state !== 'COMPLETE' && (
-  //     <Col>
-  //       <Card alt={order.id} style={{}}>
-  //         <Card.Body>
-  //           <Card.Title>
-  //             <div>{order.pin}</div>
-  //           </Card.Title>
-  //           {orderItemNames.map((name, index) => (
-  //             <Row key={index}>
-  //               <Card.Text>{name}</Card.Text>
-  //             </Row>
-  //           ))}
-  //           <OrderButtonGroup
-  //             updateOrderCallback={updateOrder}
-  //             orderId={order.id}
-  //             orderData={order}
-  //           ></OrderButtonGroup>
-  //         </Card.Body>
-  //       </Card>
-  //     </Col>
-  //   )
-  // );
-
   if (isActiveOrder(props.showActiveOrder)) {
     if (order.state !== 'COMPLETE') {
       return (
@@ -103,9 +78,7 @@ export default function Order(props) {
       );
     }
   } else {
-    let oneDay = new Date().getTime() + 1 * 24 * 60 * 60 * 1000;
-
-    if (order.state === 'COMPLETE' && oneDay > order.date) {
+    if (order.state === 'COMPLETE') {
       return (
         <Col className="col-4">
           <div style={{ margin: '10px', padding: '10px' }}>

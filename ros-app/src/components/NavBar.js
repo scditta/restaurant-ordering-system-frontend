@@ -43,7 +43,7 @@ export default function NavBar() {
               <LinkContainer to="/">
                 <Nav.Link>Menu</Nav.Link>
               </LinkContainer>
-              <LinkContainer to="/orders">
+              <LinkContainer to="/ordergrid">
                 <Nav.Link>Active Orders</Nav.Link>
               </LinkContainer>
               {!authUser.authorization ? (
