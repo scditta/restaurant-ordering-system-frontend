@@ -27,19 +27,6 @@ function App() {
 
   return (
     <>
-<<<<<<< HEAD
-      <AuthProvider>
-        {/* Routes */}
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/signup" element={<CreateUser />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/ordergrid" element={<OrderPage />} />
-          {/* <Route path="*" element={<div>page not found!</div>} /> */}
-        </Routes>
-      </AuthProvider>
-=======
       {/* NavBar Component */}
       <NavBar />
       {/* <DashBoard /> */}
@@ -59,7 +46,6 @@ function App() {
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
->>>>>>> main
     </>
   );
 }
