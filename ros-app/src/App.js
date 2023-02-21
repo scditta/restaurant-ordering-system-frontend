@@ -1,25 +1,47 @@
-import { Routes, Route } from 'react-router-dom';
+import { useContext } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import './App.css';
 
 import CreateUser from './components/CreateUser';
 import Login from './components/Login';
 import DashBoard from './components/DashBoard';
-import { AuthProvider } from './context/AuthenticationContext';
+import NavBar from './components/NavBar';
+import OrderHistory from './components/OrderHistory';
+
+import AuthenticationContext from './context/AuthenticationContext';
 
 function App() {
+  const authUser = useContext(AuthenticationContext);
+
+  const ProtectedRoute = ({ userAuthorization, children }) => {
+    if (userAuthorization) {
+      return <Navigate to="/" replace />;
+    }
+    return children;
+  };
+
   return (
     <>
-      <AuthProvider>
-        <DashBoard />
-        {/* Routes */}
-        <Routes>
-          <Route path="/" />
-          <Route path="/signup" element={<CreateUser />} />
-          <Route path="/login" element={<Login />} />
-          {/* <Route path="*" element={<div>page not found!</div>} /> */}
-        </Routes>
-      </AuthProvider>
+      {/* NavBar Component */}
+      <NavBar />
+      {/* <DashBoard /> */}
+      {/* Routes */}
+      <Routes>
+        <Route path="/" element={<DashBoard />} />
+        <Route path="/signup" element={<CreateUser />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/orders" />
+        <Route
+          path="/orderHistory"
+          element={
+            <ProtectedRoute userAuthorization={!authUser.authorization}>
+              <OrderHistory />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </>
   );
 }

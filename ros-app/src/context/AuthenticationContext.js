@@ -31,7 +31,7 @@ export function AuthProvider({ children }) {
 
       try {
         const userID = localStorage.getItem('user_id');
-        const response = await api.get(`/api/v1/users/${userID}`);
+        const response = await api.get(`api/v1/users/${userID}`);
         //if there is a user session token
         if (response.data.session_token === userSessionToken) {
           setUser(response.data);
