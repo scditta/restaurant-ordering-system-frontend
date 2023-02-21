@@ -1,7 +1,6 @@
-import { useState, useEffect, useContext } from 'react';
-import { Row, Image, Col, Container } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { Row, Col } from 'react-bootstrap';
 import OrderButtonGroup from './OrderButtonGroup';
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import api from '../API/posts';
 export default function Order(props) {
@@ -34,7 +33,7 @@ export default function Order(props) {
 
   const updateOrder = async (e) => {
     try {
-      const getResponse = await api.get(`api/v1/orders/${props.orderId}`);
+      const getResponse = await api.get(`api/v1/orders/${props.orderData.id}`);
       setOrderData(getResponse.data);
     } catch (err) {
       if (err.response) {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import api from '../API/posts';
@@ -7,7 +7,6 @@ export default function OrderButtonGroup(props) {
   //   const authUser = useContext(AuthenticationContext);
   const REDHEX = '706b71';
   const BLUEHEX = 'bebbbe';
-  const [order, setOrderData] = useState(props.orderData);
   const [buttonState, setButtonState] = useState(props.orderData.state);
 
   //Fetch the order item and insert its data
@@ -20,7 +19,7 @@ export default function OrderButtonGroup(props) {
     try {
       //   console.log(orderId);
       const validState = textToValidState[e.target.innerText];
-      const response = await api.put(`api/v1/orders/${props.orderId}`, {
+      const response = await api.put(`api/v1/orders/${props.orderData.id}`, {
         state: validState,
         payment_tax: props.orderData.payment_tax,
         payment_subtotal: props.orderData.payment_subtotal, //save as cents in db, NOT dollars
@@ -54,7 +53,7 @@ export default function OrderButtonGroup(props) {
     >
       <ButtonGroup className="mb-2" onClick={(e) => handleClick(e)} style={{ width: '80%' }}>
         <Button
-          id={order.orderId}
+          id={props.orderData.orderId}
           style={
             buttonState === 'NOT_STARTED'
               ? { backgroundColor: `#${REDHEX}`, borderColor: `#${BLUEHEX}` }
@@ -64,7 +63,7 @@ export default function OrderButtonGroup(props) {
           NOT STARTED
         </Button>
         <Button
-          id={order.orderId}
+          id={props.orderData.orderId}
           style={
             buttonState === 'IN_PROGRESS'
               ? { backgroundColor: `#${REDHEX}`, borderColor: `#${BLUEHEX}` }
@@ -74,7 +73,7 @@ export default function OrderButtonGroup(props) {
           IN PROGRESS
         </Button>
         <Button
-          id={order.orderId}
+          id={props.orderData.orderId}
           style={
             buttonState === 'COMPLETE'
               ? { backgroundColor: `#${REDHEX}`, borderColor: `#${BLUEHEX}` }
