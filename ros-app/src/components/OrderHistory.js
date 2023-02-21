@@ -109,14 +109,25 @@ export default function OrderHistory() {
     if (startDate === null && endDate === null) {
       onClear();
     } else {
+      // console.log(new Date(startDate).);
+      const setStartDate =
+        startDate.getFullYear() +
+        '-' +
+        ('0' + (startDate.getMonth() + 1)).slice(-2) +
+        '-' +
+        ('0' + startDate.getDate()).slice(-2);
+
       api
         .get(
-          `api/v1/orders?state=${orderState}&min=${startDate.toLocaleDateString(
-            'en-CA'
-          )}T00:00:00&max=${
+          `api/v1/orders?state=${orderState}&min=${setStartDate}T00:00:00&max=${
             endDate != null
-              ? endDate.toLocaleDateString('en-CA') + 'T23:59:59.999Z'
-              : startDate.toLocaleDateString('en-CA') + 'T23:59:59.999Z'
+              ? endDate.getFullYear() +
+                '-' +
+                ('0' + (endDate.getMonth() + 1)).slice(-2) +
+                '-' +
+                ('0' + endDate.getDate()).slice(-2) +
+                'T23:59:59.999Z'
+              : setStartDate + 'T23:59:59.999Z'
           }`
         )
         .then((resp) => {
@@ -197,11 +208,12 @@ export default function OrderHistory() {
                       </Col>
                       <Col>
                         <Card.Title>
+                          Customer:
                           {order.user === null ? 'Guest' : <UserName userId={order.user} />}
                         </Card.Title>
                       </Col>
                       <Card.Subtitle className="mb-2 text-muted">
-                        Date of Transaction: {new Date(order.date).toLocaleString('en-CA')}
+                        Date of Transaction: {new Date(order.date).toUTCString()}
                       </Card.Subtitle>
                     </Row>
                     <Row className="mx-5">
