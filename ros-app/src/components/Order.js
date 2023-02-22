@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Row, Col } from 'react-bootstrap';
+import { useState, useEffect, useContext } from 'react';
+import { Row, Image, Col, Container } from 'react-bootstrap';
 import OrderButtonGroup from './OrderButtonGroup';
+import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import api from '../API/posts';
 export default function Order(props) {
@@ -20,7 +21,7 @@ export default function Order(props) {
     const fetchItems = async () => {
       let allItems = [];
 
-      for (const item of props.orderData.items) {
+      for (const item of props.orderData.item) {
         const getResponse = await api.get(`api/v1/items/${item.item}`);
         allItems.push({ qty: item.qty, name: getResponse.data.name });
       }
@@ -29,7 +30,7 @@ export default function Order(props) {
     };
 
     fetchItems();
-  }, [props.orderData.items]);
+  }, [props.orderData.item]);
 
   const updateOrder = async (e) => {
     try {
@@ -77,7 +78,10 @@ export default function Order(props) {
       );
     }
   } else {
-    if (order.state === 'COMPLETE') {
+    let oneDay = new Date().getTime() - 1 * 24 * 60 * 60 * 1000;
+    let isoString = new Date(oneDay).toISOString();
+
+    if (order.state === 'COMPLETE' && isoString < order.date) {
       return (
         <Col className="col-4">
           <div style={{ margin: '10px', padding: '10px' }}>
