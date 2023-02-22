@@ -61,16 +61,13 @@ export default function OrderHistory() {
             //response is undefined
             console.log(`Error: ${err.message}`);
           }
-        }).finally(() => {
+        })
+        .finally(() => {
           setLoading(false);
         });
     }, [userId]);
 
-    return (
-      <>
-      {isLoading? "Loading" : userName}
-      </>
-    );
+    return <>{isLoading ? 'Loading' : userName}</>;
   };
 
   //onchange for date selection
@@ -102,7 +99,8 @@ export default function OrderHistory() {
           //response is undefined
           console.log(`Error: ${err.message}`);
         }
-      }).finally(() => {
+      })
+      .finally(() => {
         setLoading(false);
       });
   };
@@ -111,14 +109,25 @@ export default function OrderHistory() {
     if (startDate === null && endDate === null) {
       onClear();
     } else {
+      // console.log(new Date(startDate).);
+      const setStartDate =
+        startDate.getFullYear() +
+        '-' +
+        ('0' + (startDate.getMonth() + 1)).slice(-2) +
+        '-' +
+        ('0' + startDate.getDate()).slice(-2);
+
       api
         .get(
-          `api/v1/orders?state=${orderState}&min=${startDate.toLocaleDateString(
-            'en-CA'
-          )}T00:00:00&max=${
+          `api/v1/orders?state=${orderState}&min=${setStartDate}T00:00:00&max=${
             endDate != null
-              ? endDate.toLocaleDateString('en-CA') + 'T23:59:59.999Z'
-              : startDate.toLocaleDateString('en-CA') + 'T23:59:59.999Z'
+              ? endDate.getFullYear() +
+                '-' +
+                ('0' + (endDate.getMonth() + 1)).slice(-2) +
+                '-' +
+                ('0' + endDate.getDate()).slice(-2) +
+                'T23:59:59.999Z'
+              : setStartDate + 'T23:59:59.999Z'
           }`
         )
         .then((resp) => {
@@ -135,7 +144,8 @@ export default function OrderHistory() {
             //response is undefined
             console.log(`Error: ${err.message}`);
           }
-        }).finally(() => {
+        })
+        .finally(() => {
           setLoading(false);
         });
     }
@@ -188,41 +198,44 @@ export default function OrderHistory() {
           <>
             {orders.slice(start, end).map((order, index) => (
               <Card key={index} className="my-2">
-                {isLoading? <Card.Body>Loading</Card.Body> : (
-                <Card.Body>
-                  <Row className="mx-5">
-                    <Col>
-                      <Card.Title>Order #{order.pin}</Card.Title>
-                    </Col>
-                    <Col>
-                      <Card.Title>
-                        Customer: {order.user === null ? 'Guest' : <UserName userId={order.user} />}
-                      </Card.Title>
-                    </Col>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      Date of Transaction: {new Date(order.date).toLocaleString('en-CA')}
-                    </Card.Subtitle>
-                  </Row>
-                  <Row className="mx-5">
-                    <Col className="mx-2 my-3">
-                      <Card.Title>Items:</Card.Title>
-                      {order.items?.map((item, index) => (
-                        <ListGroup key={index}>
-                          <ListGroup.Item className="my-1">
-                            <Row className="my-1">
-                              <OrderDetail itemId={item.item} qty={item.qty}/>
-                            </Row>
-                          </ListGroup.Item>
-                        </ListGroup>
-                      ))}
-                      <Row>
-                        <Card.Text>Subtotal: {currency(order.payment_subtotal)}</Card.Text>
-                        <Card.Text>Tax: {currency(order.payment_tax)}</Card.Text>
-                        <Card.Text>Total: {currency(order.payment_total)}</Card.Text>
-                      </Row>
-                    </Col>
-                  </Row>
-                </Card.Body>
+                {isLoading ? (
+                  <Card.Body>Loading</Card.Body>
+                ) : (
+                  <Card.Body>
+                    <Row className="mx-5">
+                      <Col>
+                        <Card.Title>Order #{order.pin}</Card.Title>
+                      </Col>
+                      <Col>
+                        <Card.Title>
+                          Customer:
+                          {order.user === null ? 'Guest' : <UserName userId={order.user} />}
+                        </Card.Title>
+                      </Col>
+                      <Card.Subtitle className="mb-2 text-muted">
+                        Date of Transaction: {new Date(order.date).toUTCString()}
+                      </Card.Subtitle>
+                    </Row>
+                    <Row className="mx-5">
+                      <Col className="mx-2 my-3">
+                        <Card.Title>Items:</Card.Title>
+                        {order.items?.map((item, index) => (
+                          <ListGroup key={index}>
+                            <ListGroup.Item className="my-1">
+                              <Row className="my-1">
+                                <OrderDetail itemId={item.item} qty={item.qty} />
+                              </Row>
+                            </ListGroup.Item>
+                          </ListGroup>
+                        ))}
+                        <Row>
+                          <Card.Text>Subtotal: {currency(order.payment_subtotal)}</Card.Text>
+                          <Card.Text>Tax: {currency(order.payment_tax)}</Card.Text>
+                          <Card.Text>Total: {currency(order.payment_total)}</Card.Text>
+                        </Row>
+                      </Col>
+                    </Row>
+                  </Card.Body>
                 )}
               </Card>
             ))}

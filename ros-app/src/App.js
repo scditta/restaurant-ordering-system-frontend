@@ -5,10 +5,11 @@ import './App.css';
 
 import CreateUser from './components/CreateUser';
 import Login from './components/Login';
-import DashBoard from './components/DashBoard';
-import NavBar from './components/NavBar';
-import OrderHistory from './components/OrderHistory';
+import OrderPage from './components/OrderPage';
 
+import NavBar from './components/NavBar';
+import DashBoard from './components/DashBoard';
+import OrderHistory from './components/OrderHistory';
 import AuthenticationContext from './context/AuthenticationContext';
 
 function App() {
@@ -31,7 +32,15 @@ function App() {
         <Route path="/" element={<DashBoard />} />
         <Route path="/signup" element={<CreateUser />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/orders" />
+        <Route
+          path="/ordergrid"
+          element={
+            <ProtectedRoute userAuthorization={!authUser.authorization}>
+              <OrderPage />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/orderHistory"
           element={
