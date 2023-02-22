@@ -1,10 +1,8 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import { Container, ButtonGroup } from 'react-bootstrap';
+import { ButtonGroup } from 'react-bootstrap';
 import OrderGrid from './OrderGrid';
 export default function ActiveCompletedOrderButtonGroup() {
-  //   const [order, setOrderButtonGroupData] = useState([]);
-  //   const authUser = useContext(AuthenticationContext);
   const [showActiveOrder, setShowActiveOrder] = useState(true);
 
   //Fetch the order item and insert its data
