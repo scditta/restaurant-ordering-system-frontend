@@ -20,6 +20,7 @@ export default function OrderButtonGroup(props) {
       //   console.log(orderId);
       const validState = textToValidState[e.target.innerText];
       const response = await api.put(`api/v1/orders/${props.orderData.id}`, {
+        user: props.orderData.user,
         state: validState,
         payment_tax: props.orderData.payment_tax,
         payment_subtotal: props.orderData.payment_subtotal, //save as cents in db, NOT dollars

@@ -1,7 +1,6 @@
-import { useState, useEffect, useContext } from 'react';
-import { Row, Image, Col, Container } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { Row, Col } from 'react-bootstrap';
 import OrderButtonGroup from './OrderButtonGroup';
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import api from '../API/posts';
 export default function Order(props) {
@@ -21,7 +20,7 @@ export default function Order(props) {
     const fetchItems = async () => {
       let allItems = [];
 
-      for (const item of props.orderData.item) {
+      for (const item of props.orderData.items) {
         const getResponse = await api.get(`api/v1/items/${item.item}`);
         allItems.push({ qty: item.qty, name: getResponse.data.name });
       }
@@ -30,7 +29,7 @@ export default function Order(props) {
     };
 
     fetchItems();
-  }, [props.orderData.item]);
+  }, [props.orderData.items]);
 
   const updateOrder = async (e) => {
     try {
