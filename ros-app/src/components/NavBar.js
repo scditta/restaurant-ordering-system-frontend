@@ -49,7 +49,7 @@ export default function NavBar() {
               ) : (
                 <>
                   <LinkContainer to="/ordergrid">
-                    <Nav.Link>Active Orders</Nav.Link>
+                    <Nav.Link>Order Tracker</Nav.Link>
                   </LinkContainer>
                   <LinkContainer to="/orderHistory">
                     <Nav.Link>Order History</Nav.Link>

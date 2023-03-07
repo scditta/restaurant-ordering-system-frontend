@@ -14,8 +14,6 @@ export default function Order(props) {
   const [order, setOrderData] = useState(props.orderData);
   const [orderItems, setOrderItems] = useState([]);
 
-  //Fetch the order item and insert its data
-
   useEffect(() => {
     const fetchItems = async () => {
       let allItems = [];
