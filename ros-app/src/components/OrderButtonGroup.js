@@ -3,13 +3,9 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import api from '../API/posts';
 export default function OrderButtonGroup(props) {
-  //   const [order, setOrderButtonGroupData] = useState([]);
-  //   const authUser = useContext(AuthenticationContext);
   const REDHEX = '706b71';
   const BLUEHEX = 'bebbbe';
   const [buttonState, setButtonState] = useState(props.orderData.state);
-
-  //Fetch the order item and insert its data
   const handleClick = async (e) => {
     const textToValidState = {
       'NOT STARTED': 'NOT_STARTED',
@@ -23,7 +19,7 @@ export default function OrderButtonGroup(props) {
         user: props.orderData.user,
         state: validState,
         payment_tax: props.orderData.payment_tax,
-        payment_subtotal: props.orderData.payment_subtotal, //save as cents in db, NOT dollars
+        payment_subtotal: props.orderData.payment_subtotal,
         payment_total: props.orderData.payment_total,
         items: props.orderData.items,
       });
