@@ -10,6 +10,7 @@ import OrderPage from './components/OrderPage';
 import NavBar from './components/NavBar';
 import DashBoard from './components/DashBoard';
 import OrderHistory from './components/OrderHistory';
+import YourOrders from './components/YourOrders';
 import AuthenticationContext from './context/AuthenticationContext';
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/orders" element={<YourOrders />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

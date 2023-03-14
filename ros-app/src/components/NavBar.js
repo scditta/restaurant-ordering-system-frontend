@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Container, Nav, NavDropdown, Alert } from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown, Alert, Badge } from 'react-bootstrap';
 
 import AuthenticationContext from '../context/AuthenticationContext';
 
@@ -45,7 +45,20 @@ export default function NavBar() {
               </LinkContainer>
 
               {!authUser.authorization ? (
-                <></>
+                <LinkContainer to="/orders">
+                  <Nav.Link>
+                    Your Orders
+                    <Badge
+                      className="ms-1 p-1"
+                      pill
+                      bg="danger"
+                      text="danger"
+                      style={{ height: '0.7rem', width: '0.7rem' }}
+                    >
+                      *
+                    </Badge>
+                  </Nav.Link>
+                </LinkContainer>
               ) : (
                 <>
                   <LinkContainer to="/ordergrid">
