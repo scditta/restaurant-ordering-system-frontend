@@ -1,5 +1,7 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+
+import api from '../API/posts';
 
 import Item from './Item';
 import Category from './Category';
@@ -10,7 +12,7 @@ import Cart from './Cart';
 import AuthenticationContext from '../context/AuthenticationContext';
 import MenuContext from '../context/MenuContext';
 
-export default function Menu() {
+export default function Menu(props) {
   const menuData = useContext(MenuContext);
   const authUser = useContext(AuthenticationContext);
 
@@ -46,6 +48,48 @@ export default function Menu() {
     localStorage.setItem('cart', JSON.stringify(updatedCart));
     setCart(updatedCart);
   };
+
+  const reOrderedCart = useCallback((id, qty, name, price) => {
+    const updatedCart = {};
+    updatedCart[id] = { qty: qty };
+    updatedCart[id].name = name;
+    updatedCart[id].price = price;
+    updateCart(updatedCart);
+    window.history.replaceState({}, document.title);
+  }, []);
+
+  useEffect(() => {
+    console.log(props);
+    if (props.reorder !== null) {
+      for (let i = 0; i < props.reorder.items.length; i++) {
+        api
+          .get(`api/v1/items/${props.reorder.items[i].item}`)
+          .then((resp) => {
+            console.log(resp.data);
+            console.log(props.reorder.items[i].qty);
+            // setCart((oldArray) => [...oldArray, resp.data]);
+            // addCart(resp.data.id, props.reorder.items[i].qty, resp.data.name, resp.data.price);
+            reOrderedCart(
+              resp.data.id,
+              props.reorder.items[i].qty,
+              resp.data.name,
+              resp.data.price
+            );
+          })
+          .catch((err) => {
+            if (err.response) {
+              //not in the 200 range
+              console.log(err.response.data);
+              console.log(err.response.status);
+              console.log(err.response.headers);
+            } else {
+              //response is undefined
+              console.log(`Error: ${err.message}`);
+            }
+          });
+      }
+    }
+  }, [props, reOrderedCart]);
 
   return (
     <Container>
