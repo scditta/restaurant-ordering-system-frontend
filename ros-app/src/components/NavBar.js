@@ -58,7 +58,7 @@ export default function NavBar() {
           setOrderTrackerNotification(true);
           break;
         case 'order-update':
-          if (eventData.user === authUser.user.id) {
+          if (authUser.user && eventData.user === authUser.user.id) {
             switch (eventData.state) {
               case 'IN_PROGRESS':
                 showNotification(`Your order is being prepared by the restaurant.`);
