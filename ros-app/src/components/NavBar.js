@@ -3,6 +3,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Container, Nav, NavDropdown, Alert } from 'react-bootstrap';
 
 import AuthenticationContext from '../context/AuthenticationContext';
+import { EventSourcePolyfill } from 'event-source-polyfill';
 
 import { logout } from '../API/authenticationService';
 
@@ -28,6 +29,34 @@ export default function NavBar() {
         }
       });
   }
+
+  async function listenSSE() {
+    let url = `${process.env.REACT_APP_BACKEND_URL}/api/v1/sse/orders`;
+    url = url.replace(/(?<!:)\/+/gm, '/'); //clean up double slashes in url
+
+    const es = new EventSourcePolyfill(url, {
+      headers: {
+        api_key: process.env.REACT_APP_API_KEY,
+      },
+    });
+
+    console.log(`Connected to SSE server.`);
+
+    es.onmessage = (event) => {
+      const eventData = JSON.parse(event.data);
+      console.log(eventData);
+
+      switch (eventData.event) {
+        case 'order-create':
+          break;
+        case 'order-update':
+          break;
+        default:
+      }
+    };
+  }
+
+  listenSSE();
 
   return (
     <>
