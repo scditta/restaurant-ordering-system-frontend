@@ -28,9 +28,11 @@ export default function Cart(props) {
     return (
       <Card key={id} className="mb-2">
         <Card.Body>
-          <span>{cartItem.name}</span>
+          <span>
+            {cartItem.name} x{cartItem.qty}
+          </span>
           <span className="float-end">
-            Qty: {cartItem.qty}
+            {formatCurrency(cartItem.price * cartItem.qty)}
             <XCircleFill
               size={24}
               style={{ marginLeft: '1em', cursor: 'pointer' }}
