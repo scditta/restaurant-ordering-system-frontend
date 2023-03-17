@@ -46,21 +46,23 @@ export default function NavBar() {
 
     es.onmessage = (event) => {
       const eventData = JSON.parse(event.data);
-      console.log(eventData);
 
       switch (eventData.event) {
         case 'order-create':
           break;
         case 'order-update':
-          //check user id
-          setOrderNotification(true);
+          if (eventData.user == authUser.user) {
+            setOrderNotification(true);
+          }
           break;
         default:
       }
     };
   }
 
-  listenSSE();
+  if (authUser.user) {
+    listenSSE();
+  }
 
   return (
     <>
@@ -90,7 +92,6 @@ export default function NavBar() {
                       Order Tracker
                       {orderNotification ? (
                         <ExclamationCircleFill
-                          //size={5}
                           style={{
                             marginLeft: '0.2em',
                             transform: 'translate(0px, -1px)',
