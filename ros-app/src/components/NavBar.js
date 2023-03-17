@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Container, Nav, NavDropdown, Alert, Toast, ToastContainer } from 'react-bootstrap';
 import { EventSourcePolyfill } from 'event-source-polyfill';
@@ -39,10 +39,9 @@ export default function NavBar() {
     setShowToast(true);
   }
 
-  async function listenSSE() {
+  useEffect(() => {
     let url = `${process.env.REACT_APP_BACKEND_URL}/api/v1/sse/orders`;
     url = url.replace(/(?<!:)\/+/gm, '/'); //clean up double slashes in url
-
     const es = new EventSourcePolyfill(url, {
       headers: {
         api_key: process.env.REACT_APP_API_KEY,
@@ -51,16 +50,12 @@ export default function NavBar() {
 
     console.log(`Connected to SSE server.`);
 
-    es.onmessage = (event) => {
+    es.addEventListener('order', (event) => {
       const eventData = JSON.parse(event.data);
 
       switch (eventData.event) {
         case 'order-create':
-          //setOrderTrackerNotification(true);
-          /*
-          Order tracker notification not working properly.
-          Page will disconnect from back-end
-           */
+          setOrderTrackerNotification(true);
           break;
         case 'order-update':
           if (eventData.user === authUser.user.id) {
@@ -77,12 +72,12 @@ export default function NavBar() {
           break;
         default:
       }
-    };
-  }
+    });
 
-  if (authUser.user) {
-    listenSSE();
-  }
+    return () => {
+      es.close();
+    };
+  });
 
   return (
     <>
