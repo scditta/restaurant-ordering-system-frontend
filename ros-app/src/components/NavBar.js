@@ -1,13 +1,15 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Container, Nav, NavDropdown, Alert } from 'react-bootstrap';
+import { EventSourcePolyfill } from 'event-source-polyfill';
+import { ExclamationCircleFill } from 'react-bootstrap-icons';
 
 import AuthenticationContext from '../context/AuthenticationContext';
-import { EventSourcePolyfill } from 'event-source-polyfill';
 
 import { logout } from '../API/authenticationService';
 
 export default function NavBar() {
+  const [orderNotification, setOrderNotification] = useState(false);
   const authUser = useContext(AuthenticationContext);
 
   async function logoutUser() {
@@ -50,6 +52,8 @@ export default function NavBar() {
         case 'order-create':
           break;
         case 'order-update':
+          //check user id
+          setOrderNotification(true);
           break;
         default:
       }
@@ -78,7 +82,21 @@ export default function NavBar() {
               ) : (
                 <>
                   <LinkContainer to="/ordergrid">
-                    <Nav.Link>Order Tracker</Nav.Link>
+                    <Nav.Link>
+                      Order Tracker
+                      {orderNotification ? (
+                        <ExclamationCircleFill
+                          //size={5}
+                          style={{
+                            marginLeft: '0.2em',
+                            transform: 'translate(0px, -1px)',
+                            color: 'red',
+                          }}
+                        ></ExclamationCircleFill>
+                      ) : (
+                        <></>
+                      )}
+                    </Nav.Link>
                   </LinkContainer>
                   <LinkContainer to="/orderHistory">
                     <Nav.Link>Order History</Nav.Link>
