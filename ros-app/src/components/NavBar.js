@@ -1,15 +1,15 @@
 import { useContext, useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Container, Nav, NavDropdown, Alert } from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown, Alert, Toast, ToastContainer } from 'react-bootstrap';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import { ExclamationCircleFill } from 'react-bootstrap-icons';
-
-import AuthenticationContext from '../context/AuthenticationContext';
-
 import { logout } from '../API/authenticationService';
+import AuthenticationContext from '../context/AuthenticationContext';
 
 export default function NavBar() {
   const [orderNotification, setOrderNotification] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastText, setToastText] = useState('');
   const authUser = useContext(AuthenticationContext);
 
   async function logoutUser() {
@@ -32,6 +32,12 @@ export default function NavBar() {
       });
   }
 
+  function showNotification(text) {
+    setOrderNotification(true);
+    setToastText(text);
+    setShowToast(true);
+  }
+
   async function listenSSE() {
     let url = `${process.env.REACT_APP_BACKEND_URL}/api/v1/sse/orders`;
     url = url.replace(/(?<!:)\/+/gm, '/'); //clean up double slashes in url
@@ -51,8 +57,16 @@ export default function NavBar() {
         case 'order-create':
           break;
         case 'order-update':
-          if (eventData.user == authUser.user.id) {
-            setOrderNotification(true);
+          if (eventData.user === authUser.user.id) {
+            switch (eventData.state) {
+              case 'IN_PROGRESS':
+                showNotification(`Your order is being prepared by the restaurant.`);
+                break;
+              case 'COMPLETE':
+                showNotification(`Your order is ready for pickup.`);
+                break;
+              default:
+            }
           }
           break;
         default:
@@ -141,6 +155,19 @@ export default function NavBar() {
       ) : (
         <></>
       )}
+      <ToastContainer className="p-3 position-fixed" position="top-center">
+        <Toast
+          show={showToast}
+          onClose={() => {
+            setShowToast(false);
+          }}
+        >
+          <Toast.Header>
+            <strong className="me-auto">Order Update</strong>
+          </Toast.Header>
+          <Toast.Body>{toastText}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </>
   );
 }
