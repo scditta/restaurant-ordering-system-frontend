@@ -82,7 +82,11 @@ export default function NavBar() {
               ) : (
                 <>
                   <LinkContainer to="/ordergrid">
-                    <Nav.Link>
+                    <Nav.Link
+                      onClick={() => {
+                        setOrderNotification(false);
+                      }}
+                    >
                       Order Tracker
                       {orderNotification ? (
                         <ExclamationCircleFill
