@@ -51,7 +51,7 @@ export default function NavBar() {
         case 'order-create':
           break;
         case 'order-update':
-          if (eventData.user == authUser.user) {
+          if (eventData.user == authUser.user.id) {
             setOrderNotification(true);
           }
           break;
@@ -80,16 +80,14 @@ export default function NavBar() {
               </LinkContainer>
 
               {!authUser.authorization ? (
-                <></>
-              ) : (
                 <>
-                  <LinkContainer to="/ordergrid">
+                  <LinkContainer to="/">
                     <Nav.Link
                       onClick={() => {
                         setOrderNotification(false);
                       }}
                     >
-                      Order Tracker
+                      Orders
                       {orderNotification ? (
                         <ExclamationCircleFill
                           style={{
@@ -102,6 +100,12 @@ export default function NavBar() {
                         <></>
                       )}
                     </Nav.Link>
+                  </LinkContainer>
+                </>
+              ) : (
+                <>
+                  <LinkContainer to="/ordergrid">
+                    <Nav.Link>Order Tracker</Nav.Link>
                   </LinkContainer>
                   <LinkContainer to="/orderHistory">
                     <Nav.Link>Order History</Nav.Link>
