@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import { Card, Button, Modal, Alert } from 'react-bootstrap';
+import { Card, Button, Modal, Alert, Form } from 'react-bootstrap';
 import { XCircleFill } from 'react-bootstrap-icons';
 import GooglePayButton from '@google-pay/button-react';
 import api from '../API/posts';
 
 export default function Cart(props) {
   const [showCheckout, setShowCheckout] = useState(false);
-  const [paySuccess, setPaySuccess] = useState(false);
+  const [payComplete, setPayComplete] = useState(false);
   const [orderNumber, setOrderNumber] = useState('XXXX');
   const [error, setError] = useState(null);
+  const [payError, setPayError] = useState(false);
   const hideCheckout = () => {
-    setPaySuccess(false);
+    setPayComplete(false);
     setShowCheckout(false);
   };
 
@@ -86,7 +87,7 @@ export default function Cart(props) {
       })
       .then((res) => {
         setOrderNumber(res.data.pin);
-        setPaySuccess(true);
+        setPayComplete(true);
         props.clearCartCallback();
       })
       .catch((err) => {
@@ -123,6 +124,7 @@ export default function Cart(props) {
               onClick={() => {
                 setError(null);
                 setShowCheckout(true);
+                setPayError(false);
               }}
               disabled={cartEntryIds.length === 0}
             >
@@ -133,7 +135,16 @@ export default function Cart(props) {
       </Card>
 
       <Modal show={showCheckout} onHide={hideCheckout} animation={false} size="sm" centered>
-        {paySuccess ? (
+        {payError && payComplete ? (
+          <>
+            <Modal.Header closeButton>
+              <Modal.Title>Payment Error</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div>An error occured during the transaction.</div>
+            </Modal.Body>
+          </>
+        ) : payComplete ? (
           <>
             <Modal.Header closeButton>
               <Modal.Title>Order Checkout</Modal.Title>
@@ -227,6 +238,18 @@ export default function Cart(props) {
                   Cancel
                 </Button>
               </div>
+
+              <Form style={{ marginTop: '2em' }}>
+                <Form.Check
+                  type="switch"
+                  id="custom-switch"
+                  label="Simulate Transaction Error"
+                  value={payError}
+                  onChange={() => {
+                    setPayError(!payError);
+                  }}
+                />
+              </Form>
             </Modal.Body>
           </>
         )}
