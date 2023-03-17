@@ -8,6 +8,7 @@ import AuthenticationContext from '../context/AuthenticationContext';
 
 export default function NavBar() {
   const [orderNotification, setOrderNotification] = useState(false);
+  const [orderTrackerNotification, setOrderTrackerNotification] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastText, setToastText] = useState('');
   const authUser = useContext(AuthenticationContext);
@@ -55,6 +56,11 @@ export default function NavBar() {
 
       switch (eventData.event) {
         case 'order-create':
+          //setOrderTrackerNotification(true);
+          /*
+          Order tracker notification not working properly.
+          Page will disconnect from back-end
+           */
           break;
         case 'order-update':
           if (eventData.user === authUser.user.id) {
@@ -119,7 +125,24 @@ export default function NavBar() {
               ) : (
                 <>
                   <LinkContainer to="/ordergrid">
-                    <Nav.Link>Order Tracker</Nav.Link>
+                    <Nav.Link
+                      onClick={() => {
+                        setOrderTrackerNotification(false);
+                      }}
+                    >
+                      Order Tracker
+                      {orderTrackerNotification ? (
+                        <ExclamationCircleFill
+                          style={{
+                            marginLeft: '0.2em',
+                            transform: 'translate(0px, -1px)',
+                            color: 'red',
+                          }}
+                        ></ExclamationCircleFill>
+                      ) : (
+                        <></>
+                      )}
+                    </Nav.Link>
                   </LinkContainer>
                   <LinkContainer to="/orderHistory">
                     <Nav.Link>Order History</Nav.Link>
