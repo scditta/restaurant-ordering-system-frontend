@@ -225,7 +225,11 @@ export default function Cart(props) {
                   },
                 }}
                 onLoadPaymentData={(paymentRequest) => {
-                  handlePaymentSuccess();
+                  if (payError) {
+                    setPayComplete(true);
+                  } else {
+                    handlePaymentSuccess();
+                  }
                 }}
               />
 
