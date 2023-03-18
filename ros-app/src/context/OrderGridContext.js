@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
+import { EventSourcePolyfill } from 'event-source-polyfill';
 import api from '../API/posts';
 
 //React Context
@@ -9,6 +10,31 @@ export function OrderGridProvider({ children }) {
 
   useEffect(() => {
     updateOrderGrid();
+
+    let url = `${process.env.REACT_APP_BACKEND_URL}/api/v1/sse/orders`;
+    url = url.replace(/(?<!:)\/+/gm, '/'); //clean up double slashes in url
+    const es = new EventSourcePolyfill(url, {
+      headers: {
+        api_key: process.env.REACT_APP_API_KEY,
+      },
+    });
+
+    console.log(`Connected to SSE server.`);
+
+    es.addEventListener('order', (event) => {
+      const eventData = JSON.parse(event.data);
+
+      switch (eventData.event) {
+        case 'order-create':
+          updateOrderGrid();
+          break;
+        default:
+      }
+    });
+
+    return () => {
+      es.close();
+    };
   }, []);
 
   const updateOrderGrid = () => {
