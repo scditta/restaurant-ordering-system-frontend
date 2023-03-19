@@ -1,12 +1,16 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Container, Nav, NavDropdown, Alert, Badge } from 'react-bootstrap';
-
+import { Navbar, Container, Nav, NavDropdown, Alert, Toast, ToastContainer } from 'react-bootstrap';
+import { EventSourcePolyfill } from 'event-source-polyfill';
+import { ExclamationCircleFill } from 'react-bootstrap-icons';
+import { logout } from '../API/authenticationService';
 import AuthenticationContext from '../context/AuthenticationContext';
 
-import { logout } from '../API/authenticationService';
-
 export default function NavBar() {
+  const [orderNotification, setOrderNotification] = useState(false);
+  const [orderTrackerNotification, setOrderTrackerNotification] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastText, setToastText] = useState('');
   const authUser = useContext(AuthenticationContext);
 
   async function logoutUser() {
@@ -29,6 +33,52 @@ export default function NavBar() {
       });
   }
 
+  function showNotification(text) {
+    setOrderNotification(true);
+    setToastText(text);
+    setShowToast(true);
+  }
+
+  useEffect(() => {
+    let url = `${process.env.REACT_APP_BACKEND_URL}/api/v1/sse/orders`;
+    url = url.replace(/(?<!:)\/+/gm, '/'); //clean up double slashes in url
+    const es = new EventSourcePolyfill(url, {
+      headers: {
+        api_key: process.env.REACT_APP_API_KEY,
+      },
+    });
+
+    console.log(`Connected to SSE server.`);
+
+    es.addEventListener('order', (event) => {
+      const eventData = JSON.parse(event.data);
+
+      switch (eventData.event) {
+        case 'order-create':
+          setOrderTrackerNotification(true);
+          break;
+        case 'order-update':
+          if (authUser.user && eventData.user === authUser.user.id) {
+            switch (eventData.state) {
+              case 'IN_PROGRESS':
+                showNotification(`Your order is being prepared by the restaurant.`);
+                break;
+              case 'COMPLETE':
+                showNotification(`Your order is ready for pickup.`);
+                break;
+              default:
+            }
+          }
+          break;
+        default:
+      }
+    });
+
+    return () => {
+      es.close();
+    };
+  });
+
   return (
     <>
       <Navbar bg="light" expand="md">
@@ -45,24 +95,49 @@ export default function NavBar() {
               </LinkContainer>
 
               {!authUser.authorization ? (
-                <LinkContainer to="/orders">
-                  <Nav.Link>
-                    Your Orders
-                    <Badge
-                      className="ms-1 p-1"
-                      pill
-                      bg="danger"
-                      text="danger"
-                      style={{ height: '0.7rem', width: '0.7rem' }}
+                <>
+                  <LinkContainer to="/">
+                    <Nav.Link
+                      onClick={() => {
+                        setOrderNotification(false);
+                      }}
                     >
-                      *
-                    </Badge>
-                  </Nav.Link>
-                </LinkContainer>
+                      Orders
+                      {orderNotification ? (
+                        <ExclamationCircleFill
+                          style={{
+                            marginLeft: '0.2em',
+                            transform: 'translate(0px, -1px)',
+                            color: 'red',
+                          }}
+                        ></ExclamationCircleFill>
+                      ) : (
+                        <></>
+                      )}
+                    </Nav.Link>
+                  </LinkContainer>
+                </>
               ) : (
                 <>
                   <LinkContainer to="/ordergrid">
-                    <Nav.Link>Order Tracker</Nav.Link>
+                    <Nav.Link
+                      onClick={() => {
+                        setOrderTrackerNotification(false);
+                      }}
+                    >
+                      Order Tracker
+                      {orderTrackerNotification ? (
+                        <ExclamationCircleFill
+                          style={{
+                            marginLeft: '0.2em',
+                            transform: 'translate(0px, -1px)',
+                            color: 'red',
+                          }}
+                        ></ExclamationCircleFill>
+                      ) : (
+                        <></>
+                      )}
+                    </Nav.Link>
                   </LinkContainer>
                   <LinkContainer to="/orderHistory">
                     <Nav.Link>Order History</Nav.Link>
@@ -98,6 +173,19 @@ export default function NavBar() {
       ) : (
         <></>
       )}
+      <ToastContainer className="p-3 position-fixed" position="top-center">
+        <Toast
+          show={showToast}
+          onClose={() => {
+            setShowToast(false);
+          }}
+        >
+          <Toast.Header>
+            <strong className="me-auto">Order Update</strong>
+          </Toast.Header>
+          <Toast.Body>{toastText}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </>
   );
 }
