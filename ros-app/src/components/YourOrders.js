@@ -3,6 +3,7 @@ import { Container, Row, Col, Button, Card, ListGroup } from 'react-bootstrap';
 
 import api from '../API/posts';
 import { currency } from '../helpers/currency';
+import { EventSourcePolyfill } from 'event-source-polyfill';
 
 import OrderDetail from './OrderDetail';
 
@@ -25,75 +26,87 @@ export default function YourOrders() {
       console.log('Guest / Not logged in');
       setCompletedOrders([]);
     } else {
-      api
-        .get(`api/v1/orders?user=${authUser.user.id}&state=${'COMPLETE'}`)
-        .then((resp) => {
-          // console.log(resp.data);
-          setCompletedOrders(resp.data.reverse());
-        })
-        .catch((err) => {
-          if (err.response) {
-            //not in the 200 range
-            console.log(err.response.data);
-            console.log(err.response.status);
-            console.log(err.response.headers);
-          } else {
-            //response is undefined
-            console.log(`Error: ${err.message}`);
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-      api
-        .get(`api/v1/orders?state=${'NOT_STARTED'}&state=${'IN_PROGRESS'}&user=${authUser.user.id}`)
-        .then((resp) => {
-          // console.log(resp.data);
-          setNotCompleteOrders(resp.data.reverse());
-        })
-        .catch((err) => {
-          if (err.response) {
-            //not in the 200 range
-            console.log(err.response.data);
-            console.log(err.response.status);
-            console.log(err.response.headers);
-          } else {
-            //response is undefined
-            console.log(`Error: ${err.message}`);
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      getCustomerOrders(authUser.user);
+
+      let url = `${process.env.REACT_APP_BACKEND_URL}/api/v1/sse/orders`;
+      url = url.replace(/(?<!:)\/+/gm, '/'); //clean up double slashes in url
+      const es = new EventSourcePolyfill(url, {
+        headers: {
+          api_key: process.env.REACT_APP_API_KEY,
+        },
+      });
+
+      console.log(`Connected to SSE server.`);
+
+      es.addEventListener('order', (event) => {
+        const eventData = JSON.parse(event.data);
+
+        switch (eventData.event) {
+          case 'order-update':
+            if (authUser.user && eventData.user === authUser.user.id) {
+              switch (eventData.state) {
+                case 'IN_PROGRESS':
+                case 'COMPLETE':
+                  getCustomerOrders(authUser.user);
+                  break;
+                default:
+              }
+            }
+            break;
+          default:
+        }
+      });
+      return () => {
+        es.close();
+      };
     }
   }, [authUser]);
 
+  const getCustomerOrders = (user) => {
+    api
+      .get(`api/v1/orders?user=${user.id}&state=${'COMPLETE'}`)
+      .then((resp) => {
+        // console.log(resp.data);
+        setCompletedOrders(resp.data.reverse());
+      })
+      .catch((err) => {
+        if (err.response) {
+          //not in the 200 range
+          console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response.headers);
+        } else {
+          //response is undefined
+          console.log(`Error: ${err.message}`);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
+    api
+      .get(`api/v1/orders?state=${'NOT_STARTED'}&state=${'IN_PROGRESS'}&user=${user.id}`)
+      .then((resp) => {
+        // console.log(resp.data);
+        setNotCompleteOrders(resp.data.reverse());
+      })
+      .catch((err) => {
+        if (err.response) {
+          //not in the 200 range
+          console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response.headers);
+        } else {
+          //response is undefined
+          console.log(`Error: ${err.message}`);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   function EachOrder({ orders, completed = false }) {
-    // const [orders, setOrders] = useState([]);
-
-    // useEffect(() => {
-    //   api
-    //     .get(`api/v1/orders?user=${authUser.user.id}`)
-    //     .then((resp) => {
-    //       // console.log(resp.data);
-    //       setOrders(resp.data.reverse());
-    //     })
-    //     .catch((err) => {
-    //       if (err.response) {
-    //         //not in the 200 range
-    //         console.log(err.response.data);
-    //         console.log(err.response.status);
-    //         console.log(err.response.headers);
-    //       } else {
-    //         //response is undefined
-    //         console.log(`Error: ${err.message}`);
-    //       }
-    //     })
-    //     .finally(() => {
-    //       setLoading(false);
-    //     });
-    // }, []);
-
     return orders.map((order, index) => (
       <Card key={index} className="my-2">
         <Card.Body>
@@ -157,14 +170,21 @@ export default function YourOrders() {
     <>
       <Container fluid="md" className="my-5">
         {!authUser.auth ? (
-          'Guest'
+          'Your order is being prepared, please stand by!'
         ) : (
           <>
             <Col>
               <h1>Active Orders</h1>
-              <EachOrder orders={notCompleteOrders} completed={true} />
+              {notCompleteOrders.length === 0 ? (
+                <Card>
+                  <Card.Body className="p-4">No Active Orders</Card.Body>
+                </Card>
+              ) : (
+                <EachOrder orders={notCompleteOrders} completed={true} />
+              )}
             </Col>
-            <Col>
+            <hr></hr>
+            <Col className="my-5">
               <h1>Previous Orders</h1>
               {isLoading ? (
                 <Card.Body>Loading...</Card.Body>
