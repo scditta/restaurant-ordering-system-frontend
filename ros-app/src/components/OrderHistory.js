@@ -85,7 +85,7 @@ export default function OrderHistory() {
       .get(`api/v1/orders?state=${orderState}`)
       .then((resp) => {
         // console.log(resp.data);
-        setOrders(resp.data);
+        setOrders(resp.data.reverse());
         // console.log(orders);
         // setStartDate('');
       })
@@ -132,7 +132,7 @@ export default function OrderHistory() {
         )
         .then((resp) => {
           // console.log(resp.data);
-          setOrders(resp.data);
+          setOrders(resp.data.reverse());
         })
         .catch((err) => {
           if (err.response) {

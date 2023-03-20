@@ -1,5 +1,7 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+
+import api from '../API/posts';
 
 import Item from './Item';
 import Category from './Category';
@@ -10,12 +12,14 @@ import Cart from './Cart';
 import AuthenticationContext from '../context/AuthenticationContext';
 import MenuContext from '../context/MenuContext';
 
-export default function Menu() {
+export default function Menu(props) {
   const menuData = useContext(MenuContext);
   const authUser = useContext(AuthenticationContext);
 
   let cartCached = localStorage.getItem('cart');
-  let defaultCart = {};
+  let defaultCart = useMemo(() => {
+    return {};
+  }, []);
   if (cartCached) defaultCart = JSON.parse(cartCached);
 
   const [cart, setCart] = useState(defaultCart);
@@ -46,6 +50,49 @@ export default function Menu() {
     localStorage.setItem('cart', JSON.stringify(updatedCart));
     setCart(updatedCart);
   };
+
+  // const reOrderedCart = useCallback((id, qty, name, price, updatedCart) => {
+  //   // const updatedCart = {};
+  //   console.log(updatedCart);
+  //   updatedCart[id] = { qty: qty };
+  //   updatedCart[id].name = name;
+  //   updatedCart[id].price = price;
+  //   updateCart(updatedCart);
+  // }, []);
+
+  useEffect(() => {
+    // console.log(props);
+    // let updatedCart = {};
+    if (props.reorder !== null) {
+      // console.log(props.reorder.items);
+      for (let i = 0; i < props.reorder.items.length; i++) {
+        // let newOrder = {};
+        // console.log(props.reorder.items[i]);
+        api
+          .get(`api/v1/items/${props.reorder.items[i].item}`)
+          .then((resp) => {
+            // console.log(resp.data);
+            // console.log(props.reorder.items[i].qty);
+
+            defaultCart[resp.data.id] = { qty: props.reorder.items[i].qty };
+            defaultCart[resp.data.id].name = resp.data.name;
+            defaultCart[resp.data.id].price = resp.data.price;
+          })
+          .catch((err) => {
+            if (err.response) {
+              //not in the 200 range
+              console.log(err.response.data);
+              console.log(err.response.status);
+              console.log(err.response.headers);
+            } else {
+              //response is undefined
+              console.log(`Error: ${err.message}`);
+            }
+          });
+      }
+      window.history.replaceState({}, document.title);
+    }
+  }, [props, defaultCart]);
 
   return (
     <Container>

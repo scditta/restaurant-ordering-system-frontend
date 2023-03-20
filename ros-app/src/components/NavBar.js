@@ -96,7 +96,7 @@ export default function NavBar() {
 
               {!authUser.authorization ? (
                 <>
-                  <LinkContainer to="/">
+                  <LinkContainer to="/orders">
                     <Nav.Link
                       onClick={() => {
                         setOrderNotification(false);
