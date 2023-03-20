@@ -85,8 +85,8 @@ export default function Menu(props) {
             defaultCart[resp.data.id] = { qty: props.reorder.items[i].qty };
             defaultCart[resp.data.id].name = resp.data.name;
             defaultCart[resp.data.id].price = resp.data.price;
-            localStorage.setItem('cart', JSON.stringify(defaultCart));
-            setCart(defaultCart);
+            // localStorage.setItem('cart', JSON.stringify(defaultCart));
+            // setCart(defaultCart);
           })
           .catch((err) => {
             if (err.response) {
