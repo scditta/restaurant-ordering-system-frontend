@@ -52,11 +52,24 @@ export default function Menu(props) {
   };
 
   // const reOrderedCart = useCallback((id, qty, name, price) => {
-  //   defaultCart[id] = { qty: qty };
-  //   defaultCart[id].name = name;
-  //   defaultCart[id].price = price;
-  //   localStorage.setItem('cart', JSON.stringify(defaultCart));
-  //   setCart(defaultCart);
+  //   // defaultCart[id] = { qty: qty };
+  //   // defaultCart[id].name = name;
+  //   // defaultCart[id].price = price;
+  //   // localStorage.setItem('cart', JSON.stringify(defaultCart));
+  //   // setCart(defaultCart);
+  //   const updatedCart = {};
+  //   console.log(updatedCart);
+  //   // setTimeout(() => {
+  //   // console.log('timer');
+  //   if (id in updatedCart) {
+  //     updatedCart[id].qty += qty;
+  //   } else {
+  //     updatedCart[id] = { qty: qty };
+  //   }
+  //   updatedCart[id].name = name;
+  //   updatedCart[id].price = price;
+  //   updateCart(updatedCart);
+  //   // }, 2000);
   // }, []);
 
   useEffect(() => {
@@ -82,11 +95,18 @@ export default function Menu(props) {
             //   resp.data.name,
             //   resp.data.price
             // );
+            // defaultCart[resp.data.id] = { qty: props.reorder.items[i].qty };
+            // defaultCart[resp.data.id].name = resp.data.name;
+            // defaultCart[resp.data.id].price = resp.data.price;
+            // updateCart(defaultCart);
+            // setCart(defaultCart);
+
             defaultCart[resp.data.id] = { qty: props.reorder.items[i].qty };
             defaultCart[resp.data.id].name = resp.data.name;
             defaultCart[resp.data.id].price = resp.data.price;
-            // localStorage.setItem('cart', JSON.stringify(defaultCart));
-            // setCart(defaultCart);
+
+            setCart({ ...cart });
+            console.log(cart);
           })
           .catch((err) => {
             if (err.response) {
@@ -100,6 +120,8 @@ export default function Menu(props) {
             }
           });
       }
+      console.log(cart);
+      // updateCart(cart.defaultCart);
       window.history.replaceState({}, document.title);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
