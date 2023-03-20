@@ -170,7 +170,7 @@ export default function YourOrders() {
     <>
       <Container fluid="md" className="my-5">
         {!authUser.auth ? (
-          'Your order is being prepared, please stand by!'
+          'As a guest you can not view your orders, please create an account to view current and previous orders.'
         ) : (
           <>
             <Col>
@@ -186,10 +186,18 @@ export default function YourOrders() {
             <hr></hr>
             <Col className="my-5">
               <h1>Previous Orders</h1>
-              {isLoading ? (
-                <Card.Body>Loading...</Card.Body>
+              {completedOrders.length === 0 ? (
+                <Card>
+                  <Card.Body className="p-4">No Previous Orders</Card.Body>
+                </Card>
               ) : (
-                <EachOrder orders={completedOrders} />
+                <>
+                  {isLoading ? (
+                    <Card.Body>Loading...</Card.Body>
+                  ) : (
+                    <EachOrder orders={completedOrders} />
+                  )}
+                </>
               )}
             </Col>
           </>
