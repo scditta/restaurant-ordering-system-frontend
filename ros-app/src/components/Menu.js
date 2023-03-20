@@ -51,13 +51,12 @@ export default function Menu(props) {
     setCart(updatedCart);
   };
 
-  // const reOrderedCart = useCallback((id, qty, name, price, updatedCart) => {
-  //   // const updatedCart = {};
-  //   console.log(updatedCart);
-  //   updatedCart[id] = { qty: qty };
-  //   updatedCart[id].name = name;
-  //   updatedCart[id].price = price;
-  //   updateCart(updatedCart);
+  // const reOrderedCart = useCallback((id, qty, name, price) => {
+  //   defaultCart[id] = { qty: qty };
+  //   defaultCart[id].name = name;
+  //   defaultCart[id].price = price;
+  //   localStorage.setItem('cart', JSON.stringify(defaultCart));
+  //   setCart(defaultCart);
   // }, []);
 
   useEffect(() => {
@@ -74,9 +73,20 @@ export default function Menu(props) {
             // console.log(resp.data);
             // console.log(props.reorder.items[i].qty);
 
+            // defaultCart[resp.data.id] = { qty: props.reorder.items[i].qty };
+            // defaultCart[resp.data.id].name = resp.data.name;
+            // defaultCart[resp.data.id].price = resp.data.price;
+            // reOrderedCart(
+            //   resp.data.id,
+            //   props.reorder.items[i].qty,
+            //   resp.data.name,
+            //   resp.data.price
+            // );
             defaultCart[resp.data.id] = { qty: props.reorder.items[i].qty };
             defaultCart[resp.data.id].name = resp.data.name;
             defaultCart[resp.data.id].price = resp.data.price;
+            localStorage.setItem('cart', JSON.stringify(defaultCart));
+            setCart(defaultCart);
           })
           .catch((err) => {
             if (err.response) {
@@ -92,7 +102,8 @@ export default function Menu(props) {
       }
       window.history.replaceState({}, document.title);
     }
-  }, [props, defaultCart]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.reorder]);
 
   return (
     <Container>
