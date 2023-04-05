@@ -51,6 +51,14 @@ function App() {
           }
         />
         <Route path="/orders" element={<YourOrders />} />
+        <Route
+          path="/createCoupon"
+          element={
+            <ProtectedRoute userAuthorization={!authUser.authorization}>
+              <CouponPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
