@@ -8,6 +8,7 @@ import Category from './Category';
 import AddCategoryButton from './AddCategoryButton';
 import AddItemButton from './AddItemButton';
 import Cart from './Cart';
+import Offers from './Offers';
 
 import AuthenticationContext from '../context/AuthenticationContext';
 import MenuContext from '../context/MenuContext';
@@ -131,6 +132,7 @@ export default function Menu(props) {
     <Container>
       <Row className="pt-3">
         <Col md={8}>
+          {!authUser.authorization ? <Offers /> : <></>}
           <AddCategoryButton />
           {menuData.categories?.map((category, index) => (
             <div key={index}>
