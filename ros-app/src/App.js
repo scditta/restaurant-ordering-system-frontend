@@ -6,11 +6,10 @@ import './App.css';
 import CreateUser from './components/CreateUser';
 import Login from './components/Login';
 import OrderPage from './components/OrderPage';
-
+import CouponPage from './components/CouponPage';
 import NavBar from './components/NavBar';
 import DashBoard from './components/DashBoard';
 import OrderHistory from './components/OrderHistory';
-import YourOrders from './components/YourOrders';
 import AuthenticationContext from './context/AuthenticationContext';
 
 function App() {
@@ -50,7 +49,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/orders" element={<YourOrders />} />
         <Route
           path="/managerCoupon"
           element={
