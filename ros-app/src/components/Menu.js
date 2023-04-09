@@ -1,17 +1,16 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-
+import { Container, Row, Col, Toast, ToastContainer } from 'react-bootstrap';
 import api from '../API/posts';
-
 import Item from './Item';
 import Category from './Category';
 import AddCategoryButton from './AddCategoryButton';
 import AddItemButton from './AddItemButton';
 import Cart from './Cart';
 import Offers from './Offers';
-
 import AuthenticationContext from '../context/AuthenticationContext';
 import MenuContext from '../context/MenuContext';
+
+const WEEKDAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 
 export default function Menu(props) {
   const menuData = useContext(MenuContext);
@@ -24,6 +23,9 @@ export default function Menu(props) {
   if (cartCached) defaultCart = JSON.parse(cartCached);
 
   const [cart, setCart] = useState(defaultCart);
+  const [coupons, setCoupons] = useState([]);
+  const [showToast, setShowToast] = useState(false);
+  const [toastText, setToastText] = useState('');
 
   const addCart = (id, qty, name, price) => {
     const updatedCart = { ...cart };
@@ -50,6 +52,27 @@ export default function Menu(props) {
   const updateCart = (updatedCart) => {
     localStorage.setItem('cart', JSON.stringify(updatedCart));
     setCart(updatedCart);
+  };
+
+  const getItem = async (id) => {
+    try {
+      const response = await api.get(`api/v1/items/${id}`);
+      return response.data;
+    } catch (err) {
+      if (err.response) {
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      } else {
+        console.log(`Error: ${err.message}`);
+      }
+      return false;
+    }
+  };
+
+  const addCoupon = (code) => {
+    setToastText(`Applied coupon ${code} to cart.`);
+    setShowToast(true);
   };
 
   useEffect(() => {
@@ -82,37 +105,89 @@ export default function Menu(props) {
       window.history.replaceState({}, document.title);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    //retrieve today's coupons
+    const getCoupons = () => {
+      api
+        .get(`api/v1/coupons`)
+        .then(async (response) => {
+          const currentCoupons = [];
+          const date = new Date();
+          const dayOfWeek = WEEKDAYS[date.getDay()];
+
+          for (const coupon of response.data) {
+            if (coupon.availability.includes(dayOfWeek)) {
+              const foundItem = await getItem(coupon.item);
+
+              if (foundItem) {
+                coupon.item = foundItem;
+                currentCoupons.push(coupon);
+              }
+            }
+          }
+
+          setCoupons(currentCoupons);
+        })
+        .catch((err) => {
+          if (err.response) {
+            console.log(err.response.data);
+            console.log(err.response.status);
+            console.log(err.response.headers);
+          } else {
+            console.log(`Error: ${err.message}`);
+          }
+        });
+    };
+    getCoupons();
   }, [props.reorder]);
 
   return (
-    <Container>
-      <Row className="pt-3">
-        <Col md={8}>
-          {!authUser.authorization ? <Offers /> : <></>}
-          <AddCategoryButton />
-          {menuData.categories?.map((category, index) => (
-            <div key={index}>
-              <Category categoryId={category.id} categoryName={category.name} />
-              {category?.items.map((item, index) => (
-                <Item
-                  key={index}
-                  itemId={item}
-                  categoryId={category.id}
-                  addCartCallback={addCart}
-                />
-              ))}
-              {authUser.authorization && <AddItemButton categoryId={category.id} />}
-            </div>
-          ))}
-        </Col>
-        <Col md={4} className="ml-4">
-          {!authUser.authorization ? (
-            <Cart cart={cart} removeCartCallback={removeCart} clearCartCallback={clearCart} />
-          ) : (
-            <></>
-          )}
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <Container>
+        <Row className="pt-3">
+          <Col md={8}>
+            {!authUser.authorization ? (
+              <Offers coupons={coupons} addCouponCallback={addCoupon} />
+            ) : (
+              <></>
+            )}
+            <AddCategoryButton />
+            {menuData.categories?.map((category, index) => (
+              <div key={index}>
+                <Category categoryId={category.id} categoryName={category.name} />
+                {category?.items.map((item, index) => (
+                  <Item
+                    key={index}
+                    itemId={item}
+                    categoryId={category.id}
+                    addCartCallback={addCart}
+                  />
+                ))}
+                {authUser.authorization && <AddItemButton categoryId={category.id} />}
+              </div>
+            ))}
+          </Col>
+          <Col md={4} className="ml-4">
+            {!authUser.authorization ? (
+              <Cart cart={cart} removeCartCallback={removeCart} clearCartCallback={clearCart} />
+            ) : (
+              <></>
+            )}
+          </Col>
+        </Row>
+      </Container>
+      <ToastContainer className="p-3 position-fixed" position="top-center">
+        <Toast
+          autohide={true}
+          delay={2000}
+          show={showToast}
+          onClose={() => {
+            setShowToast(false);
+          }}
+        >
+          <Toast.Body>{toastText}</Toast.Body>
+        </Toast>
+      </ToastContainer>
+    </>
   );
 }
