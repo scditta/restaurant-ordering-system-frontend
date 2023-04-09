@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Card, Image, Button, Container, Row, Col } from 'react-bootstrap';
 
 import api from '../API/posts';
 
@@ -6,6 +7,9 @@ const WEEKDAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDA
 
 export default function Offers() {
   const [coupons, setCoupons] = useState([]);
+
+  const formatCurrency = (cents) =>
+    (cents / 100).toLocaleString('en-ca', { style: 'currency', currency: 'CAD' });
 
   const getItem = async (id) => {
     try {
@@ -60,11 +64,35 @@ export default function Offers() {
 
   return (
     <>
-      <h1>Offers</h1>(
+      <h1>Offers</h1>
       {coupons.map((coupon) => (
-        <span>{coupon.code}</span>
+        <Card key={coupon.id} className="mb-2">
+          <Card.Body>
+            <Container>
+              <Row>
+                <Col xs={1}></Col>
+                <Col xs={4}>
+                  <Image className="cardImage" src={coupon.item.image} />
+                </Col>
+                <Col xs={6}>
+                  <b>{coupon.discount_percent}%</b> off {coupon.item.name}!<br />
+                  <br />
+                  <s>{formatCurrency(coupon.item.price)}</s>&nbsp;
+                  <b>
+                    {formatCurrency((coupon.item.price * (100 - coupon.discount_percent)) / 100)}
+                  </b>
+                  <br />
+                  <br />
+                  <Button onClick={() => {}}>
+                    Promo Code: <b>{coupon.code}</b>
+                  </Button>
+                </Col>
+                <Col xs={1}></Col>
+              </Row>
+            </Container>
+          </Card.Body>
+        </Card>
       ))}
-      )
     </>
   );
 }
