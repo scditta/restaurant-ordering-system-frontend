@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, Image, Button, Row, Col, Toast, ToastContainer } from 'react-bootstrap';
-
+import { currency } from '../helpers/currency';
 import api from '../API/posts';
 
 const WEEKDAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
@@ -14,9 +14,6 @@ export default function Offers() {
     setToastText(`Applied coupon ${code} to cart.`);
     setShowToast(true);
   };
-
-  const formatCurrency = (cents) =>
-    (cents / 100).toLocaleString('en-ca', { style: 'currency', currency: 'CAD' });
 
   const getItem = async (id) => {
     try {
@@ -91,10 +88,8 @@ export default function Offers() {
                     />
                     <br />
                     <b>{coupon.discount_percent}%</b> off {coupon.item.name}!<br />
-                    <s>{formatCurrency(coupon.item.price)}</s>&nbsp;
-                    <b>
-                      {formatCurrency((coupon.item.price * (100 - coupon.discount_percent)) / 100)}
-                    </b>
+                    <s>{currency(coupon.item.price)}</s>&nbsp;
+                    <b>{currency((coupon.item.price * (100 - coupon.discount_percent)) / 100)}</b>
                     <br />
                     <br />
                     <div className="d-grid gap-2 mt-2">

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Card, Button, Modal, Alert, Form, InputGroup } from 'react-bootstrap';
 import { XCircleFill } from 'react-bootstrap-icons';
+import { currency } from '../helpers/currency';
 import GooglePayButton from '@google-pay/button-react';
 import api from '../API/posts';
 
@@ -18,9 +19,6 @@ export default function Cart(props) {
   const cartEntryIds = Object.keys(props.cart);
   const cartEntries = props.cart;
 
-  const formatCurrency = (cents) =>
-    (cents / 100).toLocaleString('en-ca', { style: 'currency', currency: 'CAD' });
-
   let subtotal = 0;
   const cartItems = cartEntryIds.map((id) => {
     const cartItem = cartEntries[id];
@@ -33,7 +31,7 @@ export default function Cart(props) {
             {cartItem.name} x{cartItem.qty}
           </span>
           <span className="float-end">
-            {formatCurrency(cartItem.price * cartItem.qty)}
+            {currency(cartItem.price * cartItem.qty)}
             <XCircleFill
               size={24}
               style={{ marginLeft: '1em', cursor: 'pointer' }}
@@ -55,7 +53,7 @@ export default function Cart(props) {
         <span>
           {cartItem.name} (x{cartItem.qty})
         </span>
-        <span className="float-end">{formatCurrency(cartItem.price * cartItem.qty)}</span>
+        <span className="float-end">{currency(cartItem.price * cartItem.qty)}</span>
       </div>
     );
   });
@@ -63,9 +61,9 @@ export default function Cart(props) {
   const tax = Math.ceil(subtotal * 0.13);
   const total = subtotal + tax;
 
-  const subtotalFormatted = formatCurrency(subtotal);
-  const taxFormatted = formatCurrency(tax);
-  const totalFormatted = formatCurrency(total);
+  const subtotalFormatted = currency(subtotal);
+  const taxFormatted = currency(tax);
+  const totalFormatted = currency(total);
 
   const handlePaymentSuccess = async () => {
     setError(null);
