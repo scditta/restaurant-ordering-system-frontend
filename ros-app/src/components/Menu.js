@@ -87,7 +87,7 @@ export default function Menu(props) {
         try {
           const retrievedCoupons = response.data;
           if (retrievedCoupons.length === 0) {
-            throw new Error(`Invalid coupon. Coupon was not applied to cart.`);
+            throw new Error(`'${code}' is not a valid coupon. Coupon was not applied to cart.`);
           }
 
           const retrievedCoupon = retrievedCoupons[0];
@@ -95,7 +95,6 @@ export default function Menu(props) {
           if (!isCouponActive(retrievedCoupon)) {
             throw new Error(`Coupon is no longer active. Coupon was not applied to cart.`);
           }
-
           setActiveCoupon(retrievedCoupon);
 
           setShowToast(false);
@@ -103,7 +102,7 @@ export default function Menu(props) {
           setShowToast(true);
         } catch (err) {
           setShowToast(false);
-          setToastText(err);
+          setToastText(err.message);
           setShowToast(true);
         }
       })
@@ -228,7 +227,7 @@ export default function Menu(props) {
       <ToastContainer className="p-3 position-fixed" position="top-center">
         <Toast
           autohide={true}
-          delay={3000}
+          delay={5000}
           show={showToast}
           onClose={() => {
             setShowToast(false);
