@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Button, Modal, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 // import { useNavigate } from 'react-router-dom';
-import ItemDropdownOption from './CouponItemDropdown';
+import CouponItemDropdown from './CouponItemDropdown';
 import AuthenticationContext from '../context/AuthenticationContext';
 import CouponGridContext from '../context/CouponGridContext';
 
@@ -120,7 +120,7 @@ export function AddCouponButton() {
               {' '}
               <Form.Label>Select an item to discount</Form.Label>
               <Form.Select placeholder="Discounted Item" name="item" onChange={handleChange}>
-                <ItemDropdownOption></ItemDropdownOption>
+                <CouponItemDropdown></CouponItemDropdown>
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3 px-5">

@@ -50,7 +50,7 @@ function App() {
           }
         />
         <Route
-          path="/managerCoupon"
+          path="/couponManagement"
           element={
             <ProtectedRoute userAuthorization={!authUser.authorization}>
               <CouponPage />

@@ -16,7 +16,7 @@ export default function Coupon(props) {
     try {
       console.log(props);
       const response = await api.delete(`api/v1/coupons/${props.id}`);
-      props.updateOrderCallback(response);
+      props.updateCouponCallback(response);
       console.log(response);
     } catch {}
   }
@@ -26,7 +26,7 @@ export default function Coupon(props) {
       <Row alt={props.item} className="mb-3 mt-4" style={{ borderBottom: '1px solid black' }}>
         <Col xs={5}>
           <p>Coupon Code: {props.code}</p>
-          <p>Discount: {props.discount_percent * 100}%</p>
+          <p>Discount: {(props.discount_percent * 100).toFixed()}%</p>
         </Col>
         <Col>
           <Button variant="outline-danger" onClick={handleDelete}>
