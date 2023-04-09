@@ -64,38 +64,46 @@ export default function Offers() {
 
   return (
     <>
-      <h1>Offers</h1>
-      {coupons.map((coupon) => (
-        <Row>
-          <Col xs={4}>
-            <Card key={coupon.id} className="mb-2">
-              <Card.Body>
-                <Image
-                  className="cardImage"
-                  src={coupon.item.image}
-                  fluid
-                  style={{
-                    width: '100%',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                  }}
-                />
-                <br />
-                <b>{coupon.discount_percent}%</b> off {coupon.item.name}!<br />
-                <s>{formatCurrency(coupon.item.price)}</s>&nbsp;
-                <b>{formatCurrency((coupon.item.price * (100 - coupon.discount_percent)) / 100)}</b>
-                <br />
-                <br />
-                <div className="d-grid gap-2 mt-2">
-                  <Button onClick={() => {}}>
-                    Code: <b>{coupon.code}</b>
-                  </Button>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      ))}
+      {coupons.length > 0 ? (
+        <>
+          <h1>Offers</h1>
+          {coupons.map((coupon) => (
+            <Row>
+              <Col xs={4}>
+                <Card key={coupon.id} className="mb-2">
+                  <Card.Body>
+                    <Image
+                      className="cardImage"
+                      src={coupon.item.image}
+                      fluid
+                      style={{
+                        width: '100%',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                      }}
+                    />
+                    <br />
+                    <b>{coupon.discount_percent}%</b> off {coupon.item.name}!<br />
+                    <s>{formatCurrency(coupon.item.price)}</s>&nbsp;
+                    <b>
+                      {formatCurrency((coupon.item.price * (100 - coupon.discount_percent)) / 100)}
+                    </b>
+                    <br />
+                    <br />
+                    <div className="d-grid gap-2 mt-2">
+                      <Button onClick={() => {}}>
+                        Code: <b>{coupon.code}</b>
+                      </Button>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          ))}
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 }
