@@ -50,29 +50,42 @@ export default function ChangeCoupon() {
             //response is undefined
             console.log(`Error: ${err.message}`);
           }
-        }).finally(() =>{
+        })
+        .finally(() => {
           setLoading(false);
         });
     }, [props.itemid]);
 
-    const discountedPrice = (item.price / 100) - ((item.price / 100) * (props.coupon.discount_percent / 100));
+    const discountedPrice =
+      item.price / 100 - (item.price / 100) * (props.coupon.discount_percent / 100);
     return (
       // <Row className="mx-5">
       <>
-        <Col>
-        {loading? <>Loading...</>
-        : 
-        <>
-        <Card.Body>{props.coupon.discount_percent}% off {item.name}</Card.Body>
-        <Card.Img src={item.image} />
-        <Card.Text>Code: {props.coupon.code}</Card.Text>
-
-        <Card.Text style={{textDecoration:"line-through", color: "red"}}>{currency(item.price)}</Card.Text>
-        <Card.Text>{currency(Math.round((discountedPrice + Number.EPSILON) * 100))}</Card.Text>
-        </>}
-          
-        </Col>
-        {/* <Col></Col> */}
+        {loading ? (
+          <>Loading...</>
+        ) : (
+          <>
+            <Col style={{ textAlign: 'center' }}>
+              <Card.Img src={item.image} style={{ maxWidth: '400px' }} />
+              <b>{props.coupon.discount_percent}%</b> off {item.name}!
+            </Col>
+            <Col
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexWrap: 'nowrap',
+                flexDirection: 'column',
+              }}
+            >
+              <Card.Text>Code: {props.coupon.code}</Card.Text>
+              <Card.Text>
+                <s>{currency(item.price)}</s>&nbsp;
+                <b>{currency(Math.round((discountedPrice + Number.EPSILON) * 100))}</b>
+              </Card.Text>
+            </Col>
+          </>
+        )}
       </>
     );
   };
@@ -113,22 +126,17 @@ export default function ChangeCoupon() {
             };
           });
         }
-
-        // console.log(selectedCoupon);
-        // console.log(couponId);
       };
 
-      // console.log(selectedCoupon);
-      // console.log(props);
       return (
         <Form.Check
           label={props.day}
-          inline
           name="availability"
           type="checkbox"
           value={props.day.toUpperCase()}
           checked={selectedCoupon.availability.includes(props.day.toUpperCase())}
           onChange={checkboxHandler}
+          className="my-3"
         />
       );
     }
@@ -158,6 +166,7 @@ export default function ChangeCoupon() {
 
     return (
       <Form>
+        <Form.Text style={{ fontWeight: 'bold', color: 'black' }}>Day of Weeks:</Form.Text>
         {days.map((day, index) => (
           <CheckBox key={index} day={day} coupon={props.coupon} />
         ))}
@@ -168,14 +177,19 @@ export default function ChangeCoupon() {
   return (
     <>
       <Container fluid="md">
-        <Row className='my-2'><h1>Coupons</h1></Row>
+        <Row className="my-2">
+          <h1>Coupons</h1>
+        </Row>
         {coupons.map((coupon, index) => (
           <Card key={index} className="my-2">
             <Card.Body>
               {/* <Row className="mx-5"> */}
               <Row className="mx-5">
+                {/* <Col> */}
                 <CouponItem itemid={coupon.item} coupon={coupon} />
-                <Col>
+                {/* </Col> */}
+                {/* <Col></Col> */}
+                <Col style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <DaysOfWeeks coupon={coupon} />
                 </Col>
               </Row>
