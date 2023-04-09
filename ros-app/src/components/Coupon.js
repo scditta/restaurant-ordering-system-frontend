@@ -62,7 +62,7 @@ export default function Coupon(props) {
           </Col>
           <Col>
             <Button variant="outline-danger" onClick={handleDelete}>
-              Delete
+              Delete Coupon
             </Button>
           </Col>
 
