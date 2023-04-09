@@ -1,11 +1,10 @@
 import { CouponGridProvider } from '../context/CouponGridContext';
 import { CouponGrid } from './CouponGrid.js';
-import { AddCouponButton } from './AddCouponButton';
+
 export default function CouponPage() {
   return (
     <>
       <CouponGridProvider>
-        <AddCouponButton></AddCouponButton>
         <CouponGrid></CouponGrid>
       </CouponGridProvider>
     </>

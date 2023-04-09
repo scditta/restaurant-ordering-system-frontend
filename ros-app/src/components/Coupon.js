@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import api from '../API/posts';
 
@@ -11,6 +11,35 @@ import AuthenticationContext from '../context/AuthenticationContext';
 export default function Coupon(props) {
   const authUser = useContext(AuthenticationContext);
 
+  const [isLoading, setLoading] = useState(true);
+  const [item, setItem] = useState([]);
+
+  useEffect(() => {
+    // console.log('itemEffect');
+    api
+      .get(`api/v1/items/${props.itemId}`)
+      .then((resp) => {
+        // console.log(resp.data);
+        setItem(resp.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          //not in the 200 range
+          console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response.headers);
+        } else {
+          //response is undefined
+          console.log(`Error: ${err.message}`);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [props.itemId]);
+
+  console.log('GET HERE');
+  console.log(props.itemId);
   async function handleDelete() {
     console.log('dete');
     try {
@@ -21,20 +50,33 @@ export default function Coupon(props) {
     } catch {}
   }
 
+  async function getItem() {
+    try {
+      const response = await api.get(`api/v1/item/${props.item}`);
+      return response.data;
+    } catch {}
+  }
+
   return (
     <>
-      <Row alt={props.item} className="mb-3 mt-4" style={{ borderBottom: '1px solid black' }}>
-        <Col xs={5}>
-          <p>Coupon Code: {props.code}</p>
-          <p>Discount: {(props.discount_percent * 100).toFixed()}%</p>
-        </Col>
-        <Col>
-          <Button variant="outline-danger" onClick={handleDelete}>
-            Delete
-          </Button>
-        </Col>
-        {/* If the user logged in is an admin */}
-        {/* {authUser.authorization ? (
+      {isLoading ? (
+        <Row>Loading...</Row>
+      ) : (
+        <Row alt={props.item} className="mb-3 mt-4" style={{ borderBottom: '1px solid black' }}>
+          <Col xs={5}>
+            <p>Item: {item.name}</p>
+            <img src={item.image} alt="error" className="cardImage"></img>
+            <p>Coupon Code: {props.code}</p>
+            <p>Discount: {(props.discount_percent * 100).toFixed()}%</p>
+          </Col>
+          <Col>
+            <Button variant="outline-danger" onClick={handleDelete}>
+              Delete
+            </Button>
+          </Col>
+
+          {/* If the user logged in is an admin */}
+          {/* {authUser.authorization ? (
           <>
             <Col xs={2}>
               <UpdateCategory categoryName={props.categoryName} categoryId={props.categoryId} />
@@ -46,7 +88,8 @@ export default function Coupon(props) {
         ) : (
           <></>
         )} */}
-      </Row>
+        </Row>
+      )}
     </>
   );
 }
