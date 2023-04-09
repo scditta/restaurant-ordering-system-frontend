@@ -100,39 +100,42 @@ export default function Cart(props) {
         <Card.Body>
           <Card.Title>Cart</Card.Title>
           <div style={{ minHeight: '30vh' }}>{cartItems}</div>
-
           <InputGroup className="mb-3">
             <Form.Control placeholder="Enter Promo Code" aria-label="Enter Promo Code" />
             <Button variant="secondary">Apply</Button>
           </InputGroup>
-
           <div>
             Subtotal:
             <span className="float-end">{subtotalFormatted}</span>
           </div>
-
-          <div>
-            Promo: <b>CHOVOLUV</b>
-            <XCircleFill
-              size={20}
-              style={{ marginLeft: '0.5em', cursor: 'pointer', transform: 'translate(0px, -1px)' }}
-              onClick={() => {}}
-            ></XCircleFill>
-            <span className="float-end">{subtotalFormatted}</span>
-          </div>
-
+          {props.activeCoupon ? (
+            <div>
+              Promo: <b>{props.activeCoupon.code}</b>
+              <XCircleFill
+                size={20}
+                style={{
+                  marginLeft: '0.5em',
+                  cursor: 'pointer',
+                  transform: 'translate(0px, -1px)',
+                }}
+                onClick={() => {
+                  props.clearCouponCallback();
+                }}
+              ></XCircleFill>
+              <span className="float-end">{0}</span>
+            </div>
+          ) : (
+            <></>
+          )}
           <div>
             Tax:
             <span className="float-end">{taxFormatted}</span>
           </div>
-
           <hr className="mt-2 mb-2"></hr>
-
           <div style={{ fontWeight: 'bold' }}>
             Total:
             <span className="float-end">{totalFormatted}</span>
           </div>
-
           <div className="d-grid gap-2 mt-2">
             <Button
               onClick={() => {

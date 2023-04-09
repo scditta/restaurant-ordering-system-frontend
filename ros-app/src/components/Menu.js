@@ -189,11 +189,7 @@ export default function Menu(props) {
         <Row className="pt-3">
           <Col md={8}>
             {!authUser.authorization ? (
-              <Offers
-                coupons={coupons}
-                addCouponCallback={addCoupon}
-                clearCouponCallback={clearCoupon}
-              />
+              <Offers coupons={coupons} addCouponCallback={addCoupon} />
             ) : (
               <></>
             )}
@@ -215,7 +211,13 @@ export default function Menu(props) {
           </Col>
           <Col md={4} className="ml-4">
             {!authUser.authorization ? (
-              <Cart cart={cart} removeCartCallback={removeCart} clearCartCallback={clearCart} />
+              <Cart
+                cart={cart}
+                removeCartCallback={removeCart}
+                clearCartCallback={clearCart}
+                activeCoupon={activeCoupon}
+                clearCouponCallback={clearCoupon}
+              />
             ) : (
               <></>
             )}
