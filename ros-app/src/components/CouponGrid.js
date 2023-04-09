@@ -13,6 +13,7 @@ export function CouponGrid() {
         <AddCouponButton></AddCouponButton>
         <Row className="pt-3">
           <Col md={8}>
+            <h1 style={{ borderBottom: '1px solid black' }}>Coupons</h1>
             {couponData.coupons.map((coupon, index) => (
               <div key={index}>
                 <Coupon

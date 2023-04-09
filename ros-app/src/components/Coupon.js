@@ -38,8 +38,6 @@ export default function Coupon(props) {
       });
   }, [props.itemId]);
 
-  console.log('GET HERE');
-  console.log(props.itemId);
   async function handleDelete() {
     console.log('dete');
     try {
@@ -47,13 +45,6 @@ export default function Coupon(props) {
       const response = await api.delete(`api/v1/coupons/${props.id}`);
       props.updateCouponCallback(response);
       console.log(response);
-    } catch {}
-  }
-
-  async function getItem() {
-    try {
-      const response = await api.get(`api/v1/item/${props.item}`);
-      return response.data;
     } catch {}
   }
 

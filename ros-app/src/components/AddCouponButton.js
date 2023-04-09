@@ -58,8 +58,10 @@ export function AddCouponButton() {
       request.discount_percent = +formValue.discount_percent / 100;
       request.code = formValue.code;
 
-      const splitString = formValue.availability.split(',');
+      const splitString = formValue.availability.toUpperCase().split(',');
       const availibilityList = splitString.map((item) => {
+        console.log('GET HERE');
+        console.log(item);
         return item;
       });
       request.availability = availibilityList;
@@ -105,7 +107,7 @@ export function AddCouponButton() {
               <Form.Label>Coupon Code</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Coupon Code"
+                placeholder="Name of Coupon Code"
                 name="code"
                 onChange={handleChange}
                 maxLength={NAME_MAX}
@@ -116,10 +118,9 @@ export function AddCouponButton() {
                 {NAME_MAX - formValue.code.length} character(s) remaining
               </Form.Text>
             </Form.Group>
-            <Form.Group>
-              {' '}
-              <Form.Label>Select an item to discount</Form.Label>
-              <Form.Select placeholder="Discounted Item" name="item" onChange={handleChange}>
+            <Form.Group className="mb-3 px-5">
+              <Form.Label>Select an item for the coupon</Form.Label>
+              <Form.Select value="select an item" name="item" onChange={handleChange}>
                 <CouponItemDropdown></CouponItemDropdown>
               </Form.Select>
             </Form.Group>
@@ -127,33 +128,21 @@ export function AddCouponButton() {
               <Form.Label>Discount Percent</Form.Label>
               <Form.Control
                 type="number"
-                placeholder="Discount Percent"
+                placeholder="10"
                 name="discount_percent"
                 onChange={handleChange}
                 maxLength={NAME_MAX}
               ></Form.Control>
-              <Form.Text
-                className={
-                  formValue.discount_percent.length < NAME_MAX ? 'text-muted' : 'text-danger'
-                }
-              >
-                {NAME_MAX - formValue.discount_percent.length} character(s) remaining
-              </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3 px-5">
               <Form.Label>Availability</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Availability"
+                placeholder="Monday,Tuesday,Wednesday"
                 name="availability"
                 onChange={handleChange}
                 maxLength={NAME_MAX}
               ></Form.Control>
-              <Form.Text
-                className={formValue.availability.length < NAME_MAX ? 'text-muted' : 'text-danger'}
-              >
-                {NAME_MAX - formValue.availability.length} character(s) remaining
-              </Form.Text>
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
