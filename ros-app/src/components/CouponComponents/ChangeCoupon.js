@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Container, Card, Row, Col, Form } from 'react-bootstrap';
 
 import api from '../../API/posts';
+import { currency } from '../../helpers/currency';
 
 export default function ChangeCoupon() {
   const [coupons, setCoupons] = useState([]);
@@ -26,13 +27,15 @@ export default function ChangeCoupon() {
       });
   }, []);
 
-  const CouponItem = ({ itemid }) => {
+  const CouponItem = (props) => {
     const [item, setItem] = useState({});
     // console.log(itemid);
 
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
       api
-        .get(`/api/v1/items/${itemid}`)
+        .get(`/api/v1/items/${props.itemid}`)
         .then((resp) => {
           // console.log(resp.data);
           setItem(resp.data);
@@ -47,18 +50,29 @@ export default function ChangeCoupon() {
             //response is undefined
             console.log(`Error: ${err.message}`);
           }
+        }).finally(() =>{
+          setLoading(false);
         });
-    }, [itemid]);
+    }, [props.itemid]);
 
-    // <Card.Img src=''/>
+    const discountedPrice = (item.price / 100) - ((item.price / 100) * (props.coupon.discount_percent / 100));
     return (
       // <Row className="mx-5">
       <>
         <Col>
-          <Card.Img src={item.image} />
-          <Card.Body>{item.name}</Card.Body>
+        {loading? <>Loading...</>
+        : 
+        <>
+        <Card.Body>{props.coupon.discount_percent}% off {item.name}</Card.Body>
+        <Card.Img src={item.image} />
+        <Card.Text>Code: {props.coupon.code}</Card.Text>
+
+        <Card.Text style={{textDecoration:"line-through", color: "red"}}>{currency(item.price)}</Card.Text>
+        <Card.Text>{currency(Math.round((discountedPrice + Number.EPSILON) * 100))}</Card.Text>
+        </>}
+          
         </Col>
-        <Col></Col>
+        {/* <Col></Col> */}
       </>
     );
   };
@@ -154,12 +168,13 @@ export default function ChangeCoupon() {
   return (
     <>
       <Container fluid="md">
+        <Row className='my-2'><h1>Coupons</h1></Row>
         {coupons.map((coupon, index) => (
           <Card key={index} className="my-2">
             <Card.Body>
               {/* <Row className="mx-5"> */}
               <Row className="mx-5">
-                <CouponItem itemid={coupon.item} />
+                <CouponItem itemid={coupon.item} coupon={coupon} />
                 <Col>
                   <DaysOfWeeks coupon={coupon} />
                 </Col>
