@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Button, Modal, Alert, Form } from 'react-bootstrap';
+import { Card, Button, Modal, Alert, Form, InputGroup } from 'react-bootstrap';
 import { XCircleFill } from 'react-bootstrap-icons';
 import GooglePayButton from '@google-pay/button-react';
 import api from '../API/posts';
@@ -103,7 +103,10 @@ export default function Cart(props) {
           <Card.Title>Cart</Card.Title>
           <div style={{ minHeight: '30vh' }}>{cartItems}</div>
 
-          <hr className="mt-2 mb-2"></hr>
+          <InputGroup className="mb-3">
+            <Form.Control placeholder="Enter Promo Code" aria-label="Enter Promo Code" />
+            <Button variant="secondary">Apply</Button>
+          </InputGroup>
 
           <div>
             Subtotal:
