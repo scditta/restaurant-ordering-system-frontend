@@ -103,10 +103,23 @@ export default function Cart(props) {
           <Card.Title>Cart</Card.Title>
           <div style={{ minHeight: '30vh' }}>{cartItems}</div>
 
+          <hr className="mt-2 mb-2"></hr>
+
           <div>
             Subtotal:
             <span className="float-end">{subtotalFormatted}</span>
           </div>
+
+          <div>
+            Promo: <b>CHOVOLUV</b>
+            <XCircleFill
+              size={20}
+              style={{ marginLeft: '0.5em', cursor: 'pointer', transform: 'translate(0px, -1px)' }}
+              onClick={() => {}}
+            ></XCircleFill>
+            <span className="float-end">{subtotalFormatted}</span>
+          </div>
+
           <div>
             Tax:
             <span className="float-end">{taxFormatted}</span>
