@@ -10,8 +10,6 @@ import Offers from './Offers';
 import AuthenticationContext from '../context/AuthenticationContext';
 import MenuContext from '../context/MenuContext';
 
-const WEEKDAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
-
 export default function Menu(props) {
   const menuData = useContext(MenuContext);
   const authUser = useContext(AuthenticationContext);
@@ -24,6 +22,7 @@ export default function Menu(props) {
 
   const [cart, setCart] = useState(defaultCart);
   const [coupons, setCoupons] = useState([]);
+  const [activeCoupon, setActiveCoupon] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastText, setToastText] = useState('');
 
@@ -70,9 +69,35 @@ export default function Menu(props) {
     }
   };
 
+  const isCouponActive = (coupon) => {
+    const WEEKDAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+    const date = new Date();
+    const dayOfWeek = WEEKDAYS[date.getDay()];
+
+    return coupon.availability.includes(dayOfWeek);
+  };
+
   const addCoupon = (code) => {
-    setToastText(`Applied coupon ${code} to cart.`);
+    setShowToast(false);
+    setToastText(`Applying coupon ${code}...`);
     setShowToast(true);
+    api
+      .get(`api/v1/coupons?code=${code}`)
+      .then((response) => {
+        setShowToast(false);
+        setToastText(`Applied coupon ${code} to cart.`);
+        setShowToast(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        setShowToast(false);
+        setToastText(`Invalid coupon. Coupon was not applied to cart.`);
+        setShowToast(true);
+      });
+  };
+
+  const clearCoupon = () => {
+    setActiveCoupon(false);
   };
 
   useEffect(() => {
@@ -112,11 +137,9 @@ export default function Menu(props) {
         .get(`api/v1/coupons`)
         .then(async (response) => {
           const currentCoupons = [];
-          const date = new Date();
-          const dayOfWeek = WEEKDAYS[date.getDay()];
 
           for (const coupon of response.data) {
-            if (coupon.availability.includes(dayOfWeek)) {
+            if (isCouponActive(coupon)) {
               const foundItem = await getItem(coupon.item);
 
               if (foundItem) {
@@ -147,7 +170,11 @@ export default function Menu(props) {
         <Row className="pt-3">
           <Col md={8}>
             {!authUser.authorization ? (
-              <Offers coupons={coupons} addCouponCallback={addCoupon} />
+              <Offers
+                coupons={coupons}
+                addCouponCallback={addCoupon}
+                clearCouponCallback={clearCoupon}
+              />
             ) : (
               <></>
             )}
@@ -179,7 +206,7 @@ export default function Menu(props) {
       <ToastContainer className="p-3 position-fixed" position="top-center">
         <Toast
           autohide={true}
-          delay={2000}
+          delay={3000}
           show={showToast}
           onClose={() => {
             setShowToast(false);
