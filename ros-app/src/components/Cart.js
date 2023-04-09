@@ -35,9 +35,19 @@ export default function Cart(props) {
   const cartEntries = props.cart;
 
   let subtotal = 0;
+  let discount = 0;
   const cartItems = cartEntryIds.map((id) => {
     const cartItem = cartEntries[id];
-    subtotal += cartItem.price * cartItem.qty;
+    const discountedItem = props.activeCoupon && props.activeCoupon.item === id;
+
+    const itemSubtotal = cartItem.price * cartItem.qty;
+
+    let itemDiscount = 0;
+    if (discountedItem) {
+      itemDiscount = cartItem.price * cartItem.qty * (props.activeCoupon.discount_percent / 100);
+    }
+    subtotal += itemSubtotal;
+    discount += itemDiscount;
 
     return (
       <Card key={id} className="mb-2">
@@ -46,7 +56,14 @@ export default function Cart(props) {
             {cartItem.name} x{cartItem.qty}
           </span>
           <span className="float-end">
-            {currency(cartItem.price * cartItem.qty)}
+            {discountedItem ? (
+              <>
+                <s>{currency(itemSubtotal)}</s>&nbsp;
+                <b>{currency(itemSubtotal - itemDiscount)}</b>
+              </>
+            ) : (
+              currency(itemSubtotal)
+            )}
             <XCircleFill
               size={24}
               style={{ marginLeft: '1em', cursor: 'pointer' }}
@@ -73,10 +90,11 @@ export default function Cart(props) {
     );
   });
 
-  const tax = Math.ceil(subtotal * 0.13);
-  const total = subtotal + tax;
+  const tax = Math.ceil((subtotal - discount) * 0.13);
+  const total = subtotal - discount + tax;
 
   const subtotalFormatted = currency(subtotal);
+  const discountFormatted = currency(discount);
   const taxFormatted = currency(tax);
   const totalFormatted = currency(total);
 
@@ -95,6 +113,7 @@ export default function Cart(props) {
         payment_token: null, //unused
         payment_tax: tax,
         payment_subtotal: subtotal,
+        payment_discount: discount,
         payment_total: total,
         items: orderItems,
       })
@@ -146,7 +165,7 @@ export default function Cart(props) {
                   props.clearCouponCallback();
                 }}
               ></XCircleFill>
-              <span className="float-end">{0}</span>
+              <span className="float-end">{discountFormatted}</span>
             </div>
           ) : (
             <></>
@@ -216,6 +235,10 @@ export default function Cart(props) {
               <div>
                 Subtotal:
                 <span className="float-end">{subtotalFormatted}</span>
+              </div>
+              <div>
+                Discount:
+                <span className="float-end">{discountFormatted}</span>
               </div>
               <div>
                 Tax:
