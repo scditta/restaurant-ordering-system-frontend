@@ -216,6 +216,7 @@ export default function Menu(props) {
                 removeCartCallback={removeCart}
                 clearCartCallback={clearCart}
                 activeCoupon={activeCoupon}
+                addCouponCallback={addCoupon}
                 clearCouponCallback={clearCoupon}
               />
             ) : (

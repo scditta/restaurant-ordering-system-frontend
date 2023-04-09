@@ -9,8 +9,23 @@ export default function Cart(props) {
   const [showCheckout, setShowCheckout] = useState(false);
   const [payComplete, setPayComplete] = useState(false);
   const [orderNumber, setOrderNumber] = useState('XXXX');
+  const [enteredCode, setEnteredCode] = useState('');
   const [error, setError] = useState(null);
   const [payError, setPayError] = useState(false);
+
+  const handleCodeChange = (e) => {
+    const value = e.target.value;
+    setEnteredCode(value);
+  };
+
+  const applyCode = (e) => {
+    let formattedCode = String(enteredCode.toUpperCase());
+    props.addCouponCallback(formattedCode);
+
+    setEnteredCode('');
+    e.preventDefault();
+  };
+
   const hideCheckout = () => {
     setPayComplete(false);
     setShowCheckout(false);
@@ -100,10 +115,19 @@ export default function Cart(props) {
         <Card.Body>
           <Card.Title>Cart</Card.Title>
           <div style={{ minHeight: '30vh' }}>{cartItems}</div>
-          <InputGroup className="mb-3">
-            <Form.Control placeholder="Enter Promo Code" aria-label="Enter Promo Code" />
-            <Button variant="secondary">Apply</Button>
-          </InputGroup>
+          <Form onSubmit={applyCode}>
+            <InputGroup className="mb-3">
+              <Form.Control
+                value={enteredCode}
+                onChange={handleCodeChange}
+                placeholder="Enter Promo Code"
+                aria-label="Enter Promo Code"
+              />
+              <Button type="submit" variant="secondary">
+                Apply
+              </Button>
+            </InputGroup>
+          </Form>
           <div>
             Subtotal:
             <span className="float-end">{subtotalFormatted}</span>
