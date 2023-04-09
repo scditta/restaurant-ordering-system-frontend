@@ -44,7 +44,9 @@ export default function Cart(props) {
 
     let itemDiscount = 0;
     if (discountedItem) {
-      itemDiscount = cartItem.price * cartItem.qty * (props.activeCoupon.discount_percent / 100);
+      itemDiscount = Math.ceil(
+        cartItem.price * cartItem.qty * (props.activeCoupon.discount_percent / 100)
+      );
     }
     subtotal += itemSubtotal;
     discount += itemDiscount;
@@ -165,7 +167,7 @@ export default function Cart(props) {
                   props.clearCouponCallback();
                 }}
               ></XCircleFill>
-              <span className="float-end">{discountFormatted}</span>
+              <span className="float-end">-{discountFormatted}</span>
             </div>
           ) : (
             <></>
