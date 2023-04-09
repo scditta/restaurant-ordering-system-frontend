@@ -67,10 +67,10 @@ export default function Offers() {
       {coupons.length > 0 ? (
         <>
           <h1>Offers</h1>
-          {coupons.map((coupon) => (
-            <Row>
-              <Col xs={4}>
-                <Card key={coupon.id} className="mb-2">
+          <Row className="g-4">
+            {coupons.map((coupon) => (
+              <Col xs={4} key={coupon.id}>
+                <Card className="mb-2">
                   <Card.Body>
                     <Image
                       className="cardImage"
@@ -98,8 +98,8 @@ export default function Offers() {
                   </Card.Body>
                 </Card>
               </Col>
-            </Row>
-          ))}
+            ))}
+          </Row>
         </>
       ) : (
         <></>
