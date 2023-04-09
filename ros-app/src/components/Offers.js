@@ -23,45 +23,40 @@ export default function Offers() {
     }
   };
 
-  const getCoupons = () => {
-    api
-      .get(`api/v1/coupons`)
-      .then((response) => {
-        const currentCoupons = [];
-        const date = new Date();
-        const dayOfWeek = WEEKDAYS[date.getDay()];
+  useEffect(() => {
+    const getCoupons = () => {
+      api
+        .get(`api/v1/coupons`)
+        .then(async (response) => {
+          const currentCoupons = [];
+          const date = new Date();
+          const dayOfWeek = WEEKDAYS[date.getDay()];
 
-        response.data.forEach((coupon) => {
-          if (coupon.availability.includes(dayOfWeek)) {
-            //await getItem(coupon.item);
+          for (const coupon of response.data) {
+            if (coupon.availability.includes(dayOfWeek)) {
+              const foundItem = await getItem(coupon.item);
 
-            currentCoupons.push(coupon);
+              if (foundItem) {
+                coupon.item = foundItem;
+                currentCoupons.push(coupon);
+              }
+            }
+          }
+
+          setCoupons(currentCoupons);
+        })
+        .catch((err) => {
+          if (err.response) {
+            console.log(err.response.data);
+            console.log(err.response.status);
+            console.log(err.response.headers);
+          } else {
+            console.log(`Error: ${err.message}`);
           }
         });
-
-        console.log(`Current day of the week is: ${dayOfWeek}`);
-        console.log(`Available coupons:`);
-        currentCoupons.forEach((e) => {
-          console.log(e);
-        });
-
-        //setCoupons(currentCoupons);
-      })
-      .catch((err) => {
-        if (err.response) {
-          console.log(err.response.data);
-          console.log(err.response.status);
-          console.log(err.response.headers);
-        } else {
-          console.log(`Error: ${err.message}`);
-        }
-      });
-  };
-
-  useEffect(() => {
-    console.log('test');
+    };
     getCoupons();
-  });
+  }, []);
 
   return (
     <>
