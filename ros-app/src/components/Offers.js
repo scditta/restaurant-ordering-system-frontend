@@ -5,7 +5,7 @@ import api from '../API/posts';
 
 const WEEKDAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 
-export default function Offers() {
+export default function Offers(props) {
   const [coupons, setCoupons] = useState([]);
   const [showToast, setShowToast] = useState(false);
   const [toastText, setToastText] = useState('');

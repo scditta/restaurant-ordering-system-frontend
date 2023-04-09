@@ -52,56 +52,12 @@ export default function Menu(props) {
     setCart(updatedCart);
   };
 
-  // const reOrderedCart = useCallback((id, qty, name, price) => {
-  //   // defaultCart[id] = { qty: qty };
-  //   // defaultCart[id].name = name;
-  //   // defaultCart[id].price = price;
-  //   // localStorage.setItem('cart', JSON.stringify(defaultCart));
-  //   // setCart(defaultCart);
-  //   const updatedCart = {};
-  //   console.log(updatedCart);
-  //   // setTimeout(() => {
-  //   // console.log('timer');
-  //   if (id in updatedCart) {
-  //     updatedCart[id].qty += qty;
-  //   } else {
-  //     updatedCart[id] = { qty: qty };
-  //   }
-  //   updatedCart[id].name = name;
-  //   updatedCart[id].price = price;
-  //   updateCart(updatedCart);
-  //   // }, 2000);
-  // }, []);
-
   useEffect(() => {
-    // console.log(props);
-    // let updatedCart = {};
     if (props.reorder !== null) {
-      // console.log(props.reorder.items);
       for (let i = 0; i < props.reorder.items.length; i++) {
-        // let newOrder = {};
-        // console.log(props.reorder.items[i]);
         api
           .get(`api/v1/items/${props.reorder.items[i].item}`)
           .then((resp) => {
-            // console.log(resp.data);
-            // console.log(props.reorder.items[i].qty);
-
-            // defaultCart[resp.data.id] = { qty: props.reorder.items[i].qty };
-            // defaultCart[resp.data.id].name = resp.data.name;
-            // defaultCart[resp.data.id].price = resp.data.price;
-            // reOrderedCart(
-            //   resp.data.id,
-            //   props.reorder.items[i].qty,
-            //   resp.data.name,
-            //   resp.data.price
-            // );
-            // defaultCart[resp.data.id] = { qty: props.reorder.items[i].qty };
-            // defaultCart[resp.data.id].name = resp.data.name;
-            // defaultCart[resp.data.id].price = resp.data.price;
-            // updateCart(defaultCart);
-            // setCart(defaultCart);
-
             defaultCart[resp.data.id] = { qty: props.reorder.items[i].qty };
             defaultCart[resp.data.id].name = resp.data.name;
             defaultCart[resp.data.id].price = resp.data.price;
