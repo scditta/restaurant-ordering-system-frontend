@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, Image, Button, Container, Row, Col } from 'react-bootstrap';
+import { Card, Image, Button, Row, Col, Toast, ToastContainer } from 'react-bootstrap';
 
 import api from '../API/posts';
 
@@ -7,6 +7,13 @@ const WEEKDAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDA
 
 export default function Offers() {
   const [coupons, setCoupons] = useState([]);
+  const [showToast, setShowToast] = useState(false);
+  const [toastText, setToastText] = useState('');
+
+  const applyCoupon = (code) => {
+    setToastText(`Applied coupon ${code} to cart.`);
+    setShowToast(true);
+  };
 
   const formatCurrency = (cents) =>
     (cents / 100).toLocaleString('en-ca', { style: 'currency', currency: 'CAD' });
@@ -91,7 +98,11 @@ export default function Offers() {
                     <br />
                     <br />
                     <div className="d-grid gap-2 mt-2">
-                      <Button onClick={() => {}}>
+                      <Button
+                        onClick={() => {
+                          applyCoupon(coupon.code);
+                        }}
+                      >
                         Code: <b>{coupon.code}</b>
                       </Button>
                     </div>
@@ -104,6 +115,18 @@ export default function Offers() {
       ) : (
         <></>
       )}
+      <ToastContainer className="p-3 position-fixed" position="top-center">
+        <Toast
+          autohide={true}
+          delay={2000}
+          show={showToast}
+          onClose={() => {
+            setShowToast(false);
+          }}
+        >
+          <Toast.Body>{toastText}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </>
   );
 }
