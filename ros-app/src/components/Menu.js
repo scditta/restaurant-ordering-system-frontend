@@ -84,14 +84,33 @@ export default function Menu(props) {
     api
       .get(`api/v1/coupons?code=${code}`)
       .then((response) => {
-        setShowToast(false);
-        setToastText(`Applied coupon ${code} to cart.`);
-        setShowToast(true);
+        try {
+          const retrievedCoupons = response.data;
+          if (retrievedCoupons.length === 0) {
+            throw new Error(`Invalid coupon. Coupon was not applied to cart.`);
+          }
+
+          const retrievedCoupon = retrievedCoupons[0];
+
+          if (!isCouponActive(retrievedCoupon)) {
+            throw new Error(`Coupon is no longer active. Coupon was not applied to cart.`);
+          }
+
+          setActiveCoupon(retrievedCoupon);
+
+          setShowToast(false);
+          setToastText(`Applied coupon ${code} to cart.`);
+          setShowToast(true);
+        } catch (err) {
+          setShowToast(false);
+          setToastText(err);
+          setShowToast(true);
+        }
       })
       .catch((err) => {
         console.log(err);
         setShowToast(false);
-        setToastText(`Invalid coupon. Coupon was not applied to cart.`);
+        setToastText(`An unexpected error occured. Coupon was not applied to cart.`);
         setShowToast(true);
       });
   };
