@@ -20,6 +20,7 @@ export function CouponGrid() {
                   id={coupon.id}
                   itemId={coupon.item}
                   code={coupon.code}
+                  availability={coupon.availability}
                   discount_percent={coupon.discount_percent}
                   updateCouponCallback={couponData.updateCouponGrid}
                 ></Coupon>

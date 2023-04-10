@@ -1,25 +1,15 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import api from '../API/posts';
 
-import UpdateCategory from './UpdateCategory';
-import DeleteCategory from './DeleteCategory';
-
-import AuthenticationContext from '../context/AuthenticationContext';
-// import api from '../API/posts';
-
 export default function Coupon(props) {
-  const authUser = useContext(AuthenticationContext);
-
   const [isLoading, setLoading] = useState(true);
   const [item, setItem] = useState([]);
 
   useEffect(() => {
-    // console.log('itemEffect');
     api
       .get(`api/v1/items/${props.itemId}`)
       .then((resp) => {
-        // console.log(resp.data);
         setItem(resp.data);
       })
       .catch((err) => {
@@ -47,7 +37,6 @@ export default function Coupon(props) {
       console.log(response);
     } catch {}
   }
-
   return (
     <>
       {isLoading ? (
@@ -57,6 +46,7 @@ export default function Coupon(props) {
           <Col xs={5}>
             <img src={item.image} alt="error" className="cardImage"></img>
             <p>Item: {item.name}</p>
+            <p>Availability: {props.availability.join(', ')}</p>
             <p>Coupon Code: {props.code}</p>
             <p>Discount: {props.discount_percent}%</p>
           </Col>
