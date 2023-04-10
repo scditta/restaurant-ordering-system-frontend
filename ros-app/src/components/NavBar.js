@@ -142,8 +142,8 @@ export default function NavBar() {
                   <LinkContainer to="/orderHistory">
                     <Nav.Link>Order History</Nav.Link>
                   </LinkContainer>
-                  <LinkContainer to="/couponManagement">
-                    <Nav.Link>Coupon Management</Nav.Link>
+                  <LinkContainer to="/changeCoupon">
+                    <Nav.Link>Change Coupon</Nav.Link>
                   </LinkContainer>
                 </>
               )}

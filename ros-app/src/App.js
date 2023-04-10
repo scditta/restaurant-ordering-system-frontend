@@ -11,6 +11,7 @@ import NavBar from './components/NavBar';
 import DashBoard from './components/DashBoard';
 import OrderHistory from './components/OrderHistory';
 import AuthenticationContext from './context/AuthenticationContext';
+import ChangeCoupon from './components/CouponComponents/ChangeCoupon';
 
 function App() {
   const authUser = useContext(AuthenticationContext);
@@ -54,6 +55,14 @@ function App() {
           element={
             <ProtectedRoute userAuthorization={!authUser.authorization}>
               <CouponPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/changeCoupon"
+          element={
+            <ProtectedRoute userAuthorization={!authUser.authorization}>
+              <ChangeCoupon />
             </ProtectedRoute>
           }
         />
