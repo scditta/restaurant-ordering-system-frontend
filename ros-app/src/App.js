@@ -12,6 +12,7 @@ import DashBoard from './components/DashBoard';
 import OrderHistory from './components/OrderHistory';
 import AuthenticationContext from './context/AuthenticationContext';
 import ChangeCoupon from './components/CouponComponents/ChangeCoupon';
+import YourOrders from './components/YourOrders';
 
 function App() {
   const authUser = useContext(AuthenticationContext);
@@ -50,6 +51,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/orders" element={<YourOrders />} />
+
         <Route
           path="/couponManagement"
           element={
