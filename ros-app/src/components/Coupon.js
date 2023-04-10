@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import api from '../API/posts';
-
+import { currency } from '../helpers/currency';
 export default function Coupon(props) {
   const [isLoading, setLoading] = useState(true);
   const [item, setItem] = useState([]);
-
+  const discountedPrice = item.price / 100 - (item.price / 100) * (props.discount_percent / 100);
   useEffect(() => {
     api
       .get(`api/v1/items/${props.itemId}`)
@@ -45,10 +45,13 @@ export default function Coupon(props) {
         <Row alt={props.item} className="mb-3 mt-4" style={{ borderBottom: '1px solid black' }}>
           <Col xs={5}>
             <img src={item.image} alt="error" className="cardImage"></img>
+            <br />
+            <s>{currency(item.price)}</s>&nbsp;
+            <b>{currency(Math.round((discountedPrice + Number.EPSILON) * 100))}</b>
             <p>Item: {item.name}</p>
+            <p>Discount: {props.discount_percent}%</p>
             <p>Availability: {props.availability.join(', ')}</p>
             <p>Coupon Code: {props.code}</p>
-            <p>Discount: {props.discount_percent}%</p>
           </Col>
           <Col>
             <Button variant="outline-danger" onClick={handleDelete}>

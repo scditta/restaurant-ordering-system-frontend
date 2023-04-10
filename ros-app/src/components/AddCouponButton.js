@@ -43,7 +43,6 @@ export function AddCouponButton() {
 
     useEffect(() => {
       updateItems();
-      console.log(formValue.item);
       setIsValid(
         formValue.item !== '' && formValue.code.length > 0 && formValue.availability.length > 0
       );
