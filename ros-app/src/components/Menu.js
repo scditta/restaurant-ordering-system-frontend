@@ -180,7 +180,7 @@ export default function Menu(props) {
         });
     };
     getCoupons();
-  }, [props.reorder]);
+  }, [props.reorder, cart, defaultCart]);
 
   return (
     <>
