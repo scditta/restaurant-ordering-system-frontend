@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import CouponGridContext from '../context/CouponGridContext';
 import Coupon from './Coupon.js';
