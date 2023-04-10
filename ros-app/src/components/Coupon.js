@@ -55,10 +55,10 @@ export default function Coupon(props) {
       ) : (
         <Row alt={props.item} className="mb-3 mt-4" style={{ borderBottom: '1px solid black' }}>
           <Col xs={5}>
-            <p>Item: {item.name}</p>
             <img src={item.image} alt="error" className="cardImage"></img>
+            <p>Item: {item.name}</p>
             <p>Coupon Code: {props.code}</p>
-            <p>Discount: {(props.discount_percent * 100).toFixed()}%</p>
+            <p>Discount: {props.discount_percent}%</p>
           </Col>
           <Col>
             <Button variant="outline-danger" onClick={handleDelete}>
@@ -67,18 +67,6 @@ export default function Coupon(props) {
           </Col>
 
           {/* If the user logged in is an admin */}
-          {/* {authUser.authorization ? (
-          <>
-            <Col xs={2}>
-              <UpdateCategory categoryName={props.categoryName} categoryId={props.categoryId} />
-            </Col>
-            <Col xs={2}>
-              <DeleteCategory categoryName={props.categoryName} categoryId={props.categoryId} />
-            </Col>
-          </>
-        ) : (
-          <></>
-        )} */}
         </Row>
       )}
     </>
