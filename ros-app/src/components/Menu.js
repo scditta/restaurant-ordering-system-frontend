@@ -180,7 +180,8 @@ export default function Menu(props) {
         });
     };
     getCoupons();
-  }, [props.reorder, cart, defaultCart]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.reorder]);
 
   return (
     <>
