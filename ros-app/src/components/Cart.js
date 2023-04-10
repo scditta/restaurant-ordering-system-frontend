@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Card, Button, Modal, Alert, Form } from 'react-bootstrap';
+import { Card, Button, Modal, Alert, Form, InputGroup } from 'react-bootstrap';
 import { XCircleFill } from 'react-bootstrap-icons';
+import { currency } from '../helpers/currency';
 import GooglePayButton from '@google-pay/button-react';
 import api from '../API/posts';
 
@@ -8,8 +9,23 @@ export default function Cart(props) {
   const [showCheckout, setShowCheckout] = useState(false);
   const [payComplete, setPayComplete] = useState(false);
   const [orderNumber, setOrderNumber] = useState('XXXX');
+  const [enteredCode, setEnteredCode] = useState('');
   const [error, setError] = useState(null);
   const [payError, setPayError] = useState(false);
+
+  const handleCodeChange = (e) => {
+    const value = e.target.value;
+    setEnteredCode(value);
+  };
+
+  const applyCode = (e) => {
+    let formattedCode = String(enteredCode.toUpperCase());
+    props.addCouponCallback(formattedCode);
+
+    setEnteredCode('');
+    e.preventDefault();
+  };
+
   const hideCheckout = () => {
     setPayComplete(false);
     setShowCheckout(false);
@@ -18,13 +34,22 @@ export default function Cart(props) {
   const cartEntryIds = Object.keys(props.cart);
   const cartEntries = props.cart;
 
-  const formatCurrency = (cents) =>
-    (cents / 100).toLocaleString('en-ca', { style: 'currency', currency: 'CAD' });
-
   let subtotal = 0;
+  let discount = 0;
   const cartItems = cartEntryIds.map((id) => {
     const cartItem = cartEntries[id];
-    subtotal += cartItem.price * cartItem.qty;
+    const discountedItem = props.activeCoupon && props.activeCoupon.item === id;
+
+    const itemSubtotal = cartItem.price * cartItem.qty;
+
+    let itemDiscount = 0;
+    if (discountedItem) {
+      itemDiscount = Math.ceil(
+        cartItem.price * cartItem.qty * (props.activeCoupon.discount_percent / 100)
+      );
+    }
+    subtotal += itemSubtotal;
+    discount += itemDiscount;
 
     return (
       <Card key={id} className="mb-2">
@@ -33,7 +58,14 @@ export default function Cart(props) {
             {cartItem.name} x{cartItem.qty}
           </span>
           <span className="float-end">
-            {formatCurrency(cartItem.price * cartItem.qty)}
+            {discountedItem ? (
+              <>
+                <s>{currency(itemSubtotal)}</s>&nbsp;
+                <b>{currency(itemSubtotal - itemDiscount)}</b>
+              </>
+            ) : (
+              currency(itemSubtotal)
+            )}
             <XCircleFill
               size={24}
               style={{ marginLeft: '1em', cursor: 'pointer' }}
@@ -55,17 +87,18 @@ export default function Cart(props) {
         <span>
           {cartItem.name} (x{cartItem.qty})
         </span>
-        <span className="float-end">{formatCurrency(cartItem.price * cartItem.qty)}</span>
+        <span className="float-end">{currency(cartItem.price * cartItem.qty)}</span>
       </div>
     );
   });
 
-  const tax = Math.ceil(subtotal * 0.13);
-  const total = subtotal + tax;
+  const tax = Math.ceil((subtotal - discount) * 0.13);
+  const total = subtotal - discount + tax;
 
-  const subtotalFormatted = formatCurrency(subtotal);
-  const taxFormatted = formatCurrency(tax);
-  const totalFormatted = formatCurrency(total);
+  const subtotalFormatted = currency(subtotal);
+  const discountFormatted = currency(discount);
+  const taxFormatted = currency(tax);
+  const totalFormatted = currency(total);
 
   const handlePaymentSuccess = async () => {
     setError(null);
@@ -82,6 +115,7 @@ export default function Cart(props) {
         payment_token: null, //unused
         payment_tax: tax,
         payment_subtotal: subtotal,
+        payment_discount: discount,
         payment_total: total,
         items: orderItems,
       })
@@ -102,23 +136,51 @@ export default function Cart(props) {
         <Card.Body>
           <Card.Title>Cart</Card.Title>
           <div style={{ minHeight: '30vh' }}>{cartItems}</div>
-
+          <Form onSubmit={applyCode}>
+            <InputGroup className="mb-3">
+              <Form.Control
+                value={enteredCode}
+                onChange={handleCodeChange}
+                placeholder="Enter Promo Code"
+                aria-label="Enter Promo Code"
+              />
+              <Button type="submit" variant="secondary">
+                Apply
+              </Button>
+            </InputGroup>
+          </Form>
           <div>
             Subtotal:
             <span className="float-end">{subtotalFormatted}</span>
           </div>
+          {props.activeCoupon ? (
+            <div>
+              Promo: <b>{props.activeCoupon.code}</b>
+              <XCircleFill
+                size={20}
+                style={{
+                  marginLeft: '0.5em',
+                  cursor: 'pointer',
+                  transform: 'translate(0px, -1px)',
+                }}
+                onClick={() => {
+                  props.clearCouponCallback();
+                }}
+              ></XCircleFill>
+              <span className="float-end">-{discountFormatted}</span>
+            </div>
+          ) : (
+            <></>
+          )}
           <div>
             Tax:
             <span className="float-end">{taxFormatted}</span>
           </div>
-
           <hr className="mt-2 mb-2"></hr>
-
           <div style={{ fontWeight: 'bold' }}>
             Total:
             <span className="float-end">{totalFormatted}</span>
           </div>
-
           <div className="d-grid gap-2 mt-2">
             <Button
               onClick={() => {
@@ -175,6 +237,10 @@ export default function Cart(props) {
               <div>
                 Subtotal:
                 <span className="float-end">{subtotalFormatted}</span>
+              </div>
+              <div>
+                Discount:
+                <span className="float-end">{discountFormatted}</span>
               </div>
               <div>
                 Tax:
